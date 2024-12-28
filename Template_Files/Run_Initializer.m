@@ -76,14 +76,6 @@ Gamma6_wr = 0.02;
 % Set the PWM frequency
 PWMFreq = 5; %[Hz]
 
-% Set estimated thruster forces
-REDFXNominal   = 0.2825;
-REDFYNominal   = 0.2825;
-BLACKFXNominal = 0.2825;
-BLACKFYNominal = 0.2825;
-BLUEFXNominal  = 0.2825;
-BLUEFYNominal  = 0.2825;
-
 %% For those who want to run simulations without using the GUI:
 
 % % Load previous GUI states using this public facing function

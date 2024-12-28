@@ -11,6 +11,10 @@
             return 2;
         } else if (std::strcmp(hostname, "spot-blue") == 0) {
             return 3;
+        } else if (std::strcmp(hostname, "spot-spare") == 0) {
+            return 4;
+        } else if (std::strcmp(hostname, "spot-vision") == 0) {
+            return 5;
         } else {
             return 0;  // No match found
         }
