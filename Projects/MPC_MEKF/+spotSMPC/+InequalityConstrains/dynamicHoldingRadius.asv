@@ -1,0 +1,58 @@
+% dynamicHoldingRadius Linearized ellipse constraints
+%
+% Inputs:
+%   rhold     2×1 [a; b] semi-axes of the holding ellipse
+%   z0        (mN + nN)×1 previous MPC vector [u; x_chaser]
+%   xTstack   6×N target state history over horizon
+%   n         chaser state dimension (6)
+%   m         control dimension
+%   N         horizon length
+%
+% Outputs:
+%   Aineq     N×((m+n)*N) LHS of inequality constraints
+%   bineq     N×1        RHS
+%
+function [Aineq, bineq] = dynamicHoldingRadius( ...
+    rhold, z0, xTstack, n, m, N)
+
+  % Prealloc
+  Aineq = zeros(N, (m+n)*N);
+  bineq = zeros(N, 1);
+
+  % Pull out chaser states (n×N)
+  Xc = reshape(z0(m*N+1:end), n, N);
+
+  for i = 1:N
+    % 1) Positions
+    r_tar = xTstack(1:2, i);
+    rc    = Xc(1:2,   i);
+
+    % 2) Ellipse in world frame
+       = xTstack(3, i);
+    R   = [cos(θ), -sin(θ); sin(θ), cos(θ)];
+    M   = R * diag(1./(rhold.^2)) * R';
+
+    % 3) Direction & raw radius
+    u   = rc - r_tar;
+    d   = norm(u);
+    u   = u / d;
+    rawRe = 1 / sqrt( u' * (M \ u) );
+
+    % 4) **Clamp** r_e so it never overshoots the chaser
+    delta     = 1e-3;                           % small margin
+    r_e   = min(rawRe, d - delta);
+    if r_e <= 0
+      error("Ellipse collapsed on top of chaser at step %d!", i);
+    end
+    r0    = r_tar + r_e * u;
+
+    % 5) Outward normal
+    g     = 2 * M * (r0 - r_tar);           % 2×1
+
+    % 6) Build tangent‐line half‐space: -g' * rc <= -g' * r0
+    cols  = m*N + (i-1)*n + (1:2);
+    Aineq(i, cols) = -g';
+    bineq(i)       = -g' * r0;
+  end
+end
+

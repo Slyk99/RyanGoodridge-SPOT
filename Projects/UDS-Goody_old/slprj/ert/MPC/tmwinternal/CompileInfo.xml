@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/ci/19700101 http://schema.mathworks.com/mf0/sl_modelref_info/R2024b http://schema.mathworks.com/mf0/slexec_mm_sto/R2024a_202305081229 http://schema.mathworks.com/mf0/sltp_mm/R2024b_202402211119">
+  <ModelRefInfoRepo.ModelRefInfoRoot type="ModelRefInfoRepo.ModelRefInfoRoot" uuid="157d263b-dd5f-4c7e-8b53-5df59c495746">
+    <JITEngines>s21BAkMzMUI8bAduWy1sTuE</JITEngines>
+    <JITEngines>s6ZeCsMpxySjJFYNzYWMh3D</JITEngines>
+    <JITEngines>s7RnO2WZcgGFLXGZEda4noF</JITEngines>
+    <JITEngines>sA9nR09UbtV5AqGr41OiN1F</JITEngines>
+    <JITEngines>sAOeon7Nl6jHXEyqD14rcJ</JITEngines>
+    <JITEngines>sB9qcJVN6MCPlyJZaRSyPPG</JITEngines>
+    <JITEngines>sBK86gGYVIHVQkRxyPhp8vE</JITEngines>
+    <JITEngines>sBKbHgI1f0duDIzkjGF0sAB</JITEngines>
+    <JITEngines>sDF64u0kGlnVjlpvUySP3HF</JITEngines>
+    <JITEngines>sDXKAgSMgwMPHJRDVvTFoTB</JITEngines>
+    <JITEngines>sFzVwz5hDTRxXDeIRvZkhYB</JITEngines>
+    <JITEngines>sGznrYUnTKZRIWMI4ufZvDG</JITEngines>
+    <JITEngines>sH5J0fobY2gUCxvcX0CLZyD</JITEngines>
+    <JITEngines>sHS9jCFWO2BkH4dU2phSv1C</JITEngines>
+    <JITEngines>sIl8HqUN6BtHw5j0dhozrB</JITEngines>
+    <JITEngines>sL5vegtH0mLcnP286BnhbaD</JITEngines>
+    <JITEngines>sMjm9kIlSL3QTT6O9pS17BD</JITEngines>
+    <JITEngines>sMzj15DbXSchpPueGAe6chC</JITEngines>
+    <JITEngines>sOiZrbIRhpYihIrf0aWZTzG</JITEngines>
+    <JITEngines>sPtLRzQpoZQalvcmZd3gdfH</JITEngines>
+    <JITEngines>sQupiXske6w7OdGteDnwNXC</JITEngines>
+    <JITEngines>sRGUtnum77AWUJ7gSuZCie</JITEngines>
+    <JITEngines>sStFHkF7px9T7q2X4Fub6xB</JITEngines>
+    <JITEngines>sTNvXkZDUCpULOwbGpMc4KB</JITEngines>
+    <JITEngines>sWa875oxUjHjOGSrOFYuV5F</JITEngines>
+    <JITEngines>sWhNaGaYdOkGF633rpQKkCC</JITEngines>
+    <JITEngines>sYDH2oHwJau92mBfllhfnRB</JITEngines>
+    <JITEngines>saRraD6O648yRTbA8tXoCnB</JITEngines>
+    <JITEngines>saiuiantE6wqXQB1yf4to9F</JITEngines>
+    <JITEngines>sanIFFYphnZ0T7cJH5VjvaE</JITEngines>
+    <JITEngines>sawX8XIHxBguYrHIftGAbNC</JITEngines>
+    <JITEngines>sc0aryieN9X43dGUQl4MTZC</JITEngines>
+    <JITEngines>sdYGUn0g7nRosyy3H9CQQSH</JITEngines>
+    <JITEngines>sh0928PWnHZ8DdAv2ww8fwB</JITEngines>
+    <JITEngines>siIxwxejGYElEUX0m1D8FmD</JITEngines>
+    <JITEngines>smN1XDXbZeUFHDIOMEmXzxD</JITEngines>
+    <JITEngines>snnZ7reu6ngqFvv51QONGI</JITEngines>
+    <JITEngines>sp9pFOIjYHnkXokzsJ6fUK</JITEngines>
+    <JITEngines>sr18RPkQnE8SWFnEJ26BkTB</JITEngines>
+    <JITEngines>srCUglLrTtw5J0hxud6LS7G</JITEngines>
+    <JITEngines>swdKpu6VNfKgwyDS2AM6zYF</JITEngines>
+    <JITEngines>sy5DSk5G1WqPlES7nMBAWvC</JITEngines>
+    <JITEngines>syRm40BQ3ZzF5ZToZ8YI5bC</JITEngines>
+    <JITEngines>syknCujp8xz2ZCWkewtg4VF</JITEngines>
+    <JITEngines>szjRV5faCdZ4qjPSPu2EH7E</JITEngines>
+    <calibrationData type="ModelRefInfoRepo.CalibrationData" uuid="d51d3318-b97b-40fc-8bc3-9658e102f43f">
+      <InternalData>[{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Control_Mode&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Control_Law_Enabler&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Path_Planner_Selection&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Path_Planner_Selection&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Control_Law_Enabler&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Float_State&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Univ_Time&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Thruster_ON_Count&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;WhoAmI&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;isSim&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Measured_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Saturated_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Desired_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Path&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_IMU_Measurements&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_True_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Path&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Desired_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Saturated_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Measured_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Thruster_ON_Count&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_True_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_IMU_Measurements&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Path_Planner_Selection&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Control_Law_Enabler&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_IMU_Measurements&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Path&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Desired_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_True_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Measured_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Thruster_ON_Count&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Path_Planner_Selection&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Saturated_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Control_Law_Enabler&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Path&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Desired_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_True_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;ARM_Measured_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Logger&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Logger&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Logger&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Solver_Result&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Target_Trajectory&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Controls&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Target_Holding_Radius&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Optimization_Var&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;MPC_Docking_Enabler&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Estimated_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Estimated_Covar&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Estimated_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Estimated_Covar&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Estimated_States&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Estimated_Covar&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RED_Measured_States_RAW&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_Measured_States_RAW&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLUE_Measured_States_RAW&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Toggle_Nav&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_dq&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_q&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_v&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_w&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_dq&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_q&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_x&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_x&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_R&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_R&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;QMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;QMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;QMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;dt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STQMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STQMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STQMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_R&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;DQMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;DQMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;DQMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STDQMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_dq_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STDQMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_x&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STDQMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STQMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;QMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_R_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_q_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFP&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFx&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFt&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_yaw&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_yaw&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_yaw&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Conf&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_v&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFR&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFR&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_x_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Conf_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_yaw_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;CNNError&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Red_w&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STQMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;QMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STDQMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;DQMEKFerror&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_dq&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STRMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;RMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;DQMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;STDQMEKFNIS&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_Global_zoh&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Black_q&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;Vis_Global&quot;,&quot;Profile&quot;:&quot;&quot;},{&quot;Name&quot;:&quot;BLACK_CTL_Input&quot;,&quot;Profile&quot;:&quot;&quot;}]</InternalData>
+      <ModelName>MPC</ModelName>
+    </calibrationData>
+    <childModelRefInfo type="ModelRefInfoRepo.ChildModelRefInfo" uuid="38002e31-ba7b-4415-a521-6233d192e6eb">
+      <modelName>MPC</modelName>
+      <modelPath>MPC</modelPath>
+    </childModelRefInfo>
+    <compDerivCacheNeedsReset>false</compDerivCacheNeedsReset>
+    <compZcCacheNeedsReset>false</compZcCacheNeedsReset>
+    <compiledTFinal>135.0</compiledTFinal>
+    <dataSourceInfo type="ModelRefInfoRepo.DataSourceInfo" uuid="ec5805b8-cf86-4eb6-88de-fec0388cb377">
+      <dataSources type="ModelRefInfoRepo.SourceInfo" uuid="3375a535-2d2c-4937-aa67-7e8fada498b1">
+        <includeAllSections>true</includeAllSections>
+        <sourceName>base workspace</sourceName>
+        <type>BaseWorkspace</type>
+      </dataSources>
+      <modelName>MPC</modelName>
+    </dataSourceInfo>
+    <dataTransferInfos>AAFJTQAAAAAOAAAAOAAAAAYAAAAIAAAAAgAAAAAAAAAFAAAACAAAAAAAAAABAAAAAQAAAAAAAAAFAAQAAQAAAAEAAAAAAAAA</dataTransferInfos>
+    <defaultsCMapping>{&quot;Inports&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Outports&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;ParameterArguments&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;LocalParameters&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;GlobalParameters&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;InternalData&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;SharedLocalDataStores&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;GlobalDataStores&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Constants&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;DataTransfers&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;ModelData&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;InitializeTerminate&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;Execution&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;,&quot;SharedUtility&quot;:&quot;{\&quot;Name\&quot;:\&quot;Default\&quot;,\&quot;Checksum\&quot;:\&quot;Default\&quot;,\&quot;PerInstancePropertiesChecksum\&quot;:\&quot;\&quot;,\&quot;MemorySectionName\&quot;:\&quot;None\&quot;,\&quot;MemorySectionChecksum\&quot;:\&quot;None\&quot;}&quot;}</defaultsCMapping>
+    <fastestNoncontSigFeedingDerivPorts>-1.0</fastestNoncontSigFeedingDerivPorts>
+    <globalVariables>F_black_X_nominal</globalVariables>
+    <globalVariables>F_black_Y_nominal</globalVariables>
+    <globalVariables>F_blue_X_nominal</globalVariables>
+    <globalVariables>F_blue_Y_nominal</globalVariables>
+    <globalVariables>F_red_X_nominal</globalVariables>
+    <globalVariables>F_red_Y_nominal</globalVariables>
+    <globalVariables>F_thrusters_BLACK</globalVariables>
+    <globalVariables>F_thrusters_BLUE</globalVariables>
+    <globalVariables>F_thrusters_RED</globalVariables>
+    <globalVariables>IBLACK</globalVariables>
+    <globalVariables>IRED</globalVariables>
+    <globalVariables>K_BLACK</globalVariables>
+    <globalVariables>K_BLUE</globalVariables>
+    <globalVariables>K_RED</globalVariables>
+    <globalVariables>Kd_elarm</globalVariables>
+    <globalVariables>Kd_sharm</globalVariables>
+    <globalVariables>Kd_tblue</globalVariables>
+    <globalVariables>Kd_wrarm</globalVariables>
+    <globalVariables>Kd_xblue</globalVariables>
+    <globalVariables>Kd_yblue</globalVariables>
+    <globalVariables>Kp_elarm</globalVariables>
+    <globalVariables>Kp_sharm</globalVariables>
+    <globalVariables>Kp_tblue</globalVariables>
+    <globalVariables>Kp_wrarm</globalVariables>
+    <globalVariables>Kp_xblue</globalVariables>
+    <globalVariables>Kp_yblue</globalVariables>
+    <globalVariables>PQ</globalVariables>
+    <globalVariables>PR</globalVariables>
+    <globalVariables>PWMFreq</globalVariables>
+    <globalVariables>Phase0_End</globalVariables>
+    <globalVariables>Phase1_End</globalVariables>
+    <globalVariables>Phase2_End</globalVariables>
+    <globalVariables>Phase3_End</globalVariables>
+    <globalVariables>Phase3_SubPhase1_End</globalVariables>
+    <globalVariables>Phase3_SubPhase2_End</globalVariables>
+    <globalVariables>Phase3_SubPhase3_End</globalVariables>
+    <globalVariables>Phase3_SubPhase4_End</globalVariables>
+    <globalVariables>Phase4_End</globalVariables>
+    <globalVariables>Phase5_End</globalVariables>
+    <globalVariables>Q</globalVariables>
+    <globalVariables>R</globalVariables>
+    <globalVariables>Tz_lim_elarm</globalVariables>
+    <globalVariables>Tz_lim_sharm</globalVariables>
+    <globalVariables>Tz_lim_wrarm</globalVariables>
+    <globalVariables>baseRate</globalVariables>
+    <globalVariables>dataRate</globalVariables>
+    <globalVariables>home_states_BLACK</globalVariables>
+    <globalVariables>home_states_BLUE</globalVariables>
+    <globalVariables>home_states_RED</globalVariables>
+    <globalVariables>init_states_BLACK</globalVariables>
+    <globalVariables>init_states_BLUE</globalVariables>
+    <globalVariables>init_states_RED</globalVariables>
+    <globalVariables>mBLACK</globalVariables>
+    <globalVariables>mRED</globalVariables>
+    <globalVariables>maxd</globalVariables>
+    <globalVariables>platformSelection</globalVariables>
+    <globalVariables>r_hold_tar_0</globalVariables>
+    <globalVariables>rho</globalVariables>
+    <globalVariables>simMode</globalVariables>
+    <globalVariables>thruster_dist2CG_BLACK</globalVariables>
+    <globalVariables>thruster_dist2CG_BLUE</globalVariables>
+    <globalVariables>thruster_dist2CG_RED</globalVariables>
+    <globalVariables>tsim</globalVariables>
+    <globalVariables>x_BLACK_0</globalVariables>
+    <globalVariables>x_BLUE_0</globalVariables>
+    <globalVariables>z_0</globalVariables>
+    <hasBlockWithPeriodicDiscreteSampleTime>true</hasBlockWithPeriodicDiscreteSampleTime>
+    <hasBwsAccessed>true</hasBwsAccessed>
+    <hasContinuousSampleTime>true</hasContinuousSampleTime>
+    <hasNonVirtualConstantTs>true</hasNonVirtualConstantTs>
+    <hasStatesModifiedInOutputUpdate>true</hasStatesModifiedInOutputUpdate>
+    <isBdInSimModeForSimCodegenVariants>false</isBdInSimModeForSimCodegenVariants>
+    <loggingSaveFormat>2</loggingSaveFormat>
+    <maxFreqHz>-1.0</maxFreqHz>
+    <needAbsoluteTimeDisallowInitPort>true</needAbsoluteTimeDisallowInitPort>
+    <needsAbsoluteTime>true</needsAbsoluteTime>
+    <nonTunableVariables>baseRate</nonTunableVariables>
+    <nonTunableVariables>init_states_BLACK</nonTunableVariables>
+    <nonTunableVariables>init_states_BLUE</nonTunableVariables>
+    <nonTunableVariables>init_states_RED</nonTunableVariables>
+    <numDStateRecs>82</numDStateRecs>
+    <numDataInputPorts>0</numDataInputPorts>
+    <numLoggableDStateRecs>82</numLoggableDStateRecs>
+    <numLoggableJacobianDStates>983</numLoggableJacobianDStates>
+    <removeResetFunc>true</removeResetFunc>
+    <runtimeNonFcnCallRateInfos type="ModelRefInfoRepo.RateInfo">
+      <compiled>true</compiled>
+      <needAbsoluteTime>true</needAbsoluteTime>
+      <period>0.0</period>
+      <priority>40</priority>
+      <rateIdx>0</rateIdx>
+    </runtimeNonFcnCallRateInfos>
+    <runtimeNonFcnCallRateInfos type="ModelRefInfoRepo.RateInfo">
+      <compiled>true</compiled>
+      <nonFcnCallPartitionName>Cont</nonFcnCallPartitionName>
+      <period>.05</period>
+      <priority>40</priority>
+      <rateIdx>1</rateIdx>
+    </runtimeNonFcnCallRateInfos>
+    <sampleTimeInheritanceRule>2</sampleTimeInheritanceRule>
+    <solverStatusFlags>323</solverStatusFlags>
+    <timingAndTaskingRegistry>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;slexec_sto version=&quot;1.1&quot; packageUris=&quot;http://schema.mathworks.com/mf0/slexec_mm_sto/R2024a_202305081229&quot;&gt;
+  &lt;sto.Registry type=&quot;sto.Registry&quot; uuid=&quot;f688fbd5-32fb-4e7c-868f-336d4f3d5434&quot;&gt;
+    &lt;executionSpec&gt;Undetermined&lt;/executionSpec&gt;
+    &lt;identifier&gt;MPC&lt;/identifier&gt;
+    &lt;clockRegistry type=&quot;sto.ClockRegistry&quot; uuid=&quot;f71c2f19-545f-457e-9174-3109742aa560&quot;&gt;
+      &lt;clocks type=&quot;sto.Timer&quot; uuid=&quot;f8421c8f-4322-410d-90a1-a4c531b74502&quot;&gt;
+        &lt;computedFundamentalDiscretePeriod&gt;.05&lt;/computedFundamentalDiscretePeriod&gt;
+        &lt;fastestDiscreteRate type=&quot;sto.ClassicPeriodicDiscreteRate&quot; uuid=&quot;3f992fbf-596e-4060-bb0a-9ac6b2fa7b00&quot;/&gt;
+        &lt;isDefaultTimer&gt;true&lt;/isDefaultTimer&gt;
+        &lt;resolution&gt;.05&lt;/resolution&gt;
+        &lt;timeAdvanceMode&gt;FixedStep&lt;/timeAdvanceMode&gt;
+        &lt;identifier&gt;MPC::defaultTimer&lt;/identifier&gt;
+        &lt;rates type=&quot;sto.ContinuousRate&quot; uuid=&quot;8bf1715a-ecc7-4dfa-80cd-70dd548814b3&quot;&gt;
+          &lt;annotation&gt;Cont&lt;/annotation&gt;
+          &lt;clockId&gt;MPC::defaultTimer&lt;/clockId&gt;
+          &lt;colorIndex&gt;-1&lt;/colorIndex&gt;
+          &lt;description&gt;Continuous&lt;/description&gt;
+          &lt;taskId&gt;_task0&lt;/taskId&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;3e2add2f-d4e0-42de-9652-dbedfd02c807&quot;/&gt;
+        &lt;/rates&gt;
+        &lt;rates type=&quot;sto.ClassicPeriodicDiscreteRate&quot; uuid=&quot;3f992fbf-596e-4060-bb0a-9ac6b2fa7b00&quot;&gt;
+          &lt;annotation&gt;D1&lt;/annotation&gt;
+          &lt;clockId&gt;MPC::defaultTimer&lt;/clockId&gt;
+          &lt;description&gt;Discrete 1&lt;/description&gt;
+          &lt;rateIdx&gt;1&lt;/rateIdx&gt;
+          &lt;taskId&gt;_task0&lt;/taskId&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;36aebc27-690a-4a73-8aee-da170218b65a&quot;&gt;
+            &lt;period&gt;.05&lt;/period&gt;
+            &lt;rateType&gt;ClassicPeriodicDiscrete&lt;/rateType&gt;
+          &lt;/rateSpec&gt;
+        &lt;/rates&gt;
+        &lt;baseRate type=&quot;sto.ContinuousRate&quot; uuid=&quot;b26e72d2-1790-453c-99cf-6ba62051a938&quot;&gt;
+          &lt;annotation&gt;Cont&lt;/annotation&gt;
+          &lt;clockId&gt;MPC::defaultTimer&lt;/clockId&gt;
+          &lt;colorIndex&gt;-1&lt;/colorIndex&gt;
+          &lt;description&gt;Continuous&lt;/description&gt;
+          &lt;taskId&gt;_task0&lt;/taskId&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;bb5b4404-fad4-40d6-88a4-a762afe57970&quot;/&gt;
+        &lt;/baseRate&gt;
+      &lt;/clocks&gt;
+      &lt;clocks type=&quot;sto.Event&quot; uuid=&quot;4bca57ba-d1ef-4622-b8d8-36543b6d84cf&quot;&gt;
+        &lt;eventType&gt;PARAMETER_CHANGE_EVENT&lt;/eventType&gt;
+        &lt;cNum&gt;1&lt;/cNum&gt;
+        &lt;clockType&gt;Event&lt;/clockType&gt;
+        &lt;identifier&gt;ParameterChangeEvent&lt;/identifier&gt;
+        &lt;rates type=&quot;sto.ModelWideEventRate&quot; uuid=&quot;56879015-3814-44b1-88ff-adcb42f6710c&quot;&gt;
+          &lt;annotation&gt;Inf&lt;/annotation&gt;
+          &lt;clockId&gt;ParameterChangeEvent&lt;/clockId&gt;
+          &lt;colorIndex&gt;-1&lt;/colorIndex&gt;
+          &lt;description&gt;Constant&lt;/description&gt;
+          &lt;rateIdx&gt;-1&lt;/rateIdx&gt;
+          &lt;taskId&gt;ModelWideParameterChangeEvent&lt;/taskId&gt;
+          &lt;useForExecution&gt;NotForExecution&lt;/useForExecution&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;3fbf2912-b20e-4899-8920-9bc142879459&quot;&gt;
+            &lt;period&gt;inf&lt;/period&gt;
+            &lt;rateType&gt;ModelWideParameterChangeEvent&lt;/rateType&gt;
+          &lt;/rateSpec&gt;
+        &lt;/rates&gt;
+      &lt;/clocks&gt;
+      &lt;timeAdvanceMode&gt;FixedStep&lt;/timeAdvanceMode&gt;
+    &lt;/clockRegistry&gt;
+    &lt;taskRegistry type=&quot;sto.TaskRegistry&quot; uuid=&quot;ba0b2ebf-1b6f-4976-8ac0-6742da7c4cbf&quot;&gt;
+      &lt;rootTaskHierarchyElements type=&quot;sto.Task&quot; uuid=&quot;874857a5-a514-40e1-b4f2-9dbb4f07ee83&quot;&gt;
+        &lt;isExplicit&gt;true&lt;/isExplicit&gt;
+        &lt;rates type=&quot;sto.ModelWideEventRate&quot; uuid=&quot;9583fbdf-60ec-46f3-a902-3a27b1dd00a2&quot;&gt;
+          &lt;annotation&gt;Inf&lt;/annotation&gt;
+          &lt;clockId&gt;ParameterChangeEvent&lt;/clockId&gt;
+          &lt;colorIndex&gt;-1&lt;/colorIndex&gt;
+          &lt;description&gt;Constant&lt;/description&gt;
+          &lt;rateIdx&gt;-1&lt;/rateIdx&gt;
+          &lt;taskId&gt;ModelWideParameterChangeEvent&lt;/taskId&gt;
+          &lt;useForExecution&gt;NotForExecution&lt;/useForExecution&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;b78492c7-3e99-4151-bf63-dbeb978e2e04&quot;&gt;
+            &lt;period&gt;inf&lt;/period&gt;
+            &lt;rateType&gt;ModelWideParameterChangeEvent&lt;/rateType&gt;
+          &lt;/rateSpec&gt;
+        &lt;/rates&gt;
+        &lt;schedulingClockId&gt;ParameterChangeEvent&lt;/schedulingClockId&gt;
+        &lt;timeKeeperClockId&gt;MPC::defaultTimer&lt;/timeKeeperClockId&gt;
+        &lt;elementType&gt;Task&lt;/elementType&gt;
+        &lt;identifier&gt;ModelWideParameterChangeEvent&lt;/identifier&gt;
+        &lt;priority&gt;-1&lt;/priority&gt;
+      &lt;/rootTaskHierarchyElements&gt;
+      &lt;rootTaskHierarchyElements type=&quot;sto.Task&quot; uuid=&quot;e73a477b-c699-4c4c-bd46-e2487d76fa5e&quot;&gt;
+        &lt;isExecutable&gt;true&lt;/isExecutable&gt;
+        &lt;orderIndex&gt;1&lt;/orderIndex&gt;
+        &lt;rates type=&quot;sto.ContinuousRate&quot; uuid=&quot;73d4234b-afa8-4b8e-9b8d-c56028ecc60b&quot;&gt;
+          &lt;annotation&gt;Cont&lt;/annotation&gt;
+          &lt;clockId&gt;MPC::defaultTimer&lt;/clockId&gt;
+          &lt;colorIndex&gt;-1&lt;/colorIndex&gt;
+          &lt;description&gt;Continuous&lt;/description&gt;
+          &lt;taskId&gt;_task0&lt;/taskId&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;cf49a0da-8242-4880-b989-96ce3ff1f9f1&quot;/&gt;
+        &lt;/rates&gt;
+        &lt;rates type=&quot;sto.ClassicPeriodicDiscreteRate&quot; uuid=&quot;4aa32a72-a567-47af-8c5b-537e9ff8752d&quot;&gt;
+          &lt;annotation&gt;D1&lt;/annotation&gt;
+          &lt;clockId&gt;MPC::defaultTimer&lt;/clockId&gt;
+          &lt;description&gt;Discrete 1&lt;/description&gt;
+          &lt;rateIdx&gt;1&lt;/rateIdx&gt;
+          &lt;taskId&gt;_task0&lt;/taskId&gt;
+          &lt;rateSpec type=&quot;sto.RateSpec&quot; uuid=&quot;c91604de-f5db-4a61-a82d-85bfc7b13504&quot;&gt;
+            &lt;period&gt;.05&lt;/period&gt;
+            &lt;rateType&gt;ClassicPeriodicDiscrete&lt;/rateType&gt;
+          &lt;/rateSpec&gt;
+        &lt;/rates&gt;
+        &lt;schedulingClockId&gt;MPC::defaultTimer&lt;/schedulingClockId&gt;
+        &lt;timeKeeperClockId&gt;MPC::defaultTimer&lt;/timeKeeperClockId&gt;
+        &lt;elementType&gt;Task&lt;/elementType&gt;
+        &lt;identifier&gt;_task0&lt;/identifier&gt;
+        &lt;priority&gt;40&lt;/priority&gt;
+      &lt;/rootTaskHierarchyElements&gt;
+      &lt;taskDependencyGraph type=&quot;sto.SerializedTaskConnectionList&quot; uuid=&quot;d50b93bd-929a-4bd9-9c22-7d154d500c46&quot;&gt;
+        &lt;clockIdentifier&gt;MPC::defaultTimer&lt;/clockIdentifier&gt;
+        &lt;taskIdentifier&gt;_task0&lt;/taskIdentifier&gt;
+      &lt;/taskDependencyGraph&gt;
+      &lt;taskDependencyGraph type=&quot;sto.SerializedTaskConnectionList&quot; uuid=&quot;379b336b-14f5-440d-9d1a-c69578d8e519&quot;&gt;
+        &lt;clockIdentifier&gt;ParameterChangeEvent&lt;/clockIdentifier&gt;
+        &lt;taskIdentifier&gt;ModelWideParameterChangeEvent&lt;/taskIdentifier&gt;
+      &lt;/taskDependencyGraph&gt;
+      &lt;taskPriorityDirection&gt;HighNumberLast&lt;/taskPriorityDirection&gt;
+    &lt;/taskRegistry&gt;
+  &lt;/sto.Registry&gt;
+&lt;/slexec_sto&gt;</timingAndTaskingRegistry>
+    <zeroInternalMemoryAtStartupUnchecked>true</zeroInternalMemoryAtStartupUnchecked>
+    <FMUBlockMap type="ModelRefInfoRepo.FMUBlockInfo" uuid="04ab58e3-7507-418c-b088-53b96c52f48c"/>
+    <codeGenInfo type="ModelRefInfoRepo.CodeGenInformation" uuid="a4619ae9-72d0-41fe-a569-90ce00553d77"/>
+    <compiledVariantInfos type="ModelRefInfoRepo.CompiledVariantInfoMap" uuid="adb1f96d-ed8f-408f-a3b6-e17f46a93bef"/>
+    <configSettingsForConsistencyChecks type="ModelRefInfoRepo.ConfigSettingsForConsistencyChecks" uuid="ea7045eb-a0b8-4a36-96b0-be328da6748a">
+      <consistentOutportInitialization>true</consistentOutportInitialization>
+      <fixedStepSize>.05</fixedStepSize>
+      <frameDiagnosticSetting>2</frameDiagnosticSetting>
+      <hasHybridSampleTime>true</hasHybridSampleTime>
+      <optimizedInitCode>true</optimizedInitCode>
+      <signalLoggingSaveFormat>2</signalLoggingSaveFormat>
+      <simSIMDOptimization>1</simSIMDOptimization>
+      <solverName>FixedStepDiscrete</solverName>
+      <solverType>SOLVER_TYPE_FIXEDSTEP</solverType>
+      <hardwareSettings type="ModelRefInfoRepo.HardwareSettings" uuid="5cbe0866-96a3-4dac-8eb9-f66a14bc9e91">
+        <prodBitPerChar>8</prodBitPerChar>
+        <prodBitPerDouble>64</prodBitPerDouble>
+        <prodBitPerFloat>32</prodBitPerFloat>
+        <prodBitPerInt>32</prodBitPerInt>
+        <prodBitPerLong>64</prodBitPerLong>
+        <prodBitPerLongLong>64</prodBitPerLongLong>
+        <prodBitPerPointer>64</prodBitPerPointer>
+        <prodBitPerPtrDiffT>64</prodBitPerPtrDiffT>
+        <prodBitPerShort>16</prodBitPerShort>
+        <prodBitPerSizeT>64</prodBitPerSizeT>
+        <prodEndianess>1</prodEndianess>
+        <prodLargestAtomicFloat>1</prodLargestAtomicFloat>
+        <prodLargestAtomicInteger>4</prodLargestAtomicInteger>
+        <prodLongLongMode>true</prodLongLongMode>
+        <prodShiftRight>true</prodShiftRight>
+        <prodWordSize>64</prodWordSize>
+      </hardwareSettings>
+    </configSettingsForConsistencyChecks>
+    <controllableInputRatesMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="c60bf71f-fc3c-4711-99ac-98536c3ecefc"/>
+    <controllableOutputRatesMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="7eb3794b-d448-4b70-ac42-9ed270387fbb"/>
+    <dataPortGroup type="ModelRefInfoRepo.DataPortGroup" uuid="df8951bd-b002-42b0-96b0-77bd6dafffb0"/>
+    <expFcnUnconnectedDataPortGroup type="ModelRefInfoRepo.DataPortGroup" uuid="8f2d09ac-e867-4ff4-b862-029dd855abd2"/>
+    <interfaceParameterInfo type="ModelRefInfoRepo.InterfaceParameterInfo" uuid="c710badd-2b30-45b4-a61e-9ad84909913e">
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="a8349d5e-cc9f-48d8-82a6-abe437814a42">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_black_X_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="9ef3aabd-5c47-442d-b45a-f70c8175d9b3">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_black_Y_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="8ffe177a-5308-4916-bc54-6fcefcc9adff">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_blue_X_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="5f44451a-3650-40e4-96bb-9aaf4ffb9c64">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_blue_Y_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="82b210ef-23e9-4e98-a1ed-c760b03a20d7">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_red_X_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="0a65c3d8-62aa-41ab-877b-7c1671dad50f">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_red_Y_nominal</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="83a1b24d-4b54-4adc-81c9-124258753373">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_thrusters_BLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="ec681f5c-2971-4b1d-aefc-1381f399bf05">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_thrusters_BLUE</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="3ae8437d-3da0-4d7b-816a-c74ade262787">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>F_thrusters_RED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="b2ac0856-c14b-4d97-9b7d-042ef8c79206">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>IBLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="1eeab74e-f4c3-43df-b5c4-e7881b2c8ec3">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>IRED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="9048aeb2-0994-444d-b735-540083496e73">
+        <dimensions>3</dimensions>
+        <dimensions>6</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>K_BLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="1b2099de-e148-49d8-af64-390dde2354a5">
+        <dimensions>3</dimensions>
+        <dimensions>6</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>K_BLUE</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="db551a7d-8f53-4d03-8b9e-7d730bdaab51">
+        <dimensions>3</dimensions>
+        <dimensions>6</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>K_RED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="301e28cf-9ed1-4187-9f1f-dfd913aa6c07">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_elarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="79089a7c-4d11-4dd9-9c07-37711267e1f4">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_sharm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="334c76b0-69e4-4a5b-91f6-95a03cf3180c">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_tblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="3d4d2799-b885-40d6-97aa-b419697f3817">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_wrarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="e2f3f7b9-91f7-44fa-b7ad-93a5db61fbd0">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_xblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="1dd2d5c6-9d79-4ee9-9ab0-da8d8b3c7dec">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kd_yblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="31e6e0b3-0c11-4706-8c39-d9be11de5416">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_elarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="5878f447-5399-4c1a-af92-1494284dd9f1">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_sharm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="2bec8615-5b62-4aad-b474-1fa3d17752f9">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_tblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="bdaba577-ff2a-468b-8474-2240f010f446">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_wrarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="12c47a9f-6785-400d-a899-13734aafc58e">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_xblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="ae6dc98c-b22d-42f5-bd9a-783608c58274">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Kp_yblue</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="137ae286-6ac8-4708-b7e4-95560f0627d3">
+        <dimensions>12</dimensions>
+        <dimensions>12</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>PQ</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="be6a8c86-dcca-4679-b3f2-6e319d75e859">
+        <dimensions>12</dimensions>
+        <dimensions>12</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>PR</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="e3d62cf8-a426-44e9-821f-c703a12013e3">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>PWMFreq</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="fdd8c474-5754-4ba7-bec1-e6303361418a">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase0_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="af809753-54b7-40ec-a2d0-dfc02aa56d37">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase1_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="597d8cb5-d2e8-4650-8231-baa07195823f">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase2_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="b379dddf-5201-441f-8c4f-45e8910d571f">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase3_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="857f9eaf-04a9-4686-9a21-bb5225c5e866">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase3_SubPhase1_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="0558a62b-474a-4f05-8ba5-772b83e74b06">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase3_SubPhase2_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="53ceafb4-0549-4f26-a646-ea67a67c457c">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase3_SubPhase3_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="8e4ff93c-5fd8-4e84-af2e-dd1a281b616e">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase3_SubPhase4_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="3783e150-cb5b-4bd5-80c5-181725c9615a">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase4_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="2558a293-c2e3-42da-b258-1eb1f59cc92c">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Phase5_End</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="b82b0dea-247e-49ea-9f20-210b72a552d3">
+        <dimensions>12</dimensions>
+        <dimensions>12</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Q</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="82c5fa41-288d-47ab-9d02-602295173951">
+        <dimensions>6</dimensions>
+        <dimensions>6</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>R</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="cdf00bbc-51ff-4db7-b540-3b33fbe3ad60">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Tz_lim_elarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="3dc12494-61ca-4cd9-95e5-3d1e33d394a1">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Tz_lim_sharm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="b99df622-99c9-44c9-9752-8fe6fad37725">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>Tz_lim_wrarm</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="9ca41d01-3883-4caa-adda-fb2bca60420b">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <isUsedAsNonTunableParam>true</isUsedAsNonTunableParam>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>baseRate</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="4ec0587f-8533-4ef5-9050-d0f9b97ffe0d">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>dataRate</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="9363e316-247a-4858-a912-5be62b7d4926">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>home_states_BLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="0395b1bc-45f6-4431-a9b6-578c87681558">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>home_states_BLUE</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="9557a930-adea-4df8-ad98-cbc22376f762">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>home_states_RED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="dbc9bb5f-fa0d-441c-84bd-f6a5556c4027">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>init_states_BLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="707bfbb0-b8a1-4659-814e-365906cbc1b3">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>init_states_BLUE</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="81465986-5a1c-4935-bc3d-41dc588bea7a">
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>init_states_RED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="dd94819b-09a9-41e4-870b-48b679de237e">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>mBLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="77c24a95-1127-4f36-8b01-c1bfd93e007f">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>mRED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="420873c9-7a58-454d-b93f-585e9bc45f31">
+        <dimensions>2</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>maxd</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="066d96bc-946b-44fb-9196-ffdd86c746ae">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>platformSelection</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="d5eb3175-c042-4972-988b-44a7ff2c96ed">
+        <dimensions>1</dimensions>
+        <dimensions>2</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>r_hold_tar_0</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="24bdc461-282d-4bfb-a7a5-983c864e780b">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>rho</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="83f2e05f-d1cb-4db3-a827-619452a2f211">
+        <dimensions>1</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>simMode</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="c58d355b-d560-43ea-bc03-5d5620056eac">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>thruster_dist2CG_BLACK</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="8174add7-ed8a-4896-9b97-fc910411c1ed">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>thruster_dist2CG_BLUE</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="7550df09-2c74-4f3f-a49a-792da8b9b514">
+        <dimensions>8</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>thruster_dist2CG_RED</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="68e9074d-ccc0-47d0-ac75-687aafcf5b0f">
+        <dimensions>6</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>x_BLACK_0</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="bd75fa16-3599-4b16-b0cf-351c55f62dc6">
+        <dimensions>6</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>x_BLUE_0</parameterName>
+      </globalVariables>
+      <globalVariables type="ModelRefInfoRepo.BuiltinParameter" uuid="a4ed93ca-2d5d-438f-8c5a-3eef9c7d10f4">
+        <dimensions>135</dimensions>
+        <dimensions>1</dimensions>
+        <isUsed>true</isUsed>
+        <netSVCE>true</netSVCE>
+        <numDimensions>2</numDimensions>
+        <parameterName>z_0</parameterName>
+      </globalVariables>
+    </interfaceParameterInfo>
+    <messageInfo type="ModelRefInfoRepo.MessageInformation" uuid="7514975a-197e-4f21-beb2-385af04117b2"/>
+    <methodInfo type="ModelRefInfoRepo.MethodExistenceInfo" uuid="bd832935-f6ce-44ad-ba40-9b97695a9c68">
+      <hasTerminateMethod>true</hasTerminateMethod>
+    </methodInfo>
+    <periodicEventPortUnsupportedBlockInfo type="ModelRefInfoRepo.PeriodicEventPortUnsupportedBlockInfo" uuid="a4b4b2f9-7efe-4f21-b522-a303e710423f">
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Receive and Process Phasespace Data/Adjust Time /Enabled Subsystem1</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLACK Data/Calculate True  Time Step/Enabled Subsystem3</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLACK Data/Subsystem1/Enabled Subsystem</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLACK Data/Subsystem2/Enabled Subsystem</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLUE Data/Calculate True  Time Step/Enabled Subsystem3</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLUE Data/Subsystem1/Enabled Subsystem</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store BLUE Data/Subsystem2/Enabled Subsystem</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store RED Data/Calculate True  Time Step/Enabled Subsystem3</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store RED Data/Subsystem1/Enabled Subsystem</multiRateSubsystems>
+      <multiRateSubsystems>MPC/PhaseSpace Camera Code/Use Hardware to Obtain States/Store RED Data/Subsystem2/Enabled Subsystem</multiRateSubsystems>
+    </periodicEventPortUnsupportedBlockInfo>
+    <portGroupsRequireSameRate type="ModelRefInfoRepo.PortGroupsRequireSameRate" uuid="cea64147-e339-4100-9631-c3882f56f0d0">
+      <DSMPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="1148fe9f-18ba-447f-b312-95c5d6c75bea"/>
+      <GlobalDSMPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="3a1efe04-6dda-4d92-9e1d-fdd91e8371ac"/>
+      <mergedPortGroups type="ModelRefInfoRepo.NameToPortGroupIdxVectMap" uuid="d111f70e-ce5a-45b4-9918-6f98547afeda"/>
+    </portGroupsRequireSameRate>
+    <rateBasedMdlGlobalDSMRateSpec type="ModelRefInfoRepo.GlobalDSMRateSpecMap" uuid="90c2e944-321b-4c15-9800-bf49ec09a1ca"/>
+    <rateSpecOfGlobalDSMAccessedByDescExpFcnMdlMap type="ModelRefInfoRepo.GlobalDSMRateSpecMap" uuid="ef0ac3b3-c99c-4cd2-8507-2ae8069d66a4"/>
+    <rootBlockDiagramInterface type="ci.Model" uuid="f3e8ab1a-bb6c-4023-99e6-6ccaa203a1fe">
+      <p_RootComponentInterface type="ci.ComponentInterface" uuid="290f3a36-717a-4d74-8b11-128f51c27abd">
+        <p_Name>MPC</p_Name>
+        <p_Type>ROOT</p_Type>
+      </p_RootComponentInterface>
+    </rootBlockDiagramInterface>
+    <simulinkFunctions type="ModelRefInfoRepo.SimulinkFunctions" uuid="f101b77b-51f9-4284-982c-5c7514a55bec">
+      <compSimulinkFunctionCatalog></compSimulinkFunctionCatalog>
+    </simulinkFunctions>
+    <sltpContext type="sltp.mm.core.Context" uuid="eaa72d88-4ee5-416d-b060-e92534399baf">
+      <priorityDirection>HighNumberLast</priorityDirection>
+      <unusedTaskIds>1</unusedTaskIds>
+      <defaultEventBehavior type="sltp.mm.core.EventBehavior" uuid="d7ab87b1-5e71-4ca0-9d82-f03c5bd9acc2"/>
+      <editorState type="sltp.mm.core.EditorState" uuid="dfddbac0-357d-476b-aee8-f6ce847b5b79">
+        <isSynchronized>true</isSynchronized>
+        <panelState type="sltp.mm.core.EditorPanelState" uuid="ce5f0e47-f930-4581-a1d3-2284783b58ef"/>
+      </editorState>
+      <rootTask type="sltp.mm.core.Task" uuid="d68bf30b-f682-4bfc-92a1-8148c2d0e839">
+        <context type="sltp.mm.core.Context" uuid="eaa72d88-4ee5-416d-b060-e92534399baf"/>
+        <explicit>false</explicit>
+        <name>Default</name>
+        <priority>-2147483648</priority>
+        <subgraph type="sltp.mm.core.Graph" uuid="d49cbe55-bd86-4672-a486-46c034e89138">
+          <tasks type="sltp.mm.core.Task" uuid="ed6bf1c7-27d5-4dcc-a898-20979f8abf93">
+            <baseTask>true</baseTask>
+            <context type="sltp.mm.core.Context" uuid="eaa72d88-4ee5-416d-b060-e92534399baf"/>
+            <explicit>false</explicit>
+            <id>2</id>
+            <isTimed>true</isTimed>
+            <name>Cont</name>
+            <priority>40</priority>
+            <rates type="sltp.mm.core.Rate" uuid="fae0f3fe-82a2-40c4-a69f-c3ba5cff4e6b">
+              <annotation>Cont</annotation>
+              <color>255</color>
+              <hasBlocks>true</hasBlocks>
+              <identifier>Continuous00</identifier>
+              <rateIndex>0</rateIndex>
+              <rateSpec type="sltp.mm.core.RateSpec">
+                <period>0.0</period>
+              </rateSpec>
+              <sti>0</sti>
+            </rates>
+            <rates type="sltp.mm.core.Rate" uuid="8a3aca56-bb2b-46c0-b596-5c2f67a1f37b">
+              <annotation>D1</annotation>
+              <color>-12240129</color>
+              <hasBlocks>true</hasBlocks>
+              <rateIndex>1</rateIndex>
+              <rateSpec type="sltp.mm.core.RateSpec">
+                <period>.05</period>
+              </rateSpec>
+              <sti>1</sti>
+            </rates>
+          </tasks>
+        </subgraph>
+      </rootTask>
+    </sltpContext>
+    <stateWriterToOwnerMap type="ModelRefInfoRepo.StateWriterInfo" uuid="5631b94a-238f-437e-a8b8-513d9c0cc9db"/>
+    <stoClientDataRegistry type="sto.ClientDataRegistry" uuid="b0d8b7d3-f1c8-421e-8559-1e4b4f3704bf">
+      <dataSets type="sto.ClientClockNamedDataSet" uuid="4ce893f2-cbd7-474e-ab0e-67bc08a65b54">
+        <tag>sltpEvents</tag>
+      </dataSets>
+      <dataSets type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="8091b621-c8f7-408f-bfed-9e25eeba336a">
+        <tag>sltpTaskGroups</tag>
+      </dataSets>
+      <dataSets type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="9d109a6f-874d-4fba-96be-b1db68cca0c2">
+        <dSet type="ModelRefInfoRepo.SltpTaskData" uuid="4a38fe9a-4672-413d-8ae2-31f908f11928"/>
+        <tSet type="ModelRefInfoRepo.SltpTaskData" uuid="4a38fe9a-4672-413d-8ae2-31f908f11928">
+          <dataName>Cont</dataName>
+          <linkedSet type="sto.ClientTaskHierarchyElementNamedDataSet" uuid="9d109a6f-874d-4fba-96be-b1db68cca0c2"/>
+          <id type="sto.TaskHierarchyElementId">
+            <clockId>MPC::defaultTimer</clockId>
+            <id>_task0</id>
+          </id>
+        </tSet>
+        <tag>sltpTasks</tag>
+      </dataSets>
+    </stoClientDataRegistry>
+    <varTsUIDMap type="ModelRefInfoRepo.VarTsUIDMap" uuid="773020da-c4e7-43ba-9338-7ba45d551911"/>
+  </ModelRefInfoRepo.ModelRefInfoRoot>
+</MF0>

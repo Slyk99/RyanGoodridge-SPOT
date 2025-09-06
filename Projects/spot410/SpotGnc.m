@@ -1,0 +1,31 @@
+classdef SpotGnc < Simulink.IntEnumType
+    enumeration
+        refConstant(101)
+        refCosine(102)
+        refSine(103)
+        refPolyWrap(104)
+        refHalfCosine(105)
+        refDeployStow(106)
+        refCircularInspection(107)
+%        
+        ctrlNone(201)
+        ctrlPd(202)
+        ctrlPdFwd(203)
+        ctrlPd_vel(204)
+        ctrlPdFwd_vel(205)
+        ctrlArmSetpoint(206)
+        ctrlPd_vel_ilc(207)
+%
+        errMinus(301)
+        errMinusWrap(302)
+        errArmSetpoint(303)
+%
+        estNone(401)
+        estVelBias(402)
+        estEkf3dof(403)
+%
+        procNone(501)
+        procAngle(502)
+    end
+end
+
