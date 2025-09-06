@@ -17,6 +17,7 @@ appHandle = GUI_v4_1_Main;
 clear functions % make sure simulink is cleared 
 MPC_Configuration 
 PS_Filter_Config
+CV_Configuration
 
 % As an example, here are the control parameters the manipulator.
 % Set torque limits on joints
