@@ -54,343 +54,418 @@ int main(int argc, const char **argv)
 	}
 
 
-  WSADATA w;							/* Used to open windows connection */
-  unsigned short port_number = 31535;	/* Port number to use */
-  int a1, a2, a3, a4;					/* Components of address in xxx.xxx.xxx.xxx form */
-  int client_length;					/* Length of client struct */
-  int bytes_received = -1;				/* Bytes received from client */
-  SOCKET sd;							/* Socket descriptor of server */
-  struct sockaddr_in server;			/* Information about the server */
-  struct sockaddr_in client;			/* Information about the client */
-  double dataPacket[10] = { 0 };		/* Create array for data storage */
-  double duration;
-  const double TWO_PI = 2.0 * 3.14159265358979323846;
-  const double M_PI = 3.14159265358979323846;
-
-  /* Below is the IP address for the groundstation computer. In this version, 
-  it has been set to my laptop. This will have to be changed for any new groundstation. */
-  a1 = 192;
-  a2 = 168;
-  a3 = 1;
-  a4 = 104;
-
-  /* Open windows connection */
-  if (WSAStartup(0x0101, &w) != 0)
-  {
-	  //fprintf(stderr, "Could not open Windows connection.\n");
-	  ::exit(0);
-  }
-
-  /* Open a datagram socket */
-  sd = socket(AF_INET, SOCK_DGRAM, 0);
-
-  u_long mode = 1;  
-  ioctlsocket(sd, FIONBIO, &mode); 
-
-  if (sd == INVALID_SOCKET)
-  {
-	  fprintf(stderr, "Could not create socket.\n");
-	  
-	  WSACleanup();
-	  ::exit(0);
-  }
-
-  /* Clear out server struct */
-  memset((void *)&server, '\0', sizeof(struct sockaddr_in));
-
-  /* Set family and port */
-  server.sin_family = AF_INET;
-  server.sin_port = htons(port_number);
-
-  server.sin_addr.S_un.S_un_b.s_b1 = (unsigned char)a1;
-  server.sin_addr.S_un.S_un_b.s_b2 = (unsigned char)a2;
-  server.sin_addr.S_un.S_un_b.s_b3 = (unsigned char)a3;
-  server.sin_addr.S_un.S_un_b.s_b4 = (unsigned char)a4;
-
-  /* Print out server information */
-  printf("Server running on %u.%u.%u.%u\n", (unsigned char)server.sin_addr.S_un.S_un_b.s_b1,
-	  (unsigned char)server.sin_addr.S_un.S_un_b.s_b2,
-	  (unsigned char)server.sin_addr.S_un.S_un_b.s_b3,
-	  (unsigned char)server.sin_addr.S_un.S_un_b.s_b4);
-  printf("Use the ON/OFF Toggle in the SPOT Application to shut down cleanly. This console can be minimized.\n");
-  
-
-  /* Bind address to socket */
-  if (bind(sd, (struct sockaddr *)&server, sizeof(struct sockaddr_in)) == -1)
-  {
-	  fprintf(stderr, "Could not bind name to socket.\n");
-	  
-	  closesocket(sd);
-	  WSACleanup();
-	  ::exit(0);
-	  
-  }
-
-  client_length = (int)sizeof(struct sockaddr_in);
-
-  /* Below is the IP address for the UDP client. */
-  std::vector<std::string> client_addresses = { "192.168.1.110", "192.168.1.111", "192.168.1.112", "192.168.1.104"};
-
-  // set up sockaddr_in struct for wireless computer
-  client.sin_family = AF_INET;
-  client.sin_port = htons(31534); // use port 1234 on wireless computer
-
-  /* This is where the PhaseSpace code begins. */
-  string address = "192.168.1.109";
-  OWL::Context owl;
-  OWL::Markers markers;
-  OWL::Rigids rigids;
-
-  std::string phaseSpaceOptions;
-  std::string tracker_id_RED_7_pos_string, tracker_id_RED_1_pos_string;
-  std::string tracker_id_RED_3_pos_string, tracker_id_RED_5_pos_string;
-  std::string tracker_id_BLACK_29_pos_string, tracker_id_BLACK_27_pos_string;
-  std::string tracker_id_BLACK_25_pos_string, tracker_id_BLACK_31_pos_string;
-  std::string tracker_id_BLUE_8_pos_string, tracker_id_BLUE_14_pos_string;
-  std::string tracker_id_BLUE_12_pos_string, tracker_id_BLUE_10_pos_string;
-  phaseSpaceOptions = "profile=all120";
-
-  std::unordered_map<std::string, std::string> tracker_positions;
-
-  // Default values
-  tracker_positions["tracker_id_RED_5_pos_string"] = "pos=125.509767,143.875167,0";
-  tracker_positions["tracker_id_RED_3_pos_string"] = "pos=125.509767,-135.624833,0";
-  tracker_positions["tracker_id_RED_1_pos_string"] = "pos=-154.990233,-135.624833,0";
-  tracker_positions["tracker_id_RED_7_pos_string"] = "pos=-153.490233,144.375167,0";
-  tracker_positions["tracker_id_BLACK_29_pos_string"] = "pos=130.251807,141.800150,0";
-  tracker_positions["tracker_id_BLACK_27_pos_string"] = "pos=130.751807,-135.699850,0";
-  tracker_positions["tracker_id_BLACK_25_pos_string"] = "pos=-146.748193,-135.199850,0";
-  tracker_positions["tracker_id_BLACK_31_pos_string"] = "pos=-146.748193,143.300150,0";
-  tracker_positions["tracker_id_BLUE_8_pos_string"] = "pos=140.000177,152.096588,0";
-  tracker_positions["tracker_id_BLUE_14_pos_string"] = "pos=140.500177,-125.403412,0";
-  tracker_positions["tracker_id_BLUE_12_pos_string"] = "pos=-136.999823,-124.903412,0";
-  tracker_positions["tracker_id_BLUE_10_pos_string"] = "pos=-136.999823,153.596588,0";
-
-  // Attempt to read from file
-  std::ifstream file("tracker_positions_phasespace.txt");
-  if (file.is_open()) {
-	  std::string line;
-	  while (getline(file, line)) {
-		  std::istringstream iss(line);
-		  std::string id, x, y, z;
-		  getline(iss, id, ',');
-		  getline(iss, x, ',');
-		  getline(iss, y, ',');
-		  getline(iss, z);
-		  tracker_positions[id] = "pos=" + x + "," + y + "," + z;
-	  }
-	  file.close();
-  }
-
-  // Output the tracker positions (from file if possible, otherwise defaults)
-  for (const auto& pair : tracker_positions) {
-	  std::cout << pair.first << " = " << pair.second << std::endl;
-  }
-
-  tracker_id_RED_5_pos_string = tracker_positions["tracker_id_RED_5_pos_string"];
-  tracker_id_RED_3_pos_string = tracker_positions["tracker_id_RED_3_pos_string"];
-  tracker_id_RED_1_pos_string = tracker_positions["tracker_id_RED_1_pos_string"];
-  tracker_id_RED_7_pos_string = tracker_positions["tracker_id_RED_7_pos_string"];
-
-  tracker_id_BLACK_29_pos_string = tracker_positions["tracker_id_BLACK_29_pos_string"];
-  tracker_id_BLACK_27_pos_string = tracker_positions["tracker_id_BLACK_27_pos_string"];
-  tracker_id_BLACK_25_pos_string = tracker_positions["tracker_id_BLACK_25_pos_string"];
-  tracker_id_BLACK_31_pos_string = tracker_positions["tracker_id_BLACK_31_pos_string"];
-
-  tracker_id_BLUE_8_pos_string = tracker_positions["tracker_id_BLUE_8_pos_string"];
-  tracker_id_BLUE_14_pos_string = tracker_positions["tracker_id_BLUE_14_pos_string"];
-  tracker_id_BLUE_12_pos_string = tracker_positions["tracker_id_BLUE_12_pos_string"];
-  tracker_id_BLUE_10_pos_string = tracker_positions["tracker_id_BLUE_10_pos_string"];
-
-  const std::string myoptions = phaseSpaceOptions;
-
-
-  if (owl.open(address) <= 0 || owl.initialize() <= 0) return 0;
-
-  uint32_t tracker_id_RED = 0;
-  owl.createTracker(tracker_id_RED, "rigid", "RED_rigid");
-
-  /* Assign markers to the rigid body and indicate their positions
-	 w.r.t the centre of mass (obtained from calibration text file) */
-  owl.assignMarker(tracker_id_RED, 5, "5", tracker_id_RED_5_pos_string); // top left
-  owl.assignMarker(tracker_id_RED, 3, "3", tracker_id_RED_3_pos_string); // top right
-  owl.assignMarker(tracker_id_RED,  1, "1", tracker_id_RED_1_pos_string); // bottom right
-  owl.assignMarker(tracker_id_RED, 7, "7", tracker_id_RED_7_pos_string); // bottom left 
-
-  uint32_t tracker_id_BLACK = 2;
-  owl.createTracker(tracker_id_BLACK, "rigid", "BLACK_rigid");
-
-  /* Assign markers to the rigid body and indicate their positions
-	 w.r.t the centre of mass (obtained from calibration text file) */
-  owl.assignMarker(tracker_id_BLACK,  13, "13", tracker_id_BLACK_29_pos_string); // top left
-  owl.assignMarker(tracker_id_BLACK,  11, "11", tracker_id_BLACK_27_pos_string); // top right
-  owl.assignMarker(tracker_id_BLACK,  9, "9", tracker_id_BLACK_25_pos_string); // bottom right
-  owl.assignMarker(tracker_id_BLACK,  15, "15", tracker_id_BLACK_31_pos_string); // bottom left
-
-  uint32_t tracker_id_BLUE = 3;
-
-  owl.createTracker(tracker_id_BLUE, "rigid", "BLUE_rigid");
-
-  /* Assign markers to the rigid body and indicate their positions
-	 w.r.t the centre of mass (obtained from calibration text file) */
-  owl.assignMarker(tracker_id_BLUE, 16, "16", tracker_id_BLUE_8_pos_string); // top left
-  owl.assignMarker(tracker_id_BLUE, 22, "22", tracker_id_BLUE_14_pos_string); // top right
-  owl.assignMarker(tracker_id_BLUE, 20, "20", tracker_id_BLUE_12_pos_string); // bottom right
-  owl.assignMarker(tracker_id_BLUE, 18, "18", tracker_id_BLUE_10_pos_string); // bottom left
- 
-
-  int frequency = atoi(argv[1]); // convert first argument to integer
-  owl.frequency(frequency);
-
-
-  // start streaming
-  owl.streaming(1);
-
-  //start = clock();
-  auto t1 = Clock::now();
-
-  // main loop
-  while (owl.isOpen() && owl.property<int>("initialized"))
-  {
-	  const OWL::Event *event = owl.nextEvent(1000);
-	  if (!event) continue;
-
-	  if (event->type_id() == OWL::Type::ERROR)
-	  {
-		  break;
-	  }
-	  else if (event->type_id() == OWL::Type::FRAME)
-	  {
-		  if (event->find("rigids", rigids) > 0)
-		  {
-			  for (OWL::Rigids::iterator r = rigids.begin(); r != rigids.end(); r++)
-			  {
-				  if (r->cond > 0)
-				  {
-					  auto t2 = Clock::now();
-					  duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
-					  dataPacket[0] = duration * 0.000000001;
-
-                      if (r->id == 0)
-                      {
-
-                          
-                          
-                          // Assume prevRawAngle0 and accumulatedAngle0 are declared and initialized elsewhere
-                          static double prevRawAngle0 = 0.0;
-                          static double accumulatedAngle0 = 0.0;
-
-                          dataPacket[1] = r->pose[0];
-                          dataPacket[2] = r->pose[1];
-
-                          // Compute the raw angle
-                          double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
-                              + 2 * r->pose[3] * r->pose[6],
-                              2 * r->pose[3] * r->pose[3] - 1
-                              + 2 * r->pose[4] * r->pose[4]);
-
-                          // Compute the difference between the current and the previous raw angle
-                          double angleDifference = rawAngle - prevRawAngle0;
-
-                          // Normalize the angle difference to the interval [-π, π]
-                          if (angleDifference <= -M_PI)
-                              angleDifference += TWO_PI;
-                          else if (angleDifference > M_PI)
-                              angleDifference -= TWO_PI;
-
-                          // Accumulate the angle difference
-                          accumulatedAngle0 += angleDifference;
-
-                          // Store the current raw angle for the next iteration
-                          prevRawAngle0 = rawAngle;
-
-                          // Store the accumulated angle in the data packet
-                          dataPacket[3] = accumulatedAngle0;
-
-                          //std::cout << dataPacket[1] << std::endl;
-                      }
-                      else if (r->id == 2)
-                      {
-                          // Assume prevRawAngle2 and accumulatedAngle2 are declared and initialized elsewhere
-                          static double prevRawAngle2 = 0.0;
-                          static double accumulatedAngle2 = 0.0;
-
-                          dataPacket[4] = r->pose[0];
-                          dataPacket[5] = r->pose[1];
-
-                          // Compute the raw angle
-                          double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
-                              + 2 * r->pose[3] * r->pose[6],
-                              2 * r->pose[3] * r->pose[3] - 1
-                              + 2 * r->pose[4] * r->pose[4]);
-
-                          // Compute the difference between the current and the previous raw angle
-                          double angleDifference = rawAngle - prevRawAngle2;
-
-                          // Normalize the angle difference to the interval [-π, π]
-                          if (angleDifference <= -M_PI)
-                              angleDifference += TWO_PI;
-                          else if (angleDifference > M_PI)
-                              angleDifference -= TWO_PI;
-
-                          // Accumulate the angle difference
-                          accumulatedAngle2 += angleDifference;
-
-                          // Store the current raw angle for the next iteration
-                          prevRawAngle2 = rawAngle;
-
-                          // Store the accumulated angle in the data packet
-                          dataPacket[6] = accumulatedAngle2;
-                      }
-                      else if (r->id == 3)
-                      {
-                          // Assume prevRawAngle3 and accumulatedAngle3 are declared and initialized elsewhere
-                          static double prevRawAngle3 = 0.0;
-                          static double accumulatedAngle3 = 0.0;
-
-                          dataPacket[7] = r->pose[0];
-                          dataPacket[8] = r->pose[1];
-
-                          // Compute the raw angle
-                          double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
-                              + 2 * r->pose[3] * r->pose[6],
-                              2 * r->pose[3] * r->pose[3] - 1
-                              + 2 * r->pose[4] * r->pose[4]);
-
-                          // Compute the difference between the current and the previous raw angle
-                          double angleDifference = rawAngle - prevRawAngle3;
-
-                          // Normalize the angle difference to the interval [-π, π]
-                          if (angleDifference <= -M_PI)
-                              angleDifference += TWO_PI;
-                          else if (angleDifference > M_PI)
-                              angleDifference -= TWO_PI;
-
-                          // Accumulate the angle difference
-                          accumulatedAngle3 += angleDifference;
-
-                          // Store the current raw angle for the next iteration
-                          prevRawAngle3 = rawAngle;
-
-                          // Store the accumulated angle in the data packet
-                          dataPacket[9] = accumulatedAngle3;
-                      }
-				  }
-			  }
-		  }
-
-          
-
-		  // send dataPacket array to wireless computer
-		  for (const auto& address : client_addresses) {
-			  client.sin_addr.S_un.S_addr = inet_addr(address.c_str());
-			  sendto(sd, (char*)dataPacket, sizeof(dataPacket), 0, (struct sockaddr*)&client, sizeof(client));
-		  }	  
-		  
-	  }
-  } // while 
-
-  owl.done();
-  owl.close();
-  return 0;
+    WSADATA w;							/* Used to open windows connection */
+    unsigned short port_number = 31535;	/* Port number to use */
+    int a1, a2, a3, a4;					/* Components of address in xxx.xxx.xxx.xxx form */
+    int client_length;					/* Length of client struct */
+    int bytes_received = -1;				/* Bytes received from client */
+    SOCKET sd;							/* Socket descriptor of server */
+    struct sockaddr_in server;			/* Information about the server */
+    struct sockaddr_in client;			/* Information about the client */
+    double dataPacket[19] = { 0 };		/* Create array for data storage */
+    double duration;
+    const double TWO_PI = 2.0 * 3.14159265358979323846;
+    const double M_PI = 3.14159265358979323846;
+
+    // Set up the previous values for velocity
+    double prevServX = 0.0;
+    double prevServY = 0.0;
+    double prevServAtt = 0.0;
+
+    double prevClientX = 0.0;
+    double prevClientY = 0.0;
+    double prevClientAtt = 0.0;
+
+    double prevObstX = 0.0;
+    double prevObstY = 0.0;
+    double prevObstAtt = 0.0;
+
+    auto prevTimeRED = 0.0;
+    auto prevTimeBLACK = 0.0;
+    auto prevTimeBLUE = 0.0;
+
+
+    /* Below is the IP address for the groundstation computer. In this version, 
+    it has been set to my laptop. This will have to be changed for any new groundstation. */
+    a1 = 192;
+    a2 = 168;
+    a3 = 1;
+    a4 = 104;
+
+    /* Open windows connection */
+    if (WSAStartup(0x0101, &w) != 0)
+    {
+        //fprintf(stderr, "Could not open Windows connection.\n");
+        ::exit(0);
+    }
+
+    /* Open a datagram socket */
+    sd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    // Set the buffer size
+    int bufferSize = 8192; // Example size, adjust as necessary
+    setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char*)&bufferSize, sizeof(bufferSize));
+    setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char*)&bufferSize, sizeof(bufferSize));
+
+    u_long mode = 1;  
+    ioctlsocket(sd, FIONBIO, &mode); 
+
+    if (sd == INVALID_SOCKET)
+    {
+        fprintf(stderr, "Could not create socket.\n");
+        
+        WSACleanup();
+        ::exit(0);
+    }
+
+    /* Clear out server struct */
+    memset((void *)&server, '\0', sizeof(struct sockaddr_in));
+
+    /* Set family and port */
+    server.sin_family = AF_INET;
+    server.sin_port = htons(port_number);
+
+    server.sin_addr.S_un.S_un_b.s_b1 = (unsigned char)a1;
+    server.sin_addr.S_un.S_un_b.s_b2 = (unsigned char)a2;
+    server.sin_addr.S_un.S_un_b.s_b3 = (unsigned char)a3;
+    server.sin_addr.S_un.S_un_b.s_b4 = (unsigned char)a4;
+
+    /* Print out server information */
+    printf("Server running on %u.%u.%u.%u\n", (unsigned char)server.sin_addr.S_un.S_un_b.s_b1,
+        (unsigned char)server.sin_addr.S_un.S_un_b.s_b2,
+        (unsigned char)server.sin_addr.S_un.S_un_b.s_b3,
+        (unsigned char)server.sin_addr.S_un.S_un_b.s_b4);
+    printf("Use the ON/OFF Toggle in the SPOT Application to shut down cleanly. This console can be minimized.\n");
+
+
+    /* Bind address to socket */
+    if (bind(sd, (struct sockaddr *)&server, sizeof(struct sockaddr_in)) == -1)
+    {
+        fprintf(stderr, "Could not bind name to socket.\n");
+        
+        closesocket(sd);
+        WSACleanup();
+        ::exit(0);
+        
+    }
+
+    client_length = (int)sizeof(struct sockaddr_in);
+
+    /* Below is the IP address for the UDP client. */
+    std::vector<std::string> client_addresses = { "192.168.1.110", "192.168.1.111", "192.168.1.112", "192.168.1.104", "192.168.1.115"};
+
+    // set up sockaddr_in struct for wireless computer
+    client.sin_family = AF_INET;
+    client.sin_port = htons(31534); // use port 1234 on wireless computer
+
+    /* This is where the PhaseSpace code begins. */
+    string address = "192.168.1.109";
+    OWL::Context owl;
+    OWL::Markers markers;
+    OWL::Rigids rigids;
+
+    std::string phaseSpaceOptions;
+    std::string tracker_id_RED_0_pos_string, tracker_id_RED_6_pos_string;
+    std::string tracker_id_RED_4_pos_string, tracker_id_RED_2_pos_string;
+    std::string tracker_id_BLACK_13_pos_string, tracker_id_BLACK_11_pos_string;
+    std::string tracker_id_BLACK_9_pos_string, tracker_id_BLACK_15_pos_string;
+    std::string tracker_id_BLUE_8_pos_string, tracker_id_BLUE_14_pos_string;
+    std::string tracker_id_BLUE_12_pos_string, tracker_id_BLUE_10_pos_string;
+    phaseSpaceOptions = "profile=default";
+
+    std::unordered_map<std::string, std::string> tracker_positions;
+
+    // Default values
+    tracker_positions["tracker_id_RED_0_pos_string"] = "pos=125.509767,143.875167,0";
+    tracker_positions["tracker_id_RED_6_pos_string"] = "pos=125.509767,-135.624833,0";
+    tracker_positions["tracker_id_RED_4_pos_string"] = "pos=-154.990233,-135.624833,0";
+    tracker_positions["tracker_id_RED_2_pos_string"] = "pos=-153.490233,144.375167,0";
+    tracker_positions["tracker_id_BLACK_13_pos_string"] = "pos=130.251807,141.800150,0";
+    tracker_positions["tracker_id_BLACK_11_pos_string"] = "pos=130.751807,-135.699850,0";
+    tracker_positions["tracker_id_BLACK_9_pos_string"] = "pos=-146.748193,-135.199850,0";
+    tracker_positions["tracker_id_BLACK_15_pos_string"] = "pos=-146.748193,143.300150,0";
+    tracker_positions["tracker_id_BLUE_8_pos_string"] = "pos=140.000177,152.096588,0";
+    tracker_positions["tracker_id_BLUE_14_pos_string"] = "pos=140.500177,-125.403412,0";
+    tracker_positions["tracker_id_BLUE_12_pos_string"] = "pos=-136.999823,-124.903412,0";
+    tracker_positions["tracker_id_BLUE_10_pos_string"] = "pos=-136.999823,153.596588,0";
+
+    // Attempt to read from file
+    std::ifstream file("tracker_positions_phasespace.txt");
+    if (file.is_open()) {
+        std::string line;
+        while (getline(file, line)) {
+            std::istringstream iss(line);
+            std::string id, x, y, z;
+            getline(iss, id, ',');
+            getline(iss, x, ',');
+            getline(iss, y, ',');
+            getline(iss, z);
+            tracker_positions[id] = "pos=" + x + "," + y + "," + z;
+        }
+        file.close();
+    }
+
+    // Output the tracker positions (from file if possible, otherwise defaults)
+    for (const auto& pair : tracker_positions) {
+        std::cout << pair.first << " = " << pair.second << std::endl;
+    }
+
+    tracker_id_RED_0_pos_string = tracker_positions["tracker_id_RED_0_pos_string"];
+    tracker_id_RED_6_pos_string = tracker_positions["tracker_id_RED_6_pos_string"];
+    tracker_id_RED_4_pos_string = tracker_positions["tracker_id_RED_4_pos_string"];
+    tracker_id_RED_2_pos_string = tracker_positions["tracker_id_RED_2_pos_string"];
+
+    tracker_id_BLACK_13_pos_string = tracker_positions["tracker_id_BLACK_13_pos_string"];
+    tracker_id_BLACK_11_pos_string = tracker_positions["tracker_id_BLACK_11_pos_string"];
+    tracker_id_BLACK_9_pos_string = tracker_positions["tracker_id_BLACK_9_pos_string"];
+    tracker_id_BLACK_15_pos_string = tracker_positions["tracker_id_BLACK_15_pos_string"];
+
+    tracker_id_BLUE_8_pos_string = tracker_positions["tracker_id_BLUE_8_pos_string"];
+    tracker_id_BLUE_14_pos_string = tracker_positions["tracker_id_BLUE_14_pos_string"];
+    tracker_id_BLUE_12_pos_string = tracker_positions["tracker_id_BLUE_12_pos_string"];
+    tracker_id_BLUE_10_pos_string = tracker_positions["tracker_id_BLUE_10_pos_string"];
+
+    const std::string myoptions = phaseSpaceOptions;
+
+
+    if (owl.open(address) <= 0 || owl.initialize() <= 0) return 0;
+
+    uint32_t tracker_id_RED = 0;
+    owl.createTracker(tracker_id_RED, "rigid", "RED_rigid");
+
+    /* Assign markers to the rigid body and indicate their positions
+        w.r.t the centre of mass (obtained from calibration text file) */
+    owl.assignMarker(tracker_id_RED, 0, "0", tracker_id_RED_0_pos_string); // top left
+    owl.assignMarker(tracker_id_RED, 6, "6", tracker_id_RED_6_pos_string); // top right
+    owl.assignMarker(tracker_id_RED, 4, "4", tracker_id_RED_4_pos_string); // bottom right
+    owl.assignMarker(tracker_id_RED, 2, "2", tracker_id_RED_2_pos_string); // bottom left 
+
+    uint32_t tracker_id_BLACK = 2;
+    owl.createTracker(tracker_id_BLACK, "rigid", "BLACK_rigid");
+
+    /* Assign markers to the rigid body and indicate their positions
+        w.r.t the centre of mass (obtained from calibration text file) */
+    owl.assignMarker(tracker_id_BLACK, 13, "13", tracker_id_BLACK_13_pos_string); // top left
+    owl.assignMarker(tracker_id_BLACK, 11, "11", tracker_id_BLACK_11_pos_string); // top right
+    owl.assignMarker(tracker_id_BLACK, 9, "9", tracker_id_BLACK_9_pos_string); // bottom right
+    owl.assignMarker(tracker_id_BLACK, 15, "15", tracker_id_BLACK_15_pos_string); // bottom left
+
+    uint32_t tracker_id_BLUE = 3;
+
+    owl.createTracker(tracker_id_BLUE, "rigid", "BLUE_rigid");
+
+    /* Assign markers to the rigid body and indicate their positions
+        w.r.t the centre of mass (obtained from calibration text file) */
+    owl.assignMarker(tracker_id_BLUE, 16, "16", tracker_id_BLUE_8_pos_string); // top left
+    owl.assignMarker(tracker_id_BLUE, 22, "22", tracker_id_BLUE_14_pos_string); // top right
+    owl.assignMarker(tracker_id_BLUE, 20, "20", tracker_id_BLUE_12_pos_string); // bottom right
+    owl.assignMarker(tracker_id_BLUE, 18, "18", tracker_id_BLUE_10_pos_string); // bottom left
+
+
+    int frequency = atoi(argv[1]); // convert first argument to integer
+    owl.frequency(frequency);
+
+
+    // start streaming
+    owl.streaming(1);
+
+    //start = clock();
+    auto t1 = Clock::now();
+
+    // main loop
+    while (owl.isOpen() && owl.property<int>("initialized"))
+    {
+        const OWL::Event *event = owl.nextEvent(1000);
+        if (!event) continue;
+
+        if (event->type_id() == OWL::Type::ERROR)
+        {
+            break;
+        }
+        else if (event->type_id() == OWL::Type::FRAME)
+        {
+            if (event->find("rigids", rigids) > 0)
+            {
+                for (OWL::Rigids::iterator r = rigids.begin(); r != rigids.end(); r++)
+                {
+                    if (r->cond > 0)
+                    {
+                        auto t2 = Clock::now();
+                        duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+                        dataPacket[0] = duration * 0.000000001;
+                        double currentTime = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() * 1e-9;
+
+                        if (r->id == 0)
+                        {
+                            
+                            // Assume prevRawAngle0 and accumulatedAngle0 are declared and initialized elsewhere
+                            static double prevRawAngle0 = 0.0;
+                            static double accumulatedAngle0 = 0.0;
+
+                            dataPacket[1] = r->pose[0];
+                            dataPacket[2] = r->pose[1];
+
+                            // Compute the raw angle
+                            double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
+                                + 2 * r->pose[3] * r->pose[6],
+                                2 * r->pose[3] * r->pose[3] - 1
+                                + 2 * r->pose[4] * r->pose[4]);
+
+                            // Compute the difference between the current and the previous raw angle
+                            double angleDifference = rawAngle - prevRawAngle0;
+
+                            // Normalize the angle difference to the interval [-π, π]
+                            if (angleDifference <= -M_PI)
+                                angleDifference += TWO_PI;
+                            else if (angleDifference > M_PI)
+                                angleDifference -= TWO_PI;
+
+                            // Accumulate the angle difference
+                            accumulatedAngle0 += angleDifference;
+
+                            // Store the current raw angle for the next iteration
+                            prevRawAngle0 = rawAngle;
+
+                            // Store the accumulated angle in the data packet
+                            dataPacket[3] = accumulatedAngle0;
+
+                            // Calculate the velocity
+                            double velServX = (dataPacket[1] - prevServX) / (currentTime - prevTimeRED);
+                            double velServY = (dataPacket[2] - prevServY) / (currentTime - prevTimeRED);
+                            double velServAtt = (dataPacket[3] - prevServAtt) / (currentTime - prevTimeRED);
+
+                            // Store the current values for the next iteration
+                            prevServX = dataPacket[1];
+                            prevServY = dataPacket[2];
+                            prevServAtt = dataPacket[3];
+
+                            // Store the velocity in the data packet
+                            dataPacket[10] = velServX;
+                            dataPacket[11] = velServY;
+                            dataPacket[12] = velServAtt;
+
+                            //std::cout << dataPacket[1] << std::endl;
+
+                            prevTimeRED = currentTime;
+                        }
+                        else if (r->id == 2)
+                        {
+                            // Assume prevRawAngle2 and accumulatedAngle2 are declared and initialized elsewhere
+                            static double prevRawAngle2 = 0.0;
+                            static double accumulatedAngle2 = 0.0;
+
+                            dataPacket[4] = r->pose[0];
+                            dataPacket[5] = r->pose[1];
+
+                            // Compute the raw angle
+                            double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
+                                + 2 * r->pose[3] * r->pose[6],
+                                2 * r->pose[3] * r->pose[3] - 1
+                                + 2 * r->pose[4] * r->pose[4]);
+
+                            // Compute the difference between the current and the previous raw angle
+                            double angleDifference = rawAngle - prevRawAngle2;
+
+                            // Normalize the angle difference to the interval [-π, π]
+                            if (angleDifference <= -M_PI)
+                                angleDifference += TWO_PI;
+                            else if (angleDifference > M_PI)
+                                angleDifference -= TWO_PI;
+
+                            // Accumulate the angle difference
+                            accumulatedAngle2 += angleDifference;
+
+                            // Store the current raw angle for the next iteration
+                            prevRawAngle2 = rawAngle;
+
+                            // Store the accumulated angle in the data packet
+                            dataPacket[6] = accumulatedAngle2;
+
+                            // Calculate the velocity
+                            double velClientX = (dataPacket[4] - prevClientX) / (currentTime - prevTimeBLACK);
+                            double velClientY = (dataPacket[5] - prevClientY) / (currentTime - prevTimeBLACK);
+                            double velClientAtt = (dataPacket[6] - prevClientAtt) / (currentTime - prevTimeBLACK);
+
+                            // Store the current values for the next iteration
+                            prevClientX = dataPacket[4];
+                            prevClientY = dataPacket[5];
+                            prevClientAtt = dataPacket[6];
+
+                            // Store the velocity in the data packet
+                            dataPacket[13] = velClientX;
+                            dataPacket[14] = velClientY;
+                            dataPacket[15] = velClientAtt;
+
+                            prevTimeBLACK = currentTime;
+
+                        }
+                        else if (r->id == 3)
+                        {
+                            // Assume prevRawAngle3 and accumulatedAngle3 are declared and initialized elsewhere
+                            static double prevRawAngle3 = 0.0;
+                            static double accumulatedAngle3 = 0.0;
+
+                            dataPacket[7] = r->pose[0];
+                            dataPacket[8] = r->pose[1];
+
+                            // Compute the raw angle
+                            double rawAngle = atan2(2 * r->pose[4] * r->pose[5]
+                                + 2 * r->pose[3] * r->pose[6],
+                                2 * r->pose[3] * r->pose[3] - 1
+                                + 2 * r->pose[4] * r->pose[4]);
+
+                            // Compute the difference between the current and the previous raw angle
+                            double angleDifference = rawAngle - prevRawAngle3;
+
+                            // Normalize the angle difference to the interval [-π, π]
+                            if (angleDifference <= -M_PI)
+                                angleDifference += TWO_PI;
+                            else if (angleDifference > M_PI)
+                                angleDifference -= TWO_PI;
+
+                            // Accumulate the angle difference
+                            accumulatedAngle3 += angleDifference;
+
+                            // Store the current raw angle for the next iteration
+                            prevRawAngle3 = rawAngle;
+
+                            // Store the accumulated angle in the data packet
+                            dataPacket[9] = accumulatedAngle3;
+
+                            // Calculate the velocity
+                            double velObstX = (dataPacket[7] - prevObstX) / (currentTime - prevTimeBLUE);
+                            double velObstY = (dataPacket[8] - prevObstY) / (currentTime - prevTimeBLUE);
+                            double velObstAtt = (dataPacket[9] - prevObstAtt) / (currentTime - prevTimeBLUE);
+
+                            // Store the current values for the next iteration
+                            prevObstX = dataPacket[7];
+                            prevObstY = dataPacket[8];
+                            prevObstAtt = dataPacket[9];
+
+                            // Store the velocity in the data packet
+                            dataPacket[16] = velObstX;
+                            dataPacket[17] = velObstY;  
+                            dataPacket[18] = velObstAtt;
+
+                            prevTimeBLUE = currentTime;
+
+                        }
+                    }
+                }
+            }
+
+            //std::cout << dataPacket[0] << std::endl;
+
+            // send dataPacket array to wireless computer
+            for (const auto& address : client_addresses) {
+                client.sin_addr.S_un.S_addr = inet_addr(address.c_str());
+                sendto(sd, (char*)dataPacket, sizeof(dataPacket), 0, (struct sockaddr*)&client, sizeof(client));
+            }	  
+            
+        }
+    } // while 
+
+    owl.done();
+    owl.close();
+    return 0;
 }
