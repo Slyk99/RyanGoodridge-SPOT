@@ -15,6 +15,7 @@ appHandle = GUI_v4_1_Main;
 
 %% Place any custom variables or overwriting variables in this section
 clear functions % make sure simulink is cleared 
+addpath("quatBox")
 MPC_Configuration 
 PS_Filter_Config
 CV_Configuration

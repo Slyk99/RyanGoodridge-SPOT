@@ -17,13 +17,13 @@ function [vis_x, vis_yaw, vis_conf, vis_R, vis_dq, vis_q, visZOH_x, visZOH_yaw, 
     
     % Attitude representation 
     visZOH_R = C3(yaw);
-    T        = [R, x; zeros(1,3), 1];
+    T        = [visZOH_R, visZOH_x; zeros(1,3), 1];
     T        = htformInverse(T);
     
-    visZOH_q  = rotm2Quat(R,'scalarFirst');
+    visZOH_q  = rotm2Quat(visZOH_R,'scalarFirst');
     visZOH_dq = htform2Dq(T,'scalarFirst');
     
-    if sum(abs(rawData - rawDataPrev)) < 10^-10
+    if sum(abs(rawData - rawDataPrev)) < 10^-10 || isempty(rawDataPrev)
         vis_x    = visZOH_x;
         vis_yaw  = visZOH_yaw;
         vis_conf = visZOH_conf;

@@ -1,4 +1,4 @@
-function xrel_noise = genRelStates(xRed, xobs, noise, std, stdflip, FOV)
+function xrel_noise = genRelStates(xRed, xobs, noise, std, FOV)
 % Red rotation matrix from inertial to body fixed frames
 R_IB_red = C3(xRed(3));
 yaw_rel = xRed(3) + xobs(3);
@@ -27,9 +27,9 @@ xrel_noise = xrel_noise + noise(5:7)*sin(pi*yaw_rel/FOV);
 persistent flip
 if isempty(flip)
     flip = 0;
-elseif noise(8) > stdflip
+elseif noise(8) > std
     flip = flip + pi;
-elseif noise(8) < -stdflip
+elseif noise(8) < -std
     flip = flip - pi;
 end
 xrel_noise(3) = xrel_noise(3) + flip;

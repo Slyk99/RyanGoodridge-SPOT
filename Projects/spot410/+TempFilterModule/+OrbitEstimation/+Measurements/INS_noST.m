@@ -1,6 +1,5 @@
-function [y, H] = LOSNRng(x,z)
+function [z_calc, H] = INS_noST(x)
     % Measurement function with Jacobian
-    
     % Extract position components
     px = x(1);
     py = x(2);
@@ -16,17 +15,15 @@ function [y, H] = LOSNRng(x,z)
     end
     
     % Measurement vector
-    z_calc = [s;
-              p;
-              x(3)];
-    
+    % z = [LOS, range, target att, inertial angular rate]
+    z_calc = [s; p; x(3); x(7);];
+
+    H = zeros(6,7);
+
     % Common terms
     p2 = p^2;
     p3 = p2*p;
-    
-    % Initialize Jacobian
-    H = zeros(4, 8);
-    
+
     if p ~= 0
     % s_x derivatives
     H(1,1) = (p2 - px^2) / p3;
@@ -40,11 +37,11 @@ function [y, H] = LOSNRng(x,z)
     H(3,1) = px / p;
     H(3,2) = py / p;
     end
-    
+
     % theta derivative
     H(4,3) = 1;
 
-    y = z - z_calc;
-    y(4,1) = TempFilterModule.Misc.angErr(z(4,1),z_calc(4,1));
+    % inertial angular rate
+    H(5,7) = 1;
 
 end

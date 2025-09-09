@@ -23,16 +23,17 @@ end
 navOpts.Q_INS    = 0.00001*eye(4);
 navOpts.Q_GNS    = 0.001*eye(4);
 navOpts.Q_12     = 0.2*eye(4);
-navOpts.R_PS     = 0.000001*eye(4);
-navOpts.R_LRF    = 0.0001;
-navOpts.R_Stereo = 0.0001*eye(4);
-navOpts.R_LiDAR  = 0.001*eye(4);
-navOpts.R_IMU    = diag([1; 1]);
-navOpts.dmax     = 1.345;
+navOpts.R_GNS    = 0.000001*eye(5);
+navOpts.RINSfull = [0.0001*ones(4,1); % Stereo 
+                    0.0001*ones(4,1); % LiDAR
+                    0.0001;  % LRF
+                    0.001;   % PS angle
+                    0.001;]; % Angular Velocity
+navOpts.dmax     = 1.345*ones(6,1);
 
 %% Sage Husa Parameters
 % initial measurement Bias
-navOpts.r_PS     = [0; 0; 0; 0];
+navOpts.r_PS     = [0; 0; 0; 0; 0];
 navOpts.r_LRF    =  0;
 navOpts.r_Lidar  = [0; 0; 0; 0];
 navOpts.r_Stereo = [0; 0; 0; 0];
@@ -67,12 +68,12 @@ navOpts.rho = rho;
 navOpts.d_max = 3;
 
 %% Toggles
-navOpts.GNStoggle       = false;  % Use Vision
+navOpts.GNStoggle       = true;  % Use Vision
 navOpts.INStoggle       = true;  % Use PhaseSpace
-navOpts.OLR             = false; % Outlier Rejection
-navOpts.ST              = false; % Strong Tracking
-navOpts.SageHusa_Q      = false;
-navOpts.SageHusa_R      = false;
+navOpts.OLR             = true;  % Outlier Rejection
+navOpts.ST              = true;  % Strong Tracking
+navOpts.SageHusa_Q      = true;
+navOpts.SageHusa_R      = true;
 navOpts.SageHusa_r      = true;
 
 clear functions % make sure simulink is cleared 

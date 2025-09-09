@@ -1,62 +1,131 @@
-function [R_PS, R_LRF, R_Stereo, R_LiDAR, R_IMU, ...
+function [RINSfull, R_GNS, ...
           r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
           Q_INS, Q_GNS, SageHusa] = SageHusa_main( ...
-          navOpts, sensormode, alphaSH, ...
+          navOpts, alphaSH, ...
           EKF_INS, EKF_GNS, ...
           Q_INS, Q_GNS, ...
-          R_PS, R_LRF, R_Stereo, R_LiDAR, R_IMU, ...
+          RINSfull, R_GNS, ...
           r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
-          zPS, zLRF, zStereo, zLiDAR, zIMU, ...
-          x12, PSHandle, RngHandle, LOSNRngHndle, IMUHandle)
+          zPS, zINS_full, ...
+          x12, GNSHandle, INSHandle)
+
+    % Unpack R
+    R_Stereo = diag(RINSfull(1:4));
+    R_LiDAR  = diag(RINSfull(5:8));
+    R_LRF    = RINSfull(9);
+    R_IMU    = diag(RINSfull(10:11));
 
     %% Sage Husa Q Update (The Robinson Monro is used here as a simplified SH update)
+    % Sequential Sage-Husa Q update that skips NaN measurements
     if navOpts.SageHusa_Q
+        % INS 
         if navOpts.INStoggle
-            Q_INS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q(Q_INS, EKF_INS.G, alphaSH.QINS, EKF_INS.K, EKF_INS.y);
+            y_ins = EKF_INS.y(:);              % m x 1
+            mask   = ~isnan(y_ins);            % logical mask of valid measurements
+            if any(mask)
+                idxs = find(mask);
+                for ii = idxs.'                   % iterate over valid measurement indices
+                    k_i = EKF_INS.K(:,ii);        % n x 1 (gain column)
+                    y_i = y_ins(ii);              % scalar residual
+                    Q_INS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
+                                Q_INS, EKF_INS.G, alphaSH.QINS, k_i, y_i);
+                end
+            end
         end
-        if navOpts.GNStoggle
-            Q_GNS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q(Q_GNS, EKF_GNS.G, alphaSH.QGNS, EKF_GNS.K, EKF_GNS.y);
+    
+        % GNS
+        if navOpts.GNStoggle && isfield(EKF_GNS,'y') && ~isempty(EKF_GNS.y)
+            y_gns = EKF_GNS.y(:);
+            mask   = ~isnan(y_gns);
+            if any(mask)
+                idxs = find(mask);
+                for ii = idxs.' 
+                    k_i = EKF_GNS.K(:,ii);
+                    y_i = y_gns(ii);
+                    Q_GNS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
+                                Q_GNS, EKF_INS.G, alphaSH.QGNS, k_i, y_i);
+                end
+            end
         end
     end
-    
+
+    %% Measurement unpacking
+    zStereo = zINS_full(1:4); 
+    zLiDAR  = zINS_full(5:8); 
+    zLRF    = zINS_full(9); 
+    zIMU    = zINS_full(10:11);
+
+    if navOpts.SageHusa_r || navOpts.SageHusa_R
+        [z_calc_INS, ~] = INSHandle(x12);
+        [z_calc_GNS, ~] = GNSHandle(x12);
+
+
+        if ~anynan(zPS)
+            yPS = zPS - z_calc_GNS;
+        end
+        if ~anynan(zLRF)
+            yLRF = zLRF - z_calc_INS(3);
+        end
+        if ~anynan(zStereo)
+            yStereo = zStereo - z_calc_INS(1:4);
+        end
+        if ~anynan(zLiDAR)
+            yLiDAR = zLiDAR - z_calc_INS(1:4);
+        end
+        if ~anynan(zIMU)
+            yIMU = zIMU - z_calc_INS(5:6);
+        end
+    end
+
     %% Sage Husa R Update (The Robinson Monro is used here as a simplified SH update)
     if navOpts.SageHusa_R
-        if sensormode.hasPS
-            R_PS     = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_PS,     alphaSH.RPS,    EKF_GNS.y, length(zPS));
+        if ~anynan(zPS)
+            R_GNS    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_GNS,     alphaSH.RPS,    yPS,     length(zPS));
         end
-        if sensormode.hasLRF
-            R_LRF    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LRF,    alphaSH.LRF,    EKF_INS.y, length(zLRF));
+    
+        if ~anynan(zLRF)
+            R_LRF    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LRF,    alphaSH.LRF,    yLRF,    length(zLRF));
         end
-        if sensormode.hasStereo
-            R_Stereo = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_Stereo, alphaSH.Stereo, EKF_INS.y, length(zStereo));
+    
+        if ~anynan(zStereo)
+            R_Stereo = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_Stereo, alphaSH.Stereo, yStereo, length(zStereo));
         end
-        if sensormode.hasLidar
-            R_LiDAR  = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LiDAR,  alphaSH.LiDAR,  EKF_INS.y, length(zLiDAR));
+    
+        if ~anynan(zLiDAR)
+            R_LiDAR  = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LiDAR,  alphaSH.LiDAR,  yLiDAR,  length(zLiDAR));
         end
-        if sensormode.hasIMU
-            R_IMU    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_IMU,    alphaSH.IMU,    EKF_INS.y, length(zIMU));
+    
+        if ~anynan(zIMU)
+            R_IMU    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_IMU,    alphaSH.IMU,    yIMU,    length(zIMU));
         end
+    
     end
     
-    %% Sensor Bias Update
+    %% Sensor Bias Update SageHusa_r(r, y, alpha)
     if navOpts.SageHusa_r
-        if sensormode.hasPS
-            r_PS     = TempFilterModule.AdaptiveLaws.SageHusa_r(r_PS,      zPS,    x12, alphaSH.rPS,     PSHandle);
+        if ~anynan(zPS)
+            r_PS     = TempFilterModule.AdaptiveLaws.SageHusa_r(r_PS,     yPS,     alphaSH.rPS);
         end
-        if sensormode.hasLRF
-            r_LRF    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_LRF,    zLRF,    x12, alphaSH.rLRF,    RngHandle);
+        if ~anynan(zLRF)
+            r_LRF    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_LRF,    yLRF,    alphaSH.rLRF);
         end
-        if sensormode.hasStereo
-            r_Stereo = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Stereo, zStereo, x12, alphaSH.rStereo, LOSNRngHndle);
+        if ~anynan(zStereo)
+            r_Stereo = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Stereo, yStereo, alphaSH.rStereo);
         end
-        if sensormode.hasLidar
-            r_Lidar  = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Lidar,  zLiDAR,  x12, alphaSH.rLidar,  LOSNRngHndle);
+        if ~anynan(zLiDAR)
+            r_Lidar  = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Lidar,  yLiDAR,  alphaSH.rLidar);
         end
-        if sensormode.hasIMU
-            r_IMU    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_IMU,    zIMU,    x12, alphaSH.rIMU,    IMUHandle);
+        if ~anynan(zIMU)
+            r_IMU    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_IMU,    yIMU,    alphaSH.rIMU);
         end
     end
     
+    % Pack R
+    RINSfull(1:4)     = diag(R_Stereo);
+    RINSfull(5:8)     = diag(R_LiDAR);
+    RINSfull(9)       = diag(R_LRF);
+    RINSfull(10:11)   = diag(R_IMU);
+
     %% Log values
     SageHusa.r_LRF    = r_LRF;
     SageHusa.r_IMU    = r_IMU;
@@ -67,7 +136,7 @@ function [R_PS, R_LRF, R_Stereo, R_LiDAR, R_IMU, ...
     SageHusa.QINS     = Q_INS;
     SageHusa.QGNS     = Q_GNS;
     
-    SageHusa.R_PS     = R_PS;
+    SageHusa.R_GNS    = R_GNS;
     SageHusa.R_LRF    = R_LRF;
     SageHusa.R_Stereo = R_Stereo;
     SageHusa.R_LiDAR  = R_LiDAR;

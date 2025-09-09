@@ -42,7 +42,25 @@
 %       - Correct handling of cross-covariance is critical; setting P_12 = 0
 %         without justification can significantly overestimate confidence.
 %
-function [x_fuse, P_12] = Track2Track(x1, P1, K1, H1, x2, P2, K2, H2, P_12, Q_12, F, G)
+function [x_fuse, P_12] = Track2Track(x1, UD1, K1, H1, x2, UD2, K2, H2, P_12, Q_12, F, G)
+
+    % UD is n-by-n combined matrix
+    n = size(UD1,1);
+    idx = 1:(n+1):n*n;        % linear indices of diagonal entries
+    
+    dvec1 = UD1(idx);          % extract diagonal as vector
+    D1 = diag(dvec1);          % full diagonal matrix (optional)
+    U1 = UD1;                  
+    U1(idx) = 1;              % set diagonal to ones -> unit upper triangular U
+
+    dvec2 = UD2(idx);          % extract diagonal as vector
+    D2 = diag(dvec2);          % full diagonal matrix (optional)
+    U2 = UD2;                  
+    U2(idx) = 1;              % set diagonal to ones -> unit upper triangular U
+
+    P1 = U1*D1*U1';
+    P2 = U2*D2*U2';
+
     I = eye(length(x1));
     P_21 = P_12';
     
