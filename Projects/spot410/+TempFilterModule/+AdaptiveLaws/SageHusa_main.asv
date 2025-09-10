@@ -38,7 +38,7 @@ function [RINSfull, R_GNS, ...
             for ii = length(y_gns)
                 k_i = EKF_GNS.K(:,ii);
                 y_i = y_gns(ii);
-                if ~isnan(y_i) || GNSd(ii) > GNSdmax
+                if ~isnan(y_i)
                     Q_GNS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
                             Q_GNS, EKF_INS.G, alphaSH.QGNS, k_i, y_i);
                 end % end if nan

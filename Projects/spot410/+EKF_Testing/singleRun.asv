@@ -7,7 +7,7 @@ clc
 
 % Load experimental data
 load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
-initSpotEKF
+ 
 
 %% Filter IC
 % x_s = [1; 2; 0; 0; 0; 0];
@@ -49,9 +49,6 @@ for i = 7:1:8
     hold on
     plot(data.IMU(:,i-6), 'b*')
     plot(data.x_GNS(:,i),'r')
-    plot(data.bias(:,i+8),'g')
+    plot(data.bias(:,i+1),'GroupDela')
     grid on
 end
-
-figure
-plot(data.d(:,4))

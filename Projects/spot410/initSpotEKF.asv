@@ -64,16 +64,16 @@ rho.GNS = 0.99;
 navOpts.rho = rho;
 
 %% Max Mahalanobis distance
-navOpts.dmax     = [7; 7; 1.5; 11; 0.01];
+navOpts.dmax     = [7; 7; 1.5; 0.01];
 
 %% Toggles
 navOpts.GNStoggle       = true;  % Use Vision
-navOpts.INStoggle       = false; % Use PhaseSpace
-navOpts.OLR             = true;  % Outlier Rejection
+navOpts.INStoggle       = false;  % Use PhaseSpace
+navOpts.OLR             = false;  % Outlier Rejection
 navOpts.ST              = true;  % Strong Tracking
 navOpts.SageHusa_Q      = false;
 navOpts.SageHusa_R      = false;
-navOpts.SageHusa_r      = false;
+navOpts.SageHusa_r      = true;
 
 clear functions % make sure simulink is cleared 
 

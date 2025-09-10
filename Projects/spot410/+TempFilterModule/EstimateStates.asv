@@ -33,8 +33,8 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
     [x_INS, P_INS, x_GNS, P_GNS, ~, P12] = TempFilterModule.Misc.unpackStates(xStack, PStack);
 
     %% Add Bias
-    zGNS_r = zGNS - r_PS;
-    zINS_full_r = zINS_full - [r_Stereo; r_Lidar; r_LRF; r_IMU];
+    zGNS = zGNS + r_PS;
+    zINS_full = zINS_full + [r_Stereo; r_Lidar; r_LRF; ];
 
     %% Preallocate Space
     % EKF_INS output
@@ -47,7 +47,7 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
     EKF_INS.F  = zeros(8);
     EKF_INS.G  = zeros(8,4);
     EKF_INS.V  = V_INS;
-    EKF_INS.d  = zeros(m_max,1);
+    EKF_INS.d  = 0;
 
     m_PS       = 5;
     EKF_GNS.y  = zeros(m_PS,1); 
@@ -58,12 +58,12 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
     EKF_GNS.F  = zeros(8);
     EKF_GNS.G  = zeros(8,4);
     EKF_GNS.V  = V_GNS;
-    EKF_GNS.d  = zeros(m_PS,1);
+    EKF_GNS.d  = 0;
 
     %% Inertial Navigation Filter
     if navOpts.INStoggle
         % Sensor fusion
-        [zINS,R_INS] = TempFilterModule.OrbitEstimation.Measurements.fusion(zINS_full_r, RINSfull);
+        [zINS,R_INS] = TempFilterModule.OrbitEstimation.Measurements.fusion(zINS_full, RINSfull);
 
         % INS Filter 
         [x_INS, P_INS, EKF_INS] = FilterHandle(zINS, x_INS, u, P_INS, Q_INS, R_INS, V_INS, rho_INS, INSHandle);
@@ -73,7 +73,7 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
 
     %% GNS Filter
     if navOpts.GNStoggle
-        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS_r, x_GNS, u, P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle);
+        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS, x_GNS, u, P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle);
         V_GNS = EKF_GNS.V;
 
     end % End GNS Toggle 
@@ -119,8 +119,7 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
         RINSfull, R_GNS, ...
         r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
         zGNS, zINS_full, ...
-        x12, GNSHandle, INSHandle, ...
-        navOpts.dmax, navOpts.dmax, EKF_GNS.d, EKF_INS.d);
+        x12, GNSHandle, INSHandle);
 
     %% Filter Output
     NAVout.EKF_GNS    = EKF_GNS;
