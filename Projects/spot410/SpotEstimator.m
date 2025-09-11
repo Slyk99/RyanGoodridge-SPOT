@@ -6,8 +6,8 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
     numCoord    = length(coords);
     maxEstState = 2;
 
-    maxEkfState = 6;
-    maxEkfMeas  = 3;
+    maxEkfState = 7;
+    maxEkfMeas  = 4;
 
     numDebug = maxEkfState * ( maxEkfState + 1 );
 
@@ -20,6 +20,7 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
     % persistent variables - definition
     persistent estState;
     persistent prevEst;
+    persistent prevPose;
     persistent measDelay;
 
     persistent ekfOutputPrev;
@@ -31,6 +32,7 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
     if isempty(estState)
         estState  = zeros(maxEstState,numCoord);
         prevEst   = zeros(3,numCoord);
+        prevPose  = zeros(3,numCoord);
         measDelay = ones(1,numCoord);
 
         ekfOutputPrev = zeros(    numDebug, 1);
@@ -126,95 +128,168 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
 
                 end
 
-            case SpotGnc.estEkf3dof
+            case { SpotGnc.estEkfStereo , SpotGnc.estEkfLidar, SpotGnc.estEkfPolarStereo, SpotGnc.estEkfPolarLidar }
 
-                % for now, run the filter in open loop
+                % we only run the filter for SpotCoord.xRed
+                switch coord
 
-                % position estimate is the processed measurement
-                % velocity estimate is the measured rate
-                % bias estimate remains at zero
+                    case { SpotCoord.yRed , SpotCoord.thetaRed }
 
-                sensor = paramEst(phase,coord).sensor;
-                est(coord) = proc(sensor);
+                        % do nothing
 
-                rateSensor = paramEst(phase,coord).rateSensor;
-                est_vel(coord) = proc(rateSensor);
+                    case SpotCoord.xRed
 
-                % if the measurement hasn't changed, don't run the filter
-                if est(coord) == prevEst(1,coord)
-                    
-                    debug(coord,:)   = ekfOutputPrev';
-                    measDelay(coord) = measDelay(coord) + 1;
+                        rRef     = paramEst(phase,coord).k1;
+                        baseRate = paramEst(phase,coord).k2;
 
-                else
+                        % if needed, load the PQR matrices for the current EKF configuration
+                        if ~any(ekfP0)
+                            [ekfP0,ekfQ0,ekfR0] = navigation_module.EKF_rel_spot.initialize_EKF( ...
+                                baseRate, myFun );
+                        end
 
-                    switch coord
+                        % assemble the current pose measurement
+                        switch myFun
+                            case { SpotGnc.estEkfStereo, SpotGnc.estEkfPolarStereo }
+                                procPose = [ proc(SpotSensor.xStereo); 
+                                             proc(SpotSensor.yStereo); 
+                                             proc(SpotSensor.thetaStereo) ];
+                            case { SpotGnc.estEkfLidar , SpotGnc.estEkfPolarLidar }
+                                procPose = [ proc(SpotSensor.xLidar);
+                                             proc(SpotSensor.yLidar); 
+                                             proc(SpotSensor.thetaLidar) ];
+                            otherwise
+                                error('SpotEstimator.m:\n  sensor not defined for relative pose')
+                        end
 
-                        case { SpotCoord.yRed , SpotCoord.thetaRed }
+                        % if needed, initialize the EKF output
+                        if ~any(ekfOutputPrev)
+                            ekfOutputPrev = [ procPose;                      % position
+                                              [0; 0; 0];                     % velocity
+                                              proc(SpotSensor.thetaRedImu);  % omega
+                                              reshape(ekfP0,[],1) ];
+                        end
 
+                        % propagate state estimates from previous time step to a-priori estimates
+                        ekfOutput = navigation_module.EKF_rel_spot.propagation( ...
+                            ekfOutputPrev, cmd, baseRate, ekfQ0 );
+
+                        % if measurements are available, correct to a-posteriori estimates
+                        if norm( procPose - prevPose(:,coord) ) < 1e-10
                             % do nothing
+                        else
+                            measVec   = [procPose; proc(SpotSensor.thetaRedImu)];
+                            ekfOutput = navigation_module.EKF_rel_spot.correction( ...
+                                ekfOutput, measVec, ekfR0 );
+                        end
 
-                        case SpotCoord.xRed
+                        % save filter output
+                        ekfOutputPrev  = ekfOutput;
+                        debug(coord,:) = ekfOutput';
 
-                            k1 = paramEst(phase,coord).k1;  % baseRate
+                        % update previous pose measurement
+                        prevPose(:,coord) = procPose;
 
-                            % time since last measurement
-                            dtEkf = k1 * measDelay(coord);
+                        if ( myFun == SpotGnc.estEkfPolarStereo ) || ( myFun == SpotGnc.estEkfPolarLidar )
+                            
+                            % xEst    = ekfOutput(1);
+                            % yEst    = ekfOutput(2);
+                            % xDotEst = ekfOutput(4);
+                            % yDotEst = ekfOutput(5);
+                            % 
+                            % range     = sqrt( xEst^2 + yEst^2 );
+                            % bearing   = atan( yEst   / xEst   );  % assume positive xEst
+                            % 
+                            % rangeDot   = ( xEst * xDotEst + yEst * yDotEst ) / range;
+                            % bearingDot = ( xEst * yDotEst - yEst * xDotEst ) / range^2;
+                            % 
+                            % arcLength    = rRef * proc(SpotSensor.thetaRedPhasespace);
+                            % arcLengthDot = rRef * proc(SpotSensor.thetaRedRatePhasespace);
+                            % 
+                            % est(SpotCoord.xRed)     = range;
+                            % est(SpotCoord.yRed)     = arcLength;
+                            % est(SpotCoord.thetaRed) = bearing;
+                            % 
+                            % est_vel(SpotCoord.xRed)     = rangeDot;
+                            % est_vel(SpotCoord.yRed)     = arcLengthDot;
+                            % est_vel(SpotCoord.thetaRed) = bearingDot;
 
-                            % determine which sensors are available for processing
-                            navigationSubmodule = 'navigation_module.EKF_rel_spot';
-                            sensorModeStr       = [ navigationSubmodule '.select_sensor_mode'];
-                            sensorModeFun       = str2func(sensorModeStr);
-                            sensorMode          = sensorModeFun(proc);
+                            range     = sqrt ( procPose(1)^2 + procPose(2)^2 );
+                            bearing   = atan2( procPose(2)   , procPose(1)   );
+                            arcLength = rRef * proc(SpotSensor.thetaRedPhasespace);
 
-                            switch sensorMode
-                                case 'EKF_PhaseSpace'
-                                    navigationSubmoduleMeas = [ navigationSubmodule '.EKF_PhaseSpace' ];
-                                otherwise
-                                    error('SpotEstimator.m:\n  sensor mode not defined')
-                            end
+                            est(SpotCoord.xRed)     = range;
+                            est(SpotCoord.yRed)     = arcLength;
+                            est(SpotCoord.thetaRed) = bearing;
 
-                            % if needed, load the PQR matrices for the current EKF configuration
-                            if ~any(ekfP0)
-                                initializeEkfStr    = [ navigationSubmoduleMeas '.initialize_EKF' ];
-                                initializeEkfFun    = str2func(initializeEkfStr);
-                                [ekfP0,ekfQ0,ekfR0] = initializeEkfFun();
-                            end
+                            % velocity and bias estimates remain at zero
 
-                            % if needed, initialize the EKF
-                            if ~any(ekfOutputPrev)
-                                initPos = [
-                                    proc(SpotSensor.xBlackPhasespace)     - proc(SpotSensor.xRedPhasespace); ...
-                                    proc(SpotSensor.yBlackPhasespace)     - proc(SpotSensor.yRedPhasespace); ...
-                                    proc(SpotSensor.thetaBlackPhasespace) - proc(SpotSensor.thetaRedPhasespace)];
-                                initVel = [ 0; 0; 0];
-                                ekfOutputPrev = [
-                                    initPos; ...
-                                    initVel; ...
-                                    reshape(ekfP0,[],1) ];
-                            end
+                        else
 
-                            % query the EKF for a state estimate
-                            queryEkfStr = [ navigationSubmodule '.query_ekf' ];
-                            queryEkfFun = str2func(queryEkfStr);
-                            ekfOutput   = queryEkfFun( sensorMode, ekfOutputPrev, proc, cmd, dtEkf, ekfQ0, ekfR0 );
+                            % output estimates for xRed and yRed
+                            est(SpotCoord.xRed)         = ekfOutput(1);
+                            est(SpotCoord.yRed)         = ekfOutput(2);
+                            est_vel(SpotCoord.xRed)     = ekfOutput(4);
+                            est_vel(SpotCoord.yRed)     = ekfOutput(5);
+    
+                            % theta estimates remain inertial
+                            est(SpotCoord.thetaRed) = proc( ...
+                                paramEst(phase,SpotCoord.thetaRed).sensor);
+                            est_vel(SpotCoord.thetaRed) = proc( ...
+                                paramEst(phase,SpotCoord.thetaRed).rateSensor);
 
-                            % save filter output
-                            ekfOutputPrev    = ekfOutput;
-                            debug(coord,:)   = ekfOutput';
+                        end
+                        
+                        % bias estimates remain at zero
 
-                            % update previous estimate and reset measurement delay
-                            prevEst(1,coord) = est(coord);
-                            measDelay(coord) = 1;
+                    otherwise
+                        error('SpotEstimator.m:\n  function SpotGnc.estEkf3dof not defined for SpotCoord(%d).\n\n', int32(coord))
 
-                        otherwise
+                end % switch coord
 
-                            error('SpotEstimator.m:\n  function SpotGnc.estEkf3dof not defined for SpotCoord(%d).\n\n', int32(coord))
 
-                    end % switch coord
+            case { SpotGnc.estPolarStereo, SpotGnc.estPolarLidar }
 
-                end % if changed meas
-                
+                % we only assign measurements for SpotCoord.xRed
+                switch coord
+
+                    case { SpotCoord.yRed , SpotCoord.thetaRed }
+
+                        % do nothing
+
+                    case SpotCoord.xRed
+
+                        rRef = paramEst(phase,coord).k1;
+
+                        % assemble the current pose measurement
+                        switch myFun
+                            case SpotGnc.estPolarStereo
+                                procPose = [ proc(SpotSensor.xStereo); 
+                                             proc(SpotSensor.yStereo); 
+                                             proc(SpotSensor.thetaStereo) ];
+                            case SpotGnc.estPolarLidar
+                                procPose = [ proc(SpotSensor.xLidar);
+                                             proc(SpotSensor.yLidar); 
+                                             proc(SpotSensor.thetaLidar) ];
+                            otherwise
+                                error('SpotEstimator.m:\n  sensor not defined for relative pose')
+                        end
+
+                        range     = sqrt ( procPose(1)^2 + procPose(2)^2 );
+                        bearing   = atan2( procPose(2)   , procPose(1)   );
+                        arcLength = rRef * proc(SpotSensor.thetaRedPhasespace);
+
+                        est(SpotCoord.xRed)     = range;
+                        est(SpotCoord.yRed)     = arcLength;
+                        est(SpotCoord.thetaRed) = bearing;
+
+                        % velocity and bias estimates remain at zero
+
+
+                    otherwise
+                        error('SpotEstimator.m:\n  function SpotGnc.estPolar not defined for SpotCoord(%d).\n\n', int32(coord))
+                end
+
 
             otherwise
                 error('SpotEstimator.m:\n  function SpotGnc(%d) not defined for SpotPhase(%d) and SpotCoord(%d).\n\n', int32(myFun), int32(phase), int32(coord))

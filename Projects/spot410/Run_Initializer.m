@@ -37,11 +37,14 @@ initSpotCtrlErr;
 % initialize the GNC unit handling control
 initSpotController;
 
+% initialize the GNC unit handling decoupling
+initSpotDecouple;
+
 % initialize the GNC unit handling status flags
 initSpotFlag;
 
 % load the BLACK-with-cone inspection data
-load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
+load('correctedData_2xRedThetaImu.mat')
 
 
 %% For those who want to run simulations without using the GUI:
