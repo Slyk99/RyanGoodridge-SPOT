@@ -25,9 +25,9 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
     dynHandle    = @(x, dt, u) TempFilterModule.OrbitEstimation.Propagation.Euler1_propagate(x, dt, u, params);
     INSHandle    = @(x) TempFilterModule.OrbitEstimation.Measurements.INS(x);
     GNSHandle    = @(x) TempFilterModule.OrbitEstimation.Measurements.GNS(x);
-    FilterHandle = @(z, x, u, P, Q, R, V, rho, H_Handle) TempFilterModule.OrbitEstimation.Filter.UDU_STEKF(dt, ...
+    FilterHandle = @(z, x, u, P, Q, R, V, rho, H_Handle, dmax) TempFilterModule.OrbitEstimation.Filter.UDU_STEKF(dt, ...
                      z, x, u, P, Q, R, V, rho, H_Handle, ...
-                     dynHandle, navOpts.ST, navOpts.OLR, navOpts.dmax);
+                     dynHandle, navOpts.ST, navOpts.OLR, dmax);
 
     %% Unpack data
     [x_INS, P_INS, x_GNS, P_GNS, ~, P12] = TempFilterModule.Misc.unpackStates(xStack, PStack);
@@ -66,14 +66,14 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
         [zINS,R_INS] = TempFilterModule.OrbitEstimation.Measurements.fusion(zINS_full_r, RINSfull);
 
         % INS Filter 
-        [x_INS, P_INS, EKF_INS] = FilterHandle(zINS, x_INS, u, P_INS, Q_INS, R_INS, V_INS, rho_INS, INSHandle);
+        [x_INS, P_INS, EKF_INS] = FilterHandle(zINS, x_INS, u, P_INS, Q_INS, R_INS, V_INS, rho_INS, INSHandle, navOpts.INSdmax);
          V_INS = EKF_INS.V;
 
     end % end INS Toggle
 
     %% GNS Filter
     if navOpts.GNStoggle
-        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS_r, x_GNS, u, P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle);
+        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS_r, x_GNS, u, P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle, navOpts.GNSdmax);
         V_GNS = EKF_GNS.V;
 
     end % End GNS Toggle 
@@ -120,7 +120,7 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
         r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
         zGNS, zINS_full, ...
         x12, GNSHandle, INSHandle, ...
-        navOpts.dmax, navOpts.dmax, EKF_GNS.d, EKF_INS.d);
+        navOpts.GNSdmax, navOpts.INSdmax, EKF_GNS.d, EKF_INS.d);
 
     %% Filter Output
     NAVout.EKF_GNS    = EKF_GNS;

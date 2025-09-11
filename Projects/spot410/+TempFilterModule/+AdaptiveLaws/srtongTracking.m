@@ -5,7 +5,7 @@ function [V, lambda] = srtongTracking(V, y, P, H, R, rho)
 if det(V) == 0
     V = y*y';
 else
-    V = rho*(rho*V + y*y')/(1+rho);
+    V = (rho*V + y*y')/(1+rho);
 end
 
 Pzz = H*P*H' + R;

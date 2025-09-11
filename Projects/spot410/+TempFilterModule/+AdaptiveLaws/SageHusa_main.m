@@ -25,7 +25,7 @@ function [RINSfull, R_GNS, ...
             for ii = length(y_ins)
                 k_i = EKF_INS.K(:,ii);        % n x 1
                 y_i = y_ins(ii);              % scalar residual
-                if ~isnan(y_i)
+                if ~isnan(y_i) || INSd(ii) < INSdmax(ii)
                     Q_INS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
                             Q_INS, EKF_INS.G, alphaSH.QINS, k_i, y_i);
                 end % end if nan
@@ -38,7 +38,7 @@ function [RINSfull, R_GNS, ...
             for ii = length(y_gns)
                 k_i = EKF_GNS.K(:,ii);
                 y_i = y_gns(ii);
-                if ~isnan(y_i) || GNSd(ii) > GNSdmax
+                if ~isnan(y_i) || GNSd(ii) < GNSdmax(ii)
                     Q_GNS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
                             Q_GNS, EKF_INS.G, alphaSH.QGNS, k_i, y_i);
                 end % end if nan
@@ -92,24 +92,36 @@ function [RINSfull, R_GNS, ...
         end
     
     end
-    
+
     %% Sensor Bias Update SageHusa_r(r, y, alpha)
     if navOpts.SageHusa_r
         if ~anynan(zPS)
+            % Find where d is greater than dmax
+            d_GNS_idx = GNSd > GNSdmax;
+            yPS(d_GNS_idx) = r_PS(d_GNS_idx); % Set y to r for those specific elements
             r_PS     = TempFilterModule.AdaptiveLaws.SageHusa_r(r_PS,     yPS,     alphaSH.rPS);
-            r_PS     = [0*r_PS(1:4); r_PS(5)]; % This line is just because i know PS has no bias but the IMU does
+            r_PS     = [0*r_PS(1:4); r_PS(end)]; % IMU is the only thing with bias
         end
         if ~anynan(zLRF)
+            d_LRF_idx = INSd(3) > INSdmax(3);
+            yLRF(d_LRF_idx) = r_LRF(d_LRF_idx); % Set y to r for those specific elements
             r_LRF    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_LRF,    yLRF,    alphaSH.rLRF);
         end
         if ~anynan(zStereo)
+            d_Stereo_idx = INSd(1:4) > INSdmax(1:4);
+            yStereo(d_Stereo_idx) = r_Stereo(d_Stereo_idx); % Set y to r for those specific elements
             r_Stereo = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Stereo, yStereo, alphaSH.rStereo);
         end
         if ~anynan(zLiDAR)
+            d_LiDAR_idx = INSd(1:4) > INSdmax(1:4);
+            yLiDAR(d_LiDAR_idx) = r_Lidar(d_LiDAR_idx); % Set y to r for those specific elements
             r_Lidar  = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Lidar,  yLiDAR,  alphaSH.rLidar);
         end
         if ~anynan(zIMU)
+            d_IMU_idx = INSd(5:6) > INSdmax(5:6);
+            yIMU(d_IMU_idx) = r_IMU(d_IMU_idx); % Set y to r for those specific elements
             r_IMU    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_IMU,    yIMU,    alphaSH.rIMU);
+            r_IMU    = [0; r_IMU(end)];
         end
     end
     

@@ -6,7 +6,9 @@ clc
 % Run_Initializer;
 
 % Load experimental data
-load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
+% load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
+% load('+navigation_module/ExperimentData_RED_2025_7_24_15_31_59_0273_1.mat')
+load('+navigation_module/ExperimentData_RED_2025_7_24_16_9_56_3461_3.mat')
 initSpotEKF
 
 %% Filter IC
@@ -24,34 +26,78 @@ initSpotEKF
 data = sim("+EKF_Testing\EKF_OPT.slx");
 
 %%
+lidar = [data.LiDAR(:,1:2).*data.LiDAR(:,3), data.LiDAR(:,4)];
+CNN   = [data.Stereo(:,1:2).*data.Stereo(:,3), data.Stereo(:,4)];
+
 figure
 for i = 1:1:3
     subplot(3,1,i)
-    plot(data.PS(:,i), 'k*')
+    plot(data.PS(:,i), 'k')
     hold on
-    plot(data.x_GNS(:,i),'r')
+    plot(lidar(:,i), 'b*')
+    plot(CNN(:,i), 'g*')    
+    plot(data.x_INS(:,i),'r')
     grid on
 end
 
 figure
 for i = 4:1:6
     subplot(3,1,i-3)
-    plot(data.PS(:,i), 'k*')
+    plot(data.PS(:,i), 'k')
     hold on
-    plot(data.x_GNS(:,i),'r')
+    plot(data.x_INS(:,i),'r')
     grid on
 end
 
 figure
 for i = 7:1:8
     subplot(2,1,i-6)
-    plot(data.PS(:,i), 'k*')
+    plot(data.PS(:,i), 'k')
     hold on
     plot(data.IMU(:,i-6), 'b*')
-    plot(data.x_GNS(:,i),'r')
+    plot(data.x_INS(:,i),'r')
     plot(data.bias(:,i+8),'g')
     grid on
 end
 
+%%
+P = recoverP(data.P_INS);
+V = data.V;
+
 figure
-plot(data.d(:,4))
+for i = 1:1:5
+    P_angle = squeeze(P(i,i,:) + navOpts.R_GNS(i,i));
+    V_angle = squeeze(V(i,i,:));
+
+    subplot(5,1,i)
+    plot(P_angle, 'k')
+    hold on
+    plot(V_angle,'r')
+    grid on
+    ylim([0,1e-2])
+end
+
+figure
+for i = 1:1:5
+    subplot(5,1,i)
+    plot(data.d(:,i),'k')
+    grid on
+end
+
+function P = recoverP(ud)
+P = zeros(size(ud));
+
+    % UD is n-by-n combined matrix
+    n = size(ud,1);
+    idx = 1:(n+1):n*n;        % linear indices of diagonal entries
+
+for i = 1:1:length(P)
+    UD = ud(:,:,i);
+    dvec = UD(idx);          % extract diagonal as vector
+    D = diag(dvec);          % full diagonal matrix (optional)
+    U = UD;                  
+    U(idx) = 1;              % set diagonal to ones -> unit upper triangular U
+    P(:,:,i) = U*D*U';
+end
+
+end

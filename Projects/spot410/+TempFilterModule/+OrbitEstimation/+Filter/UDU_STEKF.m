@@ -107,7 +107,7 @@ function [x, UD, EKFout] = UDU_STEKF(dt, z, x, u, UD, Q, R, V, rho, Hhndl, Fhndl
         
         % Calculate innovation
         y = z - z_bar;
-        y(5) = TempFilterModule.Misc.angErr(z(5), z_bar(5)); % Handle angle err
+        y(4) = TempFilterModule.Misc.angErr(z(4), z_bar(4)); % Handle angle err
 
         % If not an outlier, proceed with the Kalman filter update
         Hi = H(i,:);
