@@ -1,0 +1,149 @@
+function [RINSfull, R_GNS, ...
+          r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
+          Q_INS, Q_GNS, SageHusa] = SageHusa_main( ...
+          navOpts, alphaSH, ...
+          EKF_INS, EKF_GNS, ...
+          Q_INS, Q_GNS, ...
+          RINSfull, R_GNS, ...
+          r_PS, r_LRF, r_Stereo, r_Lidar, r_IMU, ...
+          zPS, zINS_full, ...
+          x12, GNSHandle, INSHandle, ...
+          GNSdmax, INSdmax, GNSd, INSd)
+
+    % Unpack R
+    R_Stereo = diag(RINSfull(1:4));
+    R_LiDAR  = diag(RINSfull(5:8));
+    R_LRF    = RINSfull(9);
+    R_IMU    = diag(RINSfull(10:11));
+
+    %% Sage Husa Q Update (The Robinson Monro is used here as a simplified SH update)
+    % Sequential Sage-Husa Q update that skips NaN measurements
+    if navOpts.SageHusa_Q
+        % INS 
+        if navOpts.INStoggle
+            y_ins = EKF_INS.y(:);             % m x 1
+            for ii = length(y_ins)
+                k_i = EKF_INS.K(:,ii);        % n x 1
+                y_i = y_ins(ii);              % scalar residual
+                if ~isnan(y_i) || INSd(ii) < INSdmax(ii)
+                    Q_INS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
+                            Q_INS, EKF_INS.G, alphaSH.QINS, k_i, y_i);
+                end % end if nan
+            end % end for length(y)
+        end % end GNS toggle
+    
+        % GNS
+        if navOpts.GNStoggle && isfield(EKF_GNS,'y') && ~isempty(EKF_GNS.y)
+            y_gns = EKF_GNS.y(:);
+            for ii = length(y_gns)
+                k_i = EKF_GNS.K(:,ii);
+                y_i = y_gns(ii);
+                if ~isnan(y_i) || GNSd(ii) < GNSdmax(ii)
+                    Q_GNS = TempFilterModule.AdaptiveLaws.RobinsonMonro_Q( ...
+                            Q_GNS, EKF_INS.G, alphaSH.QGNS, k_i, y_i);
+                end % end if nan
+            end % end for length(y)
+        end % end GNS toggle
+    end % end Q adaptation toggle
+
+    %% Measurement unpacking
+    zStereo = zINS_full(1:4); 
+    zLiDAR  = zINS_full(5:8); 
+    zLRF    = zINS_full(9); 
+    zIMU    = zINS_full(10:11);
+
+    [z_calc_INS, ~] = INSHandle(x12);
+    [z_calc_GNS, ~] = GNSHandle(x12);
+    
+    yPS       = zPS - z_calc_GNS;
+    yPS(3)    = TempFilterModule.Misc.angErr(zPS(3), z_calc_GNS(3));
+    yPS(4)    = TempFilterModule.Misc.angErr(zPS(4), z_calc_GNS(4));
+
+    yLRF      = zLRF - z_calc_INS(3);
+
+    yStereo   = zStereo - z_calc_INS(1:4);
+    yStereo(4) = TempFilterModule.Misc.angErr(zStereo(4), z_calc_INS(4));
+
+    yLiDAR    = zLiDAR - z_calc_INS(1:4);
+    yLiDAR(4) = TempFilterModule.Misc.angErr(zLiDAR(4), z_calc_INS(4));
+
+    yIMU      = zIMU - z_calc_INS(5:6);
+
+    %% Sage Husa R Update (The Robinson Monro is used here as a simplified SH update)
+    if navOpts.SageHusa_R
+        if ~anynan(zPS)
+            R_GNS    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_GNS,     alphaSH.RPS,    yPS,     length(zPS));
+        end
+    
+        if ~anynan(zLRF)
+            R_LRF    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LRF,    alphaSH.LRF,    yLRF,    length(zLRF));
+        end
+    
+        if ~anynan(zStereo)
+            R_Stereo = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_Stereo, alphaSH.Stereo, yStereo, length(zStereo));
+        end
+    
+        if ~anynan(zLiDAR)
+            R_LiDAR  = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_LiDAR,  alphaSH.LiDAR,  yLiDAR,  length(zLiDAR));
+        end
+    
+        if ~anynan(zIMU)
+            R_IMU    = TempFilterModule.AdaptiveLaws.RobinsonMonro_R(R_IMU,    alphaSH.IMU,    yIMU,    length(zIMU));
+        end
+    
+    end
+
+    %% Sensor Bias Update SageHusa_r(r, y, alpha)
+    if navOpts.SageHusa_r
+        if ~anynan(zPS)
+            % Find where d is greater than dmax
+            d_GNS_idx = GNSd > GNSdmax;
+            yPS(d_GNS_idx) = r_PS(d_GNS_idx); % Set y to r for those specific elements
+            r_PS     = TempFilterModule.AdaptiveLaws.SageHusa_r(r_PS,     yPS,     alphaSH.rPS);
+            r_PS     = [0*r_PS(1:4); r_PS(end)]; % IMU is the only thing with bias
+        end
+        if ~anynan(zLRF)
+            d_LRF_idx = INSd(3) > INSdmax(3);
+            yLRF(d_LRF_idx) = r_LRF(d_LRF_idx); % Set y to r for those specific elements
+            r_LRF    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_LRF,    yLRF,    alphaSH.rLRF);
+        end
+        if ~anynan(zStereo)
+            d_Stereo_idx = INSd(1:4) > INSdmax(1:4);
+            yStereo(d_Stereo_idx) = r_Stereo(d_Stereo_idx); % Set y to r for those specific elements
+            r_Stereo = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Stereo, yStereo, alphaSH.rStereo);
+        end
+        if ~anynan(zLiDAR)
+            d_LiDAR_idx = INSd(1:4) > INSdmax(1:4);
+            yLiDAR(d_LiDAR_idx) = r_Lidar(d_LiDAR_idx); % Set y to r for those specific elements
+            r_Lidar  = TempFilterModule.AdaptiveLaws.SageHusa_r(r_Lidar,  yLiDAR,  alphaSH.rLidar);
+        end
+        if ~anynan(zIMU)
+            d_IMU_idx = INSd(5:6) > INSdmax(5:6);
+            yIMU(d_IMU_idx) = r_IMU(d_IMU_idx); % Set y to r for those specific elements
+            r_IMU    = TempFilterModule.AdaptiveLaws.SageHusa_r(r_IMU,    yIMU,    alphaSH.rIMU);
+            r_IMU    = [0; r_IMU(end)];
+        end
+    end
+    
+    % Pack R
+    RINSfull(1:4)     = diag(R_Stereo);
+    RINSfull(5:8)     = diag(R_LiDAR);
+    RINSfull(9)       = diag(R_LRF);
+    RINSfull(10:11)   = diag(R_IMU);
+
+    %% Log values
+    SageHusa.r_LRF    = r_LRF;
+    SageHusa.r_IMU    = r_IMU;
+    SageHusa.r_Lidar  = r_Lidar;
+    SageHusa.r_Stereo = r_Stereo;
+    SageHusa.r_PS     = r_PS;
+    
+    SageHusa.QINS     = Q_INS;
+    SageHusa.QGNS     = Q_GNS;
+    
+    SageHusa.R_GNS    = R_GNS;
+    SageHusa.R_LRF    = R_LRF;
+    SageHusa.R_Stereo = R_Stereo;
+    SageHusa.R_LiDAR  = R_LiDAR;
+    SageHusa.R_IMU    = R_IMU;
+end

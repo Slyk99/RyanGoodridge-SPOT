@@ -43,6 +43,9 @@ initSpotDecouple;
 % initialize the GNC unit handling status flags
 initSpotFlag;
 
+% initialize the GNS unit handling Ryans Filter
+initSpotEKF
+
 % load the BLACK-with-cone inspection data
 load('correctedData_2xRedThetaImu.mat')
 

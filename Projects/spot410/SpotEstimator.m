@@ -142,11 +142,11 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                         rRef     = paramEst(phase,coord).k1;
                         baseRate = paramEst(phase,coord).k2;
 
-                        % if needed, load the PQR matrices for the current EKF configuration
-                        if ~any(ekfP0)
-                            [ekfP0,ekfQ0,ekfR0] = navigation_module.EKF_rel_spot.initialize_EKF( ...
-                                baseRate, myFun );
+                        % Assemble the current measurements 
+                        if norm( procPose - prevPose(:,coord) ) < 1e-10
+                            
                         end
+
 
                         % assemble the current pose measurement
                         switch myFun
@@ -160,27 +160,6 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                                              proc(SpotSensor.thetaLidar) ];
                             otherwise
                                 error('SpotEstimator.m:\n  sensor not defined for relative pose')
-                        end
-
-                        % if needed, initialize the EKF output
-                        if ~any(ekfOutputPrev)
-                            ekfOutputPrev = [ procPose;                      % position
-                                              [0; 0; 0];                     % velocity
-                                              proc(SpotSensor.thetaRedImu);  % omega
-                                              reshape(ekfP0,[],1) ];
-                        end
-
-                        % propagate state estimates from previous time step to a-priori estimates
-                        ekfOutput = navigation_module.EKF_rel_spot.propagation( ...
-                            ekfOutputPrev, cmd, baseRate, ekfQ0 );
-
-                        % if measurements are available, correct to a-posteriori estimates
-                        if norm( procPose - prevPose(:,coord) ) < 1e-10
-                            % do nothing
-                        else
-                            measVec   = [procPose; proc(SpotSensor.thetaRedImu)];
-                            ekfOutput = navigation_module.EKF_rel_spot.correction( ...
-                                ekfOutput, measVec, ekfR0 );
                         end
 
                         % save filter output

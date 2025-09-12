@@ -1,17 +1,17 @@
 %% PRE-SETUP
 
-% dataClass_rt = dataClass;
+dataClass_rt = dataClass;
 
-% clear SpotEstimator
-% 
-% for i = 2:length(dataClass_rt.Time_s.Time)
-%     [~,~,~,debugOut] = SpotEstimator( dataClass_rt.SpotGnc_Phase.Data(i,:), ...
-%                                       dataClass_rt.SpotGnc_Proc.Data(i,:), ...
-%                                       dataClass_rt.SpotGnc_Cmd.Data(i-1,:), ...
-%                                       paramEst);
-% 
-%     dataClass_rt.SpotGnc_EkfDebug.Data(i,:) = debugOut(1,:);
-% end
+clear SpotEstimator
+
+for i = 2:length(dataClass_rt.Time_s.Time)
+    [~,~,~,debugOut] = SpotEstimator( dataClass_rt.SpotGnc_Phase.Data(i,:), ...
+                                      dataClass_rt.SpotGnc_Proc.Data(i,:), ...
+                                      dataClass_rt.SpotGnc_Cmd.Data(i-1,:), ...
+                                      paramEst);
+
+    dataClass_rt.SpotGnc_EkfDebug.Data(i,:) = debugOut(1,:);
+end
 
 
 %% SETUP
