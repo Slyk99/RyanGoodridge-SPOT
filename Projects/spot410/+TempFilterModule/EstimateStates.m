@@ -66,14 +66,14 @@ function [xStack, PStack, NAVout] = EstimateStates(xStack, PStack, u, dt, zGNS, 
         [zINS,R_INS] = TempFilterModule.OrbitEstimation.Measurements.fusion(zINS_full_r, RINSfull);
 
         % INS Filter 
-        [x_INS, P_INS, EKF_INS] = FilterHandle(zINS, x_INS, u, P_INS, Q_INS, R_INS, V_INS, rho_INS, INSHandle, navOpts.INSdmax);
+        [x_INS, P_INS, EKF_INS] = FilterHandle(zINS, x_INS, u', P_INS, Q_INS, R_INS, V_INS, rho_INS, INSHandle, navOpts.INSdmax);
          V_INS = EKF_INS.V;
 
     end % end INS Toggle
 
     %% GNS Filter
     if navOpts.GNStoggle
-        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS_r, x_GNS, u, P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle, navOpts.GNSdmax);
+        [x_GNS, P_GNS, EKF_GNS] = FilterHandle(zGNS_r, x_GNS, u', P_GNS, Q_GNS, R_GNS, V_GNS, rho_GNS, GNSHandle, navOpts.GNSdmax);
         V_GNS = EKF_GNS.V;
 
     end % End GNS Toggle 

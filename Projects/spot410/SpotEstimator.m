@@ -16,7 +16,7 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
     est_vel  = zeros(numCoord,1);
     est_bias = zeros(numCoord,1);
     % debug    = zeros(numCoord,numDebug);
-    debug = zeros(9,1);
+    debug = zeros(9 + 9*9,1);
     
     % persistent variables - definition
     persistent estState;
@@ -32,6 +32,10 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
         estState  = zeros(maxEstState,numCoord);
         prevEst   = zeros(3,numCoord);
         measDelay = ones(1,numCoord);
+        zINS_prev = zeros(11,1);
+
+        xStack = navOpts.x0;
+        PStack = navOpts.P0;
     end
 
 
@@ -150,23 +154,22 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                                       SpotSensor.thetaBlackRatePhasespace]);
 
 
-
-                        xrelPS = globalToRelative(red, black);
+                        xrelPS = TempFilterModule.Processing.globalToRelative(red, black);
 
                         Stereo = proc([SpotSensor.xStereo; ...
                                     SpotSensor.yStereo; ...
                                     SpotSensor.thetaStereo]);
                         
-                        LOS_Stereo = rel2LOS(Stereo);
+                        LOS_Stereo = TempFilterModule.Processing.rel2LOS(Stereo');
                         
                         LiDAR = proc([SpotSensor.xLidar; ...
                                       SpotSensor.yLidar; ...
                                       SpotSensor.thetaLidar]);
-                        LOS_LiDAR = rel2LOS(LiDAR);
+                        LOS_LiDAR = TempFilterModule.Processing.rel2LOS(LiDAR');
                         
                         LRF = proc(SpotSensor.rLaser);
                         
-                        IMU = [theta_s; proc(SpotSensor.thetaRedImu)];
+                        IMU = [red(3); proc(SpotSensor.thetaRedImu)];
                         
                         % Debug
                         zGNS = [xrelPS(1:3); IMU];
@@ -182,48 +185,48 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                         % Check for ZOH
                         for i = 1:1:length(zINS)
                             if abs(zINS(i) - zINS_prev(i)) < 10^-10
-                                zINS(i) = nan(1,1);
+                                    zINS(i) = nan(1,1);
                             end
                         end
                         zINS_prev = zINS;
 
-                        [xStack, PStack, ~] = EstimateStates(xStack, PStack, cmd, baseRate, zGNS, zINS, navOpts);
+                        [xStack, PStack, ~] = TempFilterModule.EstimateStates(xStack, PStack, cmd(1:3), baseRate, zGNS, zINS, navOpts);
 
-                        if ( myFun == SpotGnc.estEkfPolarStereo ) || ( myFun == SpotGnc.estEkfPolarLidar )
-                            
-                            % xEst    = ekfOutput(1);
-                            % yEst    = ekfOutput(2);
-                            % xDotEst = ekfOutput(4);
-                            % yDotEst = ekfOutput(5);
-                            % 
-                            % range     = sqrt( xEst^2 + yEst^2 );
-                            % bearing   = atan( yEst   / xEst   );  % assume positive xEst
-                            % 
-                            % rangeDot   = ( xEst * xDotEst + yEst * yDotEst ) / range;
-                            % bearingDot = ( xEst * yDotEst - yEst * xDotEst ) / range^2;
-                            % 
-                            % arcLength    = rRef * proc(SpotSensor.thetaRedPhasespace);
-                            % arcLengthDot = rRef * proc(SpotSensor.thetaRedRatePhasespace);
-                            % 
-                            % est(SpotCoord.xRed)     = range;
-                            % est(SpotCoord.yRed)     = arcLength;
-                            % est(SpotCoord.thetaRed) = bearing;
-                            % 
-                            % est_vel(SpotCoord.xRed)     = rangeDot;
-                            % est_vel(SpotCoord.yRed)     = arcLengthDot;
-                            % est_vel(SpotCoord.thetaRed) = bearingDot;
-
-                            range     = sqrt ( procPose(1)^2 + procPose(2)^2 );
-                            bearing   = atan2( procPose(2)   , procPose(1)   );
-                            arcLength = rRef * proc(SpotSensor.thetaRedPhasespace);
-
-                            est(SpotCoord.xRed)     = range;
-                            est(SpotCoord.yRed)     = arcLength;
-                            est(SpotCoord.thetaRed) = bearing;
-
-                            % velocity and bias estimates remain at zero
-
-                        else
+                        % if ( myFun == SpotGnc.estEkfPolarStereo ) || ( myFun == SpotGnc.estEkfPolarLidar )
+                        % 
+                        %     % xEst    = ekfOutput(1);
+                        %     % yEst    = ekfOutput(2);
+                        %     % xDotEst = ekfOutput(4);
+                        %     % yDotEst = ekfOutput(5);
+                        %     % 
+                        %     % range     = sqrt( xEst^2 + yEst^2 );
+                        %     % bearing   = atan( yEst   / xEst   );  % assume positive xEst
+                        %     % 
+                        %     % rangeDot   = ( xEst * xDotEst + yEst * yDotEst ) / range;
+                        %     % bearingDot = ( xEst * yDotEst - yEst * xDotEst ) / range^2;
+                        %     % 
+                        %     % arcLength    = rRef * proc(SpotSensor.thetaRedPhasespace);
+                        %     % arcLengthDot = rRef * proc(SpotSensor.thetaRedRatePhasespace);
+                        %     % 
+                        %     % est(SpotCoord.xRed)     = range;
+                        %     % est(SpotCoord.yRed)     = arcLength;
+                        %     % est(SpotCoord.thetaRed) = bearing;
+                        %     % 
+                        %     % est_vel(SpotCoord.xRed)     = rangeDot;
+                        %     % est_vel(SpotCoord.yRed)     = arcLengthDot;
+                        %     % est_vel(SpotCoord.thetaRed) = bearingDot;
+                        % 
+                        %     range     = sqrt ( procPose(1)^2 + procPose(2)^2 );
+                        %     bearing   = atan2( procPose(2)   , procPose(1)   );
+                        %     arcLength = rRef * proc(SpotSensor.thetaRedPhasespace);
+                        % 
+                        %     est(SpotCoord.xRed)     = range;
+                        %     est(SpotCoord.yRed)     = arcLength;
+                        %     est(SpotCoord.thetaRed) = bearing;
+                        % 
+                        %     % velocity and bias estimates remain at zero
+                        % 
+                        % else
 
                             % output estimates for xRed and yRed (Third output will always be best)
                             est(SpotCoord.xRed)         = xStack(1, 1, 3);
@@ -234,9 +237,9 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                             % theta estimates remain inertial
                             est(SpotCoord.thetaRed) = xStack(7, 1, 3);
                             est_vel(SpotCoord.thetaRed) = xStack(8, 1, 3);
-                            debug = xStack(:, 1, 3);
+                            debug = [xStack(:, 1, 3); reshape(PStack(:,:,3),1,[])'];
 
-                        end
+                        % end
                         
 
                     otherwise

@@ -18,8 +18,7 @@ end
 %% SETUP
 
 % change default figure style
-% set(groot,'DefaultFigureWindowStyle','docked');
-set(groot,'DefaultFigureWindowStyle','normal');
+set(groot,'DefaultFigureWindowStyle','docked');
 set(groot,'DefaultLineLineWidth', 2);
 set(groot,'DefaultAxesFontSize', 12);
 set(groot,'defaultAxesXGrid','on');
@@ -198,6 +197,7 @@ plot(Proc.Time, rad2deg([Proc.thetaRedRatePhasespace, Ekf.omega, Proc.thetaRedIm
 xlabel('time, s');
 ylabel('inertial rotation, degree/s')
 legend('phasespace','ekf','imu');
+ProcRel.rangeLrf = dataClass_rt.SpotGnc_Proc.Data(:,SpotSensor.thetaRedImu)/ 100;
 
 figure;
 plot(ProcRel.Time,[ProcRel.range Ekf.range ProcRel.rangeStereo ProcRel.rangeLidar], ProcRel.Time, ProcRel.rangeLrf, '.')
