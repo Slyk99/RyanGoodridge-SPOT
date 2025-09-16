@@ -1,6 +1,7 @@
 function [z, H] = GNS(x)
-z = [x(1:3); x(7:8)];
+H = [eye(3), zeros(3,6);
+     zeros(1,6), 1, zeros(1,2);
+     zeros(1,7), 2, 1];
 
-H = [eye(3), zeros(3,5);
-     zeros(2,6), eye(2)];
+z = H*x;
 end

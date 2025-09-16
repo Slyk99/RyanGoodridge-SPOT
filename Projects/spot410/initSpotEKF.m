@@ -9,11 +9,11 @@ x_c = [drop_states_BLACK'; ...
        zeros(3,1)];
 x_rel = [globalToRelative(x_s, x_c); x_s(3,1); 0];
 
-P = 2*eye(8);
+P = 2*eye(9);
 
 % Initialize, Track 1 (INS), Track 2 (GNS), and fusion 
-x_ic = zeros(8,1,3);
-P_ic = zeros(8,8,3);
+x_ic = zeros(9,1,3);
+P_ic = zeros(9,9,3);
 for i = 1:1:3
     x_ic(:,1,i) = x_rel;
     P_ic(:,:,i) = P;
@@ -22,11 +22,13 @@ end
 %% Not Tuned
 navOpts.Q_INS    = blkdiag(0.01*eye(2), ...
                    0.01, ...
-                   0.01);
+                   0.01, ...
+                   0.00001);
 navOpts.Q_GNS    = blkdiag(0.01*eye(2), ...
                    0.01, ...
-                   0.001);
-navOpts.Q_12     = 0.000001*eye(4);
+                   0.001, ...
+                   0.00001);
+navOpts.Q_12     = 0.000001*eye(5);
 navOpts.R_GNS    = blkdiag(0.0001*eye(2), ...
                            0.001, ...
                            0.001, 0.01);
@@ -34,7 +36,7 @@ navOpts.RINSfull = [[0.1*ones(2,1); 0.1; 0.1]; % Stereo
                     [2*ones(2,1); 2; 0.01]; % LiDAR
                     0.0001;  % LRF
                     0.0001;   % PS angle
-                    0.1;]; % Angular Velocity
+                    0.1;]; % Angular Velocity + Bias
 
 %% Sage Husa Parameters
 % initial measurement Bias
@@ -74,13 +76,13 @@ navOpts.GNSdmax     = [0.5; 0.5; 0.5; 0.5; 0.5];
 navOpts.INSdmax     = [20; 20; 20; 10; 200; 20];
 
 %% Toggles
-navOpts.GNStoggle       = false;  % Use Vision
-navOpts.INStoggle       = true; % Use PhaseSpace
+navOpts.GNStoggle       = false;  % Use PhaseSpace 
+navOpts.INStoggle       = true; % Use Vision
 navOpts.OLR             = true;  % Outlier Rejection
 navOpts.ST              = false;  % Strong Tracking
 navOpts.SageHusa_Q      = false;
 navOpts.SageHusa_R      = false;
-navOpts.SageHusa_r      = true;
+navOpts.SageHusa_r      = false;
 
 clear functions % make sure simulink is cleared 
 

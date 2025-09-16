@@ -1,4 +1,4 @@
-function F = Partial(x_rel, alpha_s)
+function Fout = Partial(x_rel, alpha_s)
 % Partial
 % Computes the partial derivatives of 3-DoF planar relative dynamics
 % with respect to the relative states, in servicer body frame.
@@ -41,5 +41,8 @@ F = [F_13;
      F_4;
      F_5;
      F_68];
+
+% Im very lazy, i will add bias like this :)
+Fout = blkdiag(F,1);
 
 end

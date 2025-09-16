@@ -2,7 +2,7 @@ function [state_next, Phi_next, G] = Euler1_propagate(state, dt, u, args)
 % First-order Euler propagation 
 %
 % Inputs
-% State Vector:             states  = [x, y, theta, dx, dy, dtheta, theta_s, w_s]^T;
+% State Vector:             states  = [x, y, theta, dx, dy, dtheta, theta_s, w_s, bias]^T;
 % Time Step:                dt      = (Scalar)
 % Input vector:             u       = [ux, uy, uz]^T;
 % Function Arguments:
@@ -27,10 +27,12 @@ state_next = state + dx*dt;
 
 %% Noise Distribution Matrix
 % Noise is modeled as x = Ax + B(u + w)
-G = [zeros(3,4); 
+G_nobias = [zeros(3,4); 
     [eye(3), zeros(3,1)]; 
     zeros(1,4); 
     zeros(1,3), 1]; % Inputs on x_rel, y, rel, theta_rel, and theta_s
+
+G = blkdiag(G_nobias,1); % Add bias easily
 
 %% STM update 
 omega_s_dot = u(3)/J_s;

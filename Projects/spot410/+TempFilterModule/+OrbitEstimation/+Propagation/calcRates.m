@@ -2,7 +2,7 @@ function dx = calcRates(x_rel, u, m_s, J_s)
 % calcRates Compute 3-DOF relative rates in servicer body fixed frame
 %
 % Inputs:
-%   x_rel   : 8x1 relative state [x; y; theta; vx; vy; omega; theta_s; omega_s]
+%   x_rel   : 9x1 relative state [x; y; theta; vx; vy; omega; theta_s; omega_s; bias]
 %           - theta_s : servicer attitude (rad)
 %           - w_s     : servicer angular rate (rad/s)
 %   u       : 3x1 control input [u1; u2; u3]
@@ -26,8 +26,8 @@ w_s       = x_rel(8);      % inertial angular rate
 S = [0, -1; 1, 0];
 
 % Compute servicer accelerations in its body frame
-a_s_body = u(1:2)/m_s;  % linear accel in body frame
-alpha_s  = u(3)/J_s;    % angular accel (scalar)
+a_s_body = u(1:2);  % linear accel in body frame
+alpha_s  = u(3);    % angular accel (scalar)
 
 % Relative linear acceleration (transport theorem)
 a_rel = - a_s_body ...             % servicer thrust
@@ -44,5 +44,6 @@ dx = [ v_rel;                  % x_dot, y_dot
        a_rel;                  % vx_dot, vy_dot
        alpha_rel;              % omega_dot
        w_s;                    % theta_s_dot
-       alpha_s];               % omega_s_dot            
+       alpha_s;                % omega_s_dot
+       0];                     % Bias                        
 end

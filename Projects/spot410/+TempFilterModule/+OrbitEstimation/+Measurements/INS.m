@@ -18,7 +18,7 @@ function [z_calc, H] = INS(x)
     % z = [LOS, range, target att, inertial att, inertial angular rate]
     z_calc = [s; p; x(3); x(7); x(8)];
 
-    H = zeros(6,8);
+    H = zeros(6,9);
 
     % Common terms
     p2 = p^2;
@@ -41,7 +41,10 @@ function [z_calc, H] = INS(x)
     % theta derivative
     H(4,3) = 1;
 
-    % inertial att, inertial angular rate
-    H(5:6,7:8) = eye(2);
+    % inertial att
+    H(5,7) = 1;
+
+    % 2*inertial angular rate + bias
+    H(6,8:9) = [2, 1];
 
 end

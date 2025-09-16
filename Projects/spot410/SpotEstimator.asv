@@ -1,4 +1,4 @@
-function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst, navOpts)
+function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst)
 
     %% initialization of output and persistent variables
 
@@ -15,23 +15,30 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
     est      = zeros(numCoord,1);
     est_vel  = zeros(numCoord,1);
     est_bias = zeros(numCoord,1);
-    % debug    = zeros(numCoord,numDebug);
-    debug = zeros(9,1);
+    debug    = zeros(numCoord,numDebug);
     
     % persistent variables - definition
     persistent estState;
     persistent prevEst;
-    persistent zINS_prev;
+    persistent prevPose;
     persistent measDelay;
 
-    persistent xStack;
-    persistent PStack;
+    persistent ekfOutputPrev;
+    persistent ekfP0;
+    persistent ekfQ0;
+    persistent ekfR0;
 
     % persistent variables - initialization
     if isempty(estState)
         estState  = zeros(maxEstState,numCoord);
         prevEst   = zeros(3,numCoord);
+        prevPose  = zeros(3,numCoord);
         measDelay = ones(1,numCoord);
+
+        ekfOutputPrev = zeros(    numDebug, 1);
+        ekfP0         = zeros( maxEkfState, maxEkfState  );
+        ekfQ0         = zeros( maxEkfState, maxEkfState );
+        ekfR0         = zeros(  maxEkfMeas, maxEkfMeas );
     end
 
 
@@ -169,7 +176,7 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                         IMU = [theta_s; proc(SpotSensor.thetaRedImu)];
                         
                         % Debug
-                        zGNS = [xrelPS(1:3); IMU];
+                        x_GNS = [xrelPS(1:3); IMU];
                         % x_PS = [xrelPS(1:3); red([3,6],1)];
                         % x_PS = nan(size(x_PS));
                         LOS_Stereo = nan(size(LOS_Stereo));
@@ -177,17 +184,15 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                         LRF = nan(size(LRF));
                         % IMU = nan(size(IMU));
 
-                        zINS = [LOS_Stereo; LOS_LiDAR; LRF; IMU];
+                        x_INS = [LOS_Stereo; LOS_LiDAR; LRF; IMU];
 
                         % Check for ZOH
-                        for i = 1:1:length(zINS)
-                            if abs(zINS(i) - zINS_prev(i)) < 10^-10
-                                zINS(i) = nan(1,1);
+                        for i = 1:1:length(x_INS)
+                            if abs(x_INS(i) - sensors_prev(i)) < 10^-10
+                                x_INS(i) = nan(1,1);
                             end
                         end
-                        zINS_prev = zINS;
 
-                        [xStack, PStack, ~] = EstimateStates(xStack, PStack, cmd, baseRate, zGNS, zINS, navOpts);
 
                         if ( myFun == SpotGnc.estEkfPolarStereo ) || ( myFun == SpotGnc.estEkfPolarLidar )
                             
@@ -232,12 +237,14 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                             est_vel(SpotCoord.yRed)     = xStack(5, 1, 3);
     
                             % theta estimates remain inertial
-                            est(SpotCoord.thetaRed) = xStack(7, 1, 3);
-                            est_vel(SpotCoord.thetaRed) = xStack(8, 1, 3);
-                            debug = xStack(:, 1, 3);
+                            est(SpotCoord.thetaRed) = proc( ...
+                                paramEst(phase,SpotCoord.thetaRed).sensor);
+                            est_vel(SpotCoord.thetaRed) = proc( ...
+                                paramEst(phase,SpotCoord.thetaRed).rateSensor);
 
                         end
                         
+                        % bias estimates remain at zero
 
                     otherwise
                         error('SpotEstimator.m:\n  function SpotGnc.estEkf3dof not defined for SpotCoord(%d).\n\n', int32(coord))
