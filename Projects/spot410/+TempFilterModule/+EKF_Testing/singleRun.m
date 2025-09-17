@@ -8,8 +8,8 @@ clc
 % Load experimental data
 % load('Saved Data\ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
 % load('Saved Data\ExperimentData_RED_2025_7_24_15_31_59_0273_1.mat')
-% load('Saved Data\ExperimentData_RED_2025_7_24_16_9_56_3461_3.mat')
-load('Saved Data\ExperimentData_RED_2025_8_20_16_33_6_8377_1.mat')
+load('Saved Data\ExperimentData_RED_2025_7_24_16_9_56_3461_3.mat')
+% load('Saved Data\ExperimentData_RED_2025_8_20_16_33_6_8377_1.mat')
 initSpotEKF
 
 %% Filter IC
