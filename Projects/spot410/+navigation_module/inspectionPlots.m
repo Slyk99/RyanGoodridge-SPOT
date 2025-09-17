@@ -5,6 +5,7 @@
 clear SpotEstimator
 clear EstimateStates
 dataClass_rt.SpotGnc_EkfDebug.Data = zeros(length(dataClass_rt.SpotGnc_EkfDebug.Data), 9*10);
+initSpotEKF
 for i = 2:length(dataClass_rt.Time_s.Time)
     [~,~,~,debugOut] = SpotEstimator( dataClass_rt.SpotGnc_Phase.Data(i,:), ...
                                       dataClass_rt.SpotGnc_Proc.Data(i,:), ...
@@ -115,10 +116,10 @@ Ekf = timetable(Proc.Time);
 Ekf.xRed         = dataClass_rt.SpotGnc_EkfDebug.Data(:,1);
 Ekf.yRed         = dataClass_rt.SpotGnc_EkfDebug.Data(:,2);
 Ekf.thetaRed     = dataClass_rt.SpotGnc_EkfDebug.Data(:,3);
-Ekf.xRedRate     = dataClass_rt.SpotGnc_EkfDebug.Data(:,4);
-Ekf.yRedRate     = dataClass_rt.SpotGnc_EkfDebug.Data(:,5);
-Ekf.thetaRedRate = dataClass_rt.SpotGnc_EkfDebug.Data(:,6);
-Ekf.red_theta    = dataClass_rt.SpotGnc_EkfDebug.Data(:,7);
+Ekf.red_theta    = dataClass_rt.SpotGnc_EkfDebug.Data(:,4);
+Ekf.xRedRate     = dataClass_rt.SpotGnc_EkfDebug.Data(:,5);
+Ekf.yRedRate     = dataClass_rt.SpotGnc_EkfDebug.Data(:,6);
+Ekf.thetaRedRate = dataClass_rt.SpotGnc_EkfDebug.Data(:,7);
 Ekf.omega        = dataClass_rt.SpotGnc_EkfDebug.Data(:,8);
 Ekf.bias         = dataClass_rt.SpotGnc_EkfDebug.Data(:,9);
 
@@ -127,85 +128,171 @@ offset = 9; % first 9 cols are states
 n = 9;      % state dimension
 diagIdx = offset + (1:(n+1):n^2);
 
-Ekf.xRed3sig         = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(1)));
-Ekf.yRed3sig         = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(2)));
-Ekf.thetaRed3sig     = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(3)));
-Ekf.xRedRate3sig     = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(4)));
-Ekf.yRedRate3sig     = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(5)));
-Ekf.thetaRedRate3sig = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(6)));
-Ekf.red_theta3sig    = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(7)));
-Ekf.omega3sig        = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(8)));
-Ekf.bias3sig         = 3*sqrt(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(9)));
+Ekf.xRed3sig         = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(1))));
+Ekf.yRed3sig         = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(2))));
+Ekf.thetaRed3sig     = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(3))));
+Ekf.red_theta3sig    = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(4))));
+Ekf.xRedRate3sig     = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(5))));
+Ekf.yRedRate3sig     = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(6))));
+Ekf.thetaRedRate3sig = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(7))));
+Ekf.omega3sig        = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(8))));
+Ekf.bias3sig         = 3*sqrt(abs(dataClass_rt.SpotGnc_EkfDebug.Data(:,diagIdx(9))));
 
 Ekf.range = sqrt( Ekf.xRed.^2 + Ekf.yRed.^2 );
 
 
 %% SENSOR PLOTS
+close all
+%% x and y positions
+figure
+% X plot
+subplot(2,1,1)
+hold on
+grid on
 
-figure;
-plot(Proc.Time,[ProcRel.xBody Ekf.xRed Proc.xStereo Proc.xLidar])
-hold on;
-plot(Proc.Time,Ekf.xRed+Ekf.xRed3sig,'Color',colorMap(2,:),'LineStyle',':')
-plot(Proc.Time,Ekf.xRed-Ekf.xRed3sig,'Color',colorMap(2,:),'LineStyle',':')
-xlabel('time, s');
-ylabel('x-position, m')
+plot(Proc.Time,ProcRel.xBody, 'k')
+plot(Proc.Time,Proc.xLidar, 'b*')
+plot(Proc.Time,Proc.xStereo, 'g')
+plot(Proc.Time,Ekf.xRed,'r')
+
+% plot(Proc.Time,Ekf.xRed+Ekf.xRed3sig,'r:')
+% plot(Proc.Time,Ekf.xRed-Ekf.xRed3sig,'r:')
+
+% xlabel('time, s');
+ylabel('x-position [m]')
+% legend('phasespace','ekf','stereo','lidar');
+
+% Y plot
+subplot(2,1,2)
+hold on
+grid on
+
+plot(Proc.Time,ProcRel.yBody, 'k')
+plot(Proc.Time,Proc.yLidar, 'b*')
+plot(Proc.Time,Proc.yStereo, 'g')
+plot(Proc.Time,Ekf.yRed,'r')
+
+% plot(Proc.Time,Ekf.yRed+Ekf.yRed3sig,'r:')
+% plot(Proc.Time,Ekf.yRed-Ekf.yRed3sig,'r:')
+
+xlabel('time [s]');
+ylabel('y-position [m]')
 legend('phasespace','ekf','stereo','lidar');
 
-figure;
-plot(Proc.Time,[ProcRel.yBody Ekf.yRed Proc.yStereo Proc.yLidar])
-hold on;
-plot(Proc.Time,Ekf.yRed+Ekf.yRed3sig,'Color',colorMap(2,:),'LineStyle',':')
-plot(Proc.Time,Ekf.yRed-Ekf.yRed3sig,'Color',colorMap(2,:),'LineStyle',':')
-xlabel('time, s');
-ylabel('y-position, m')
-legend('phasespace','ekf','stereo','lidar');
-% ylim([-0.7 0.7])
+%% theta rel & theta red plots
 
-figure;
-plot(Proc.Time,rad2deg(wrapToPi([ProcRel.thetaInertial+pi/2 Ekf.thetaRed Proc.thetaStereo Proc.thetaLidar])))
-xlabel('time, s');
-ylabel('theta-rotation, degrees')
-legend('phasespace','ekf','stereo','lidar');
+figure
+% theta rel plot
+subplot(2,1,1)
+hold on
+grid on
 
-figure;
-plot(ProcRel.Time, [ProcRel.xRateBody Ekf.xRedRate]);
-hold on;
-plot(Proc.Time,Ekf.xRedRate+Ekf.xRedRate3sig,'Color',colorMap(2,:),'LineStyle',':')
-plot(Proc.Time,Ekf.xRedRate-Ekf.xRedRate3sig,'Color',colorMap(2,:),'LineStyle',':')
-xlabel('time, s');
-ylabel('SpotCoord.xRed, m/s');
+plot(Proc.Time,ProcRel.thetaInertial, 'k')
+plot(Proc.Time,Proc.thetaLidar, 'b*')
+plot(Proc.Time,Proc.thetaStereo, 'g')
+plot(Proc.Time,Ekf.thetaRed,'r')
+
+% plot(Proc.Time,Ekf.thetaRed+Ekf.thetaRed3sig,'r:')
+% plot(Proc.Time,Ekf.thetaRed-Ekf.thetaRed3sig,'r:')
+
+% xlabel('time, s');
+ylabel('theta-relitive [rad]')
+% legend('phasespace','ekf','stereo','lidar');
+
+% theta inertial plot
+subplot(2,1,2)
+hold on
+grid on
+
+plot(Proc.Time,dataClass_rt.SpotGnc_Proc.Data(:,3), 'k')
+plot(Proc.Time,Ekf.red_theta,'r')
+
+% plot(Proc.Time,Ekf.red_theta+Ekf.red_theta3sig,'r:')
+% plot(Proc.Time,Ekf.red_theta-Ekf.red_theta3sig,'r:')
+
+xlabel('time [s]');
+ylabel('theta-Inertial [rad]')
+legend('phasespace','ekf');
+
+%% x & y Velocity plots
+figure
+% x velocity
+subplot(2,1,1)
+hold on
+grid on
+
+plot(ProcRel.Time, ProcRel.xRateBody,'k')
+plot(ProcRel.Time, Ekf.xRedRate, 'r')
+
+% plot(Proc.Time,Ekf.xRedRate+Ekf.xRedRate3sig,'r:')
+% plot(Proc.Time,Ekf.xRedRate-Ekf.xRedRate3sig,'r:')
+
+ylabel('x Velocity [m/s]');
+% legend('phasespace','ekf');
+
+% y velocity
+subplot(2,1,2)
+hold on
+grid on
+
+plot(ProcRel.Time, ProcRel.yRateBody,'k')
+plot(ProcRel.Time, Ekf.yRedRate, 'r')
+
+% plot(Proc.Time,Ekf.yRedRate+Ekf.yRedRate3sig,'r:')
+% plot(Proc.Time,Ekf.yRedRate-Ekf.yRedRate3sig,'r:')
+
+xlabel('time [s]');
+ylabel('y Velocity, [m/s]');
 legend('phasespace','ekf');
 % ylim([-0.05 0.05]);
 
-figure;
-plot(ProcRel.Time, [ProcRel.yRateBody Ekf.yRedRate]);
-hold on;
-plot(Proc.Time,Ekf.yRedRate+Ekf.yRedRate3sig,'Color',colorMap(2,:),'LineStyle',':')
-plot(Proc.Time,Ekf.yRedRate-Ekf.yRedRate3sig,'Color',colorMap(2,:),'LineStyle',':')
-xlabel('time, s');
-ylabel('SpotCoord.yRed, m/s');
-legend('phasespace','ekf');
+%% theta_rel & theta_inertial rates
+figure
+% theta_rel velocity
+subplot(2,1,1)
+hold on
+grid on
+
+plot(ProcRel.Time, ProcRel.thetaRateInertial,'k')
+plot(ProcRel.Time, Ekf.thetaRedRate, 'r')
+% 
+% plot(Proc.Time,Ekf.thetaRedRate+Ekf.thetaRedRate3sig,'r:')
+% plot(Proc.Time,Ekf.thetaRedRate-Ekf.thetaRedRate3sig,'r:')
+
+ylabel('theta rel rate [rad/s]');
+% legend('phasespace','ekf');
+
+% y velocity
+subplot(2,1,2)
+hold on
+grid on
+
+plot(ProcRel.Time, dataClass_rt.SpotGnc_Proc.Data(:,SpotSensor.thetaRedImu),'b*')
+plot(ProcRel.Time, dataClass_rt.SpotGnc_Proc.Data(:,SpotSensor.thetaRedRatePhasespace),'k')
+plot(ProcRel.Time, Ekf.omega, 'r')
+plot(ProcRel.Time, Ekf.omega + Ekf.bias, 'g')
+
+% plot(Proc.Time,Ekf.omega+Ekf.omega3sig,'r:')
+% plot(Proc.Time,Ekf.omega-Ekf.omega3sig,'r:')
+% 
+% plot(Proc.Time,Ekf.omega+Ekf.omega + Ekf.bias+Ekf.bias3sig,'g:')
+% plot(Proc.Time,Ekf.omega-Ekf.omega + Ekf.bias-Ekf.bias3sig,'g:')
+
+xlabel('time [s]');
+ylabel('theta inertial rate, [rad/s]');
+legend('IMU','phasespace','ekf', 'ekf + Bias');
 % ylim([-0.05 0.05]);
 
-figure;
-plot(Proc.Time, rad2deg([ProcRel.thetaRateInertial, Ekf.thetaRedRate, Proc.thetaRedImu]))
-xlabel('time, s');
-ylabel('SpotCoord.thetaRed, degree/s')
-legend('phasespace','ekf','imu');
 
-figure;
-plot(Proc.Time, rad2deg([Proc.thetaRedRatePhasespace, Ekf.omega, Proc.thetaRedImu]))
-xlabel('time, s');
-ylabel('inertial rotation, degree/s')
-legend('phasespace','ekf','imu');
+%% Range Plot
 
-figure;
-plot(ProcRel.Time,[ProcRel.range Ekf.range ProcRel.rangeStereo ProcRel.rangeLidar], ProcRel.Time, ProcRel.rangeLrf, '.')
-xlabel('time, s');
-ylabel('range, m')
-title('body frame');
-legend('phasespace', 'ekf', 'stereo', 'lidar', 'rangefinder');
-ylim([0 2])
+% figure;
+% plot(ProcRel.Time,[ProcRel.range Ekf.range ProcRel.rangeStereo ProcRel.rangeLidar], ProcRel.Time, ProcRel.rangeLrf, '.')
+% xlabel('time, s');
+% ylabel('range, m')
+% title('body frame');
+% legend('phasespace', 'ekf', 'stereo', 'lidar', 'rangefinder');
+% ylim([0 2])
 
 
 %% CONTROL PLOTS

@@ -171,10 +171,11 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                         
                         IMU = [red(3); proc(SpotSensor.thetaRedImu)];
                         
-                        % Debug
                         zGNS = [xrelPS(1:3); IMU];
-                        % x_PS = [xrelPS(1:3); red([3,6],1)];
-                        % x_PS = nan(size(x_PS));
+
+                        % Debug
+                        % zGNS = [xrelPS(1:3); red([3,6],1)];
+                        % zGNS = nan(size(x_PS));
                         LOS_Stereo = nan(size(LOS_Stereo));
                         % LOS_LiDAR = nan(size(LOS_LiDAR));
                         LRF = nan(size(LRF));
@@ -189,8 +190,8 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                             end
                         end
                         zINS_prev = zINS;
-
-                        [xStack, PStack, ~] = TempFilterModule.EstimateStates(xStack, PStack, cmd(1:3), baseRate, zGNS, zINS, navOpts);
+                        u_red = cmd(1:3)';
+                        [xStack, PStack, ~] = TempFilterModule.EstimateStates(xStack, PStack, u_red, baseRate, zGNS, zINS, navOpts);
 
                         % if ( myFun == SpotGnc.estEkfPolarStereo ) || ( myFun == SpotGnc.estEkfPolarLidar )
                         % 
@@ -231,11 +232,11 @@ function [est,est_vel,est_bias,debug] = SpotEstimator(phase, proc, cmd, paramEst
                             % output estimates for xRed and yRed (Third output will always be best)
                             est(SpotCoord.xRed)         = xStack(1, 1, 3);
                             est(SpotCoord.yRed)         = xStack(2, 1, 3);
-                            est_vel(SpotCoord.xRed)     = xStack(4, 1, 3);
-                            est_vel(SpotCoord.yRed)     = xStack(5, 1, 3);
+                            est_vel(SpotCoord.xRed)     = xStack(5, 1, 3);
+                            est_vel(SpotCoord.yRed)     = xStack(6, 1, 3);
     
                             % theta estimates remain inertial
-                            est(SpotCoord.thetaRed) = xStack(7, 1, 3);
+                            est(SpotCoord.thetaRed) = xStack(4, 1, 3);
                             est_vel(SpotCoord.thetaRed) = xStack(8, 1, 3);
                             debug = [xStack(:, 1, 3); reshape(PStack(:,:,3),1,[])'];
 

@@ -37,7 +37,7 @@ navOpts.R_GNS    = blkdiag(0.001*eye(2), ...
                            0.001, 0.1);
 
 navOpts.RINSfull = [[0.1*ones(2,1); 0.1; 0.1]; % Stereo 
-                    [2*ones(2,1); 2; 0.01]; % LiDAR
+                    [7*ones(2,1); 7; 0.01]; % LiDAR
                     0.1;  % LRF
                     0.001;   % PS angle
                     0.1;]; % Angular Velocity + Bias
@@ -80,8 +80,8 @@ navOpts.GNSdmax     = [0.5; 0.5; 0.5; 0.5; 0.5];
 navOpts.INSdmax     = [20; 20; 20; 10; 200; 20];
 
 %% Toggles
-navOpts.GNStoggle       = true;  % Use PhaseSpace 
-navOpts.INStoggle       = false; % Use Vision
+navOpts.GNStoggle       = false;  % Use PhaseSpace 
+navOpts.INStoggle       = true; % Use Vision
 navOpts.OLR             = false;  % Outlier Rejection
 navOpts.ST              = true;  % Strong Tracking
 navOpts.SageHusa_Q      = false;
