@@ -27,12 +27,8 @@ state_next = state + dx*dt;
 
 %% Noise Distribution Matrix
 % Noise is modeled as x = Ax + B(u + w)
-G_nobias = [zeros(3,4); 
-    [eye(3), zeros(3,1)]; 
-    zeros(1,4); 
-    zeros(1,3), 1]; % Inputs on x_rel, y, rel, theta_rel, and theta_s
-
-G = blkdiag(G_nobias,1); % Add bias easily
+G = [zeros(4,5);
+     eye(5)];
 
 %% STM update 
 omega_s_dot = u(3)/J_s;

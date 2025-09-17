@@ -1,48 +1,53 @@
-function Fout = Partial(x_rel, alpha_s)
+function F = Partial(x, alpha_s)
 % Partial
 % Computes the partial derivatives of 3-DoF planar relative dynamics
 % with respect to the relative states, in servicer body frame.
 %
+% New State Definition:
+%   x = [x_r; y_r; theta_r; theta_s; vx_r; vy_r; omega_s; bias]
+%
 % Inputs:
-%   x_rel       : [x_r; y_r; theta_r; vx_r; vy_r; omega_r]
-%   omega_s     : servicer angular velocity (rad/s)
-%   omega_s_dot : servicer angular acceleration (rad/s^2)
+%   x         : state vector
+%   alpha_s   : servicer angular acceleration (rad/s^2)
 %
 % Output:
-%   A           : 8x8 Jacobian (continuous-time)
+%   Fout      : 8x8 Jacobian (continuous-time)
 
-% Extract states
-rx        = x_rel(1);      % relative x position
-ry        = x_rel(2);      % relative y position
-vx        = x_rel(4);      % relative x velocity 
-vy        = x_rel(5);      % relative y velocity
-omega_rel = x_rel(6);      % relative angular rate
-theta_s   = x_rel(7);      % inertial angle
-w_s       = x_rel(8);      % inertial angular rate
+% === Extract states ===
+xr      = x(1);   % relative x position
+yr      = x(2);   % relative y position
+theta_r = x(3);   % relative attitude
+theta_s = x(4);   % servicer attitude
+vx      = x(5);   % relative x velocity
+vy      = x(6);   % relative y velocity
+omega_r = x(7);   % relative angular rate
+omega_s = x(8);   % servicer angular rate
+bias    = x(9);   % bias
 
-% Preallocate
-F = zeros(8,8);
+% --- preallocate
+F = zeros(9,9);
 
-% rows 1:3
-F_13 = [zeros(3), eye(3), zeros(3,2)];
+% Kinematics: derivatives of positions / angles
+F(1,5) = 1;   % dx/dvx
+F(2,6) = 1;   % dy/dvy
+F(3,7) = 1;   % dtheta_r/domega_r
+F(4,8) = 1;   % dtheta_s/domega_s
 
-% row 4
-F_4 = [w_s^2,    alpha_s, 0, 0,      2*w_s, 0, 0, 2*(vy + vx*w_s)];
+% Dynamics: vx_dot = omega_s^2 * x + 2*omega_s*vy + alpha_s * y
+F(5,1) = omega_s^2;             % d(vx_dot)/d x
+F(5,2) = alpha_s;               % d(vx_dot)/d y
+F(5,5) = 0;                     % d(vx_dot)/d vx
+F(5,6) = 2*omega_s;             % d(vx_dot)/d vy
+F(5,7) = 0;                     % d(vx_dot)/d omega_r
+F(5,8) = 2*(omega_s * xr + vy); % d(vx_dot)/d omega_s
+% bias does not appear in dynamics -> no column for it
 
-% row 5
-F_5 = [-alpha_s, w_s^2,   0, -2*w_s, 0,     0, 0, -2*(vx - vy*w_s)];
-
-% rows 6:8
-F_68 = zeros(3,8);
-F_68(2,7) = 1;
-
-% Full Jacobian
-F = [F_13;
-     F_4;
-     F_5;
-     F_68];
-
-% Im very lazy, i will add bias like this :)
-Fout = blkdiag(F,1);
+% Dynamics: vy_dot = omega_s^2 * y - 2*omega_s*vx - alpha_s * x
+F(6,1) = -alpha_s;              % d(vy_dot)/d x
+F(6,2) = omega_s^2;             % d(vy_dot)/d y
+F(6,5) = -2*omega_s;            % d(vy_dot)/d vx
+F(6,6) = 0;                     % d(vy_dot)/d vy
+F(6,7) = 0;                     % d(vy_dot)/d omega_r
+F(6,8) = 2*(omega_s * yr - vx); % d(vy_dot)/d omega_s
 
 end

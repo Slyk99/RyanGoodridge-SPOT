@@ -16,7 +16,7 @@ function [z_calc, H] = INS(x)
     
     % Measurement vector
     % z = [LOS, range, target att, inertial att, inertial angular rate]
-    z_calc = [s; p; x(3); x(7); x(8)];
+    z_calc = [s; p; x(3); x(4); x(8)+ x(9)];
 
     H = zeros(6,9);
 
@@ -42,9 +42,9 @@ function [z_calc, H] = INS(x)
     H(4,3) = 1;
 
     % inertial att
-    H(5,7) = 1;
+    H(5,4) = 1;
 
     % 2*inertial angular rate + bias
-    H(6,8:9) = [2, 1];
+    H(6,8:9) = [1, 1];
 
 end
