@@ -6,9 +6,9 @@ clc
 % Run_Initializer;
 
 % Load experimental data
-% load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
+load('+navigation_module/ExperimentData_RED_2025_7_24_14_6_22_4009_1.mat')
 % load('+navigation_module/ExperimentData_RED_2025_7_24_15_31_59_0273_1.mat')
-load('+navigation_module/ExperimentData_RED_2025_7_24_16_9_56_3461_3.mat')
+% load('+navigation_module/ExperimentData_RED_2025_7_24_16_9_56_3461_3.mat')
 initSpotEKF
 
 %% Filter IC
