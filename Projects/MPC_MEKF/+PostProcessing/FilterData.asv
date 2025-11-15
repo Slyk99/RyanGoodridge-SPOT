@@ -32,16 +32,13 @@ for r = 1:length(robots)
         Est_mat(i,:) = dataClass.(robot + "_" + stateFields_est(i)).Data.';
     end
 
+    for i = 1:u
+        inputs(i,:)  = dataClass.(robot + "_" ) 
+    end
+
     % Store in struct
     PS_states.(robot)  = PS_mat;
     Est_states.(robot) = Est_mat;
-    
-    % log saturated inputs
-    for i = 1:u
-        inputs(i,:)  = dataClass.(robot + "_" + inputFields(i)).Data.'; 
-    end
-
-    CTL.(robot)      = inputs;
 
     % Determine number of time steps from P11_PS
     T = length(dataClass.(robot + "_P11_PS").Data);
