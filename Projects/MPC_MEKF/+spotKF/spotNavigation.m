@@ -2,7 +2,7 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
 
     %% Inputs
     params      = navOpts.params;
-    persistent kfChaser kfTarget kfObs V_red V_black V_blue initialized
+    persistent kfChaser kfTarget kfObs V_red V_black V_blue zred_prev zblack_prev zblue_prev initialized
 
     % Only initialize once
     if isempty(initialized)
@@ -12,6 +12,9 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
         V_red    = zeros(3);
         V_black  = zeros(3);
         V_blue   = zeros(3);
+        zred_prev   = zeros(3,1);
+        zblack_prev = zeros(3,1);
+        zblue_prev  = zeros(3,1);
         initialized = true;
     end
 
@@ -26,6 +29,22 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
     [xred,   ured,   Pred,   zred,  ...
      xblack, ublack, Pblack, zblack,...
      xblue,  ublue,  Pblue,  zblue] = spotKF.Misc.unpackStates(xstack, Pstack, Measurments, CTL);
+
+    % Handle held measurements
+    if abs(zred_prev - zred) < 10^-10
+        zred = NaN(size(zred));
+    end
+    zred_prev = zred;
+
+    if abs(zblack_prev - zblack) < 10^-10
+        zblack = NaN(size(zblack));
+    end
+    zblack_prev = zblack;
+
+    if abs(zblue_prev - zblue) < 10^-10
+        zblue = NaN(size(zblue));
+    end
+    zblue_prev = zblue;
 
     %% RED Filter
     if navOpts.toggleREDkf

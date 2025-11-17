@@ -22,7 +22,8 @@
 
 function [x_est_s, p_est_s] = RTS_Loop(x_data, P_data, xk_data, Pk_data, dt_data, u_data, Fhndl, Fargs)
     % Number of time steps
-    t = length(dt_data);
+    t = length(dt_data) + 1;
+
     % State dimension
     n = size(x_data,1);
 
@@ -41,14 +42,14 @@ function [x_est_s, p_est_s] = RTS_Loop(x_data, P_data, xk_data, Pk_data, dt_data
         xk  = xk_data(:,i+1);
         Pk  = Pk_data(:,:,i+1);
         dt  = dt_data(i);
-        u = u_data(:,i);
+        u   = u_data(:,i);
 
         % carry in the already‐smoothed at i+1
         xs  = x_est_s(:,i+1);
         Ps  = p_est_s(:,:,i+1);
 
         % one step of the RTS smoother
-        [xs, Ps] = RTS(x, P, xk, Pk, xs, Ps, dt, u, Fhndl, Fargs);
+        [xs, Ps] = spotKF.PostProcessing.RTS(x, P, xk, Pk, xs, Ps, dt, u, Fhndl, Fargs);
 
         x_est_s(:,i)   = xs;
         p_est_s(:,:,i) = Ps;
