@@ -8,7 +8,6 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
     Est_states = struct();
     
     t_full = dataClass.Time_s.Data.';       % 1 x T_full
-    dt     = diff(t_full);
     T_full = length(t_full);
 
     if Phase2_End > 0
@@ -29,7 +28,7 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
     
     % Store trimming index for later reuse in robot loops
     idx = idxStart;
-
+    
     stateFields_raw = ["Px_m_raw",     "Py_m_raw",     "Rz_rad_raw", ...
                        "Vx_mpers_raw", "Vy_mpers_raw", "RzD_radpers_raw", ...
                        "Ax_mpers2_raw","Ay_mpers2_raw","RzDD_radpers2_raw"];
@@ -47,17 +46,15 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         n = length(stateFields_raw);
         m = 6;
         u = length(inputFields);
-        T = length(Time.t);
+        T = length(dataClass.(robot + "_" + stateFields_raw(1)).Data);
         PS_mat  = zeros(n, T);
         Est_mat = zeros(n, T);
         inputs  = zeros(u, T);
     
         % Fill each 9×T matrix
         for i = 1:n
-            rawVec = dataClass.(robot + "_" + stateFields_raw(i)).Data.';
-            PS_mat(i,:) = rawVec(idx:end);
-            estVec = dataClass.(robot + "_" + stateFields_est(i)).Data.';
-            Est_mat(i,:) = estVec(idx:end);
+            PS_mat(i,:)  = dataClass.(robot + "_" + stateFields_raw(i)).Data.';
+            Est_mat(i,:) = dataClass.(robot + "_" + stateFields_est(i)).Data.';
         end
     
         % Store in struct
@@ -66,25 +63,24 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         
         % log saturated inputs
         for i = 1:u
-            uVec = dataClass.(robot + "_" + inputFields(i)).Data.';
-            inputs(i,:) = uVec(idx:end); 
+            inputs(i,:)  = dataClass.(robot + "_" + inputFields(i)).Data.'; 
         end
     
         % CTL.(robot)      = inputs;
     
         % Determine number of time steps from P11_PS
-        rawCov = dataClass.(robot + "_P11_PS").Data;  
-        T_trim = length(rawCov(idx:end));
-        C = zeros(m, m, T_trim);
-        
+        T = length(dataClass.(robot + "_P11_PS").Data);
+        C = zeros(m, m, T);
+    
         for j = 1:m
             for k = 1:m
+                % Build field name, example: 'RED_P23_PS'
                 field = robot + "_P" + j + k + "_PS";
-                covVec = dataClass.(field).Data(:);
-                C(j,k,:) = covVec(idx:end);
+    
+                % Extract time series → 1×T
+                C(j,k,:) = dataClass.(field).Data(:);
             end
         end
-
     
         Cov.(robot) = C;  % 6×6×T
     
@@ -93,12 +89,12 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         xk = Est_mat;
         Pk = C; 
     
-        for k = 1:1:idx-T_full
-           [xk(1:6,k),F,G] = spotKF.Dynamics.Euler1(Est_mat(1:6,k), dt(idx+k-1), inputs(:,k), navOpts.params);
+        for k = 2:1:length(Time.t)
+           [xk(1:6,k),F,G] = spotKF.Dynamics.Euler1(Est_mat(1:6,k), dt(k-1), inputs(:,k), navOpts.params);
             Pk(:,:,k) = F*C(:,:,k-1)*F' + G*Q*G';
         end
     
-        [x_est_s, p_est_s] = spotKF.PostProcessing.RTS_Loop(Est_mat(1:6,:), C, xk(1:6,:), Pk, dt(idx:end), inputs, @spotKF.Dynamics.Euler1, navOpts.params);
+        [x_est_s, p_est_s] = spotKF.PostProcessing.RTS_Loop(Est_mat(1:6,:), C, xk(1:6,:), Pk, dt, inputs, @spotKF.Dynamics.Euler1, navOpts.params);
     
         % Store
         pred_states.(robot) = xk;

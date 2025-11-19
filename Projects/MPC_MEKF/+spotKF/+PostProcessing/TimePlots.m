@@ -138,14 +138,16 @@ for i = 1:3
 end
 
 figure('Name', 'Accelerations')
-
 for i = 1:3
     j = i+6;
     subplot(3,1,i)
     hold on
 
-    plot(t, state_pred(j,:),  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)
+    % plot(t, state_pred(j,:),  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)
     % plot(t, state_smth(i,:),  'm', 'LineWidth', LW)
+
+    a = diff(state_est(i+3,:))./diff(t);
+    plot(t(2:end), a,  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)
 
     % Plot measurement (ground truth)
     plot(t, state_meas(j,:), 'k', 'LineWidth', LW)

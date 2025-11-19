@@ -2,7 +2,7 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
 
     %% Inputs
     params      = navOpts.params;
-    persistent kfChaser kfTarget kfObs V_red V_black V_blue zred_prev zblack_prev zblue_prev initialized
+    persistent kfChaser kfTarget kfObs V_red V_black V_blue zred_prev zblack_prev zblue_prev RED_lowpass_feedback BLACK_lowpass_feedback BLUE_lowpass_feedback initialized
 
     % Only initialize once
     if isempty(initialized)
@@ -15,6 +15,9 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
         zred_prev   = zeros(3,1);
         zblack_prev = zeros(3,1);
         zblue_prev  = zeros(3,1);
+        RED_lowpass_feedback = zeros(3,4);
+        BLACK_lowpass_feedback = zeros(3,4);
+        BLUE_lowpass_feedback = zeros(3,4);
         initialized = true;
     end
 
@@ -52,7 +55,7 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
          kfChaser.rho, V_red, kfChaser.Q, kfChaser.R, ...
          kfChaser.ST, kfChaser.OLR, kfChaser.dmax);
     else
-        vred = spotKF.Filter.pseDerivative(zred, dt, kfChaser.a);
+        [vred, RED_lowpass_feedback(:,1:2)] = spotKF.Filter.pseDerivative(zred, RED_lowpass_feedback(:,1:2), dt, kfChaser.a);
         xred = [zred; vred];
     end
     
@@ -62,7 +65,7 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
          kfTarget.rho, V_black, kfTarget.Q, kfTarget.R, ...
          kfTarget.ST, kfTarget.OLR, kfTarget.dmax);
     else
-        vblack = spotKF.Filter.pseDerivative(zblack, dt, kfTarget.a);
+        [vblack, BLACK_lowpass_feedback(:,1:2)] = spotKF.Filter.pseDerivative(zblack, BLACK_lowpass_feedback(:,1:2), dt, kfTarget.a);
         xblack = [zblack; vblack];
     end
     
@@ -72,14 +75,14 @@ function [xredfull, xblackfull, xbluefull, xstack, Pstack] = spotNavigation(dt, 
          kfObs.rho, V_blue, kfObs.Q, kfObs.R, ...
          kfObs.ST, kfObs.OLR, kfObs.dmax);
     else
-        vblue = spotKF.Filter.pseDerivative(zblue, dt, kfObs.a);
+        [vblue, BLUE_lowpass_feedback(:,1:2)] = spotKF.Filter.pseDerivative(zblue, BLUE_lowpass_feedback(:,1:2), dt, kfObs.a);
         xblue = [zblue; vblue];
     end
 
     %% Add acceleration
-    ared   = spotKF.Filter.pseDerivative(xred(4:6), dt, kfChaser.a);
-    ablack = spotKF.Filter.pseDerivative(xblack(4:6), dt, kfTarget.a);
-    ablue  = spotKF.Filter.pseDerivative(xblue(4:6), dt, kfObs.a);
+    [ared, RED_lowpass_feedback(:,3:4)]   = spotKF.Filter.pseDerivative(xred(4:6), RED_lowpass_feedback(:,3:4), dt, kfChaser.a);
+    [ablack, BLACK_lowpass_feedback(:,3:4)] = spotKF.Filter.pseDerivative(xblack(4:6), BLACK_lowpass_feedback(:,3:4), dt, kfTarget.a);
+    [ablue, BLUE_lowpass_feedback(:,3:4)]  = spotKF.Filter.pseDerivative(xblue(4:6), BLUE_lowpass_feedback(:,3:4), dt, kfObs.a);
 
     xredfull   = [xred; ared];
     xblackfull = [xblack; ablack];

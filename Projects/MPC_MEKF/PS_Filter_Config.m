@@ -4,7 +4,7 @@ kfChaser.Q    = blkdiag(0.0001*eye(2), 0.0000001);
 kfChaser.R    = 0.0000001*eye(3);
 kfChaser.rho  = 0.995;
 kfChaser.dmax = 3;
-kfChaser.a    = 10;
+kfChaser.a    = 0.5;
 
 % toggles
 kfChaser.ST   = false;
