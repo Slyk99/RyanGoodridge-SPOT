@@ -20,6 +20,7 @@ MPC_Configuration
 PS_Filter_Config
 CV_Configuration
 
+%%
 % As an example, here are the control parameters the manipulator.
 % Set torque limits on joints
 

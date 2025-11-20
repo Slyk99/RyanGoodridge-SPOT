@@ -39,9 +39,10 @@ mpcConfig.Q = blkdiag(5*eye(3), 1*eye(3)); % State cost
 mpcConfig.R = 100 * eye(m);                % Input cost
 mpcConfig.epsilon = 0.01;                  % Confidence Level (For stochastic constraints)
 
+% 0.1655093
 % Offset
-mpcConfig.docking_Offset = [0.1655093; 0.43629; 0]; % Where red needs to be to dock
-mpcConfig.BlackOffset = [0.1655093; 0];             % Offset for geometry
+mpcConfig.docking_Offset = [0.165; 0.43629; 0]; % Where red needs to be to dock
+mpcConfig.BlackOffset = [0; 0];             % Offset for geometry
 mpcConfig.BlueOffset = [0;0];                       % No offset, constraint is at center of mass
 
 % Docking Angle offset - Red looks at black until docking, then activates
