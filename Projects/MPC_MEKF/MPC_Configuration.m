@@ -32,11 +32,11 @@ mpcIC = zeros((3*N + 6*N),1);
 umax = [umax; umax; Tmax];
 
 % Rate of MPC - MPC is ZOH
-mpcConfig.dt = 0.2; % MPC dt
+mpcConfig.dt = 0.5; % MPC dt
 
 % Tunable Parameters
-mpcConfig.Q = blkdiag(5*eye(3), 1*eye(3)); % State cost
-mpcConfig.R = 100 * eye(m);                % Input cost
+mpcConfig.Q = blkdiag(10*eye(3), 1*eye(3)); % State cost
+mpcConfig.R = 1* eye(m);                % Input cost
 mpcConfig.epsilon = 0.01;                  % Confidence Level (For stochastic constraints)
 
 % 0.1655093
@@ -51,7 +51,7 @@ theta = atan2(mpcConfig.docking_Offset(2), mpcConfig.docking_Offset(1));
 mpcConfig.Camera_Offset = [0; 0; theta];
 
 % Avoidance Constraint
-mpcConfig.holding_radius = 0.7*[1; 1.1];    % Target Max constraint
+mpcConfig.holding_radius = 0.7*[1; 1];    % Target Max constraint
 mpcConfig.r_hold_min = [0.35; 0.35];        % Target Min constraint - [0.8; 0.45] for solar panels
 mpcConfig.ObsHold = 0.7*[1;1];              % Obstacle Constraint
 

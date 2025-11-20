@@ -85,13 +85,10 @@ function [Aineq, bineq] = StochasticHoldingRadius( ...
     % Fill inequality row (keep same sign convention as original)
     Aineq(i, m*N+1 + n*(i-1):m*N+2 + n*(i-1)) = -2 .* E;
     % Use c_center instead of r_tar in the constant term
-    bineq(i,1) = -1 - E*(r0 + c_center) - z_epsilon .* sigma_proj;
+    bineq(i,1) = -1 - E*(r0 + c_center) - 0*z_epsilon .* sigma_proj;
 
     %% === Plotting (unchanged, use c_center instead of r_tar if plotting) ===
     % (optional plotting code omitted for brevity)
-  end
-end
-
     %% === Plotting and violation check ===
     % hold on; axis equal;
     % xlabel('x'); ylabel('y');
@@ -111,7 +108,7 @@ end
     % plot(r0(1),       r0(2),       'bs', 'MarkerFaceColor','b', 'DisplayName','Tangent Pt');
     % 
     % % 3) Tangent line at r0
-    % %    Your E row is (r0-r_tar)'*M, and gradient g = 2*M*(r0-r_tar) = 2*(E') 
+    % %   E row is (r0-r_tar)'*M, and gradient g = 2*M*(r0-r_tar) = 2*(E') 
     % g = -2.*E;
     % t_dir    = [-g(2); g(1)];                  % tangent direction (perp to gradient)
     % t_dir    = t_dir / norm(t_dir);
@@ -127,3 +124,5 @@ end
     % else
     %     disp('OK');
     % end
+  end
+end
