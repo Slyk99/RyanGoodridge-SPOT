@@ -13,8 +13,9 @@ figure
 hold on
 grid on
 
-for i = 1:1:length(MPCdata.Results)
+for i = 1:10:length(MPCdata.Results)
     cla
+    % disp(MPCdata.Time(i))
     % Plot all three spacecraft
     for r = 1:length(robots)
         robot = robots(r);
@@ -30,16 +31,14 @@ for i = 1:1:length(MPCdata.Results)
     y = MPCdata.optimalStates(2,:,i);
     plot(x, y, 'r', 'LineWidth', 1)
     
-    % Plot Constraint 
+    %% Plot Constraint ellipse
     ellipse = allConstraints.target_ellipse(:,:,1,i)';
     plot(ellipse(1,:), ellipse(2,:), 'k')
-    % ellipse = allConstraints.Starget_ellipse(:,:,1,i)';
-    % plot(ellipse(1,:), ellipse(2,:), 'r')
     
     ellipse = allConstraints.obstacle_ellipse(:,:,1,i)';
     plot(ellipse(1,:), ellipse(2,:), 'b')
     
-    % Plot desired location
+    %% Plot desired location
     r = 0.15;
     theta = spotFilterData.estimated_States.BLACK(3,i);
     x = spotFilterData.estimated_States.BLACK(1,i);
@@ -51,14 +50,15 @@ for i = 1:1:length(MPCdata.Results)
 
     docking_port = [x;y] + R_theta*[xd;yd];
     plot(docking_port(1), docking_port(2), 'k*')
-    % px = [mpcConfig.docking_Offset(1); mpcConfig.docking_Offset(1) + r*cos(mpcConfig.Camera_Offset(3))];
-    % py = [mpcConfig.docking_Offset(2); mpcConfig.docking_Offset(2) + r*sin(mpcConfig.Camera_Offset(3))];
-    % plot(px+x, py+y, 'r')
+
+    xy = allConstraints.DockingPort(:,:,1,i);
+    plot(xy(1,:), xy(2,:), 'g')
+    plot(xy(1,end), xy(2,end), 'g*')
 
     grid on
     box on
     axis equal
     xlim([0 3.5])
     ylim([0 2.4])
-    pause(0.005)
+    pause(0.05)
 end

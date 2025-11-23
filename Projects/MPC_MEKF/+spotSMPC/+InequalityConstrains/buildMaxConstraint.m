@@ -43,7 +43,7 @@ function [Aineq, bineq] = buildMaxConstraint(x_max, Pstack, H, m, N, epsilon)
         std_k = sqrt(diag(Sigma_k));        % nc x 1
 
         % b_k = x_max - z_epsilon .* std_k
-        bineq((k-1)*nc + 1 : k*nc) = x_max - z_epsilon .* std_k;
+        bineq((k-1)*nc + 1 : k*nc) = x_max - 0*z_epsilon .* std_k;
     end
 end
 

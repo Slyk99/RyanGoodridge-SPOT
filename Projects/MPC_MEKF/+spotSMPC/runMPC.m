@@ -30,7 +30,7 @@
 %             R         - Input Weighting Matrix
 %             epsilon   - Stochastic Constraint Parameter [0 < eps < 0.5]
 %
-function [z, u, results, x_ref] = runMPC(z_prev, kfChaser, kfTarget, kfObs, umax, N, M, mpcConfig)
+function [z, u, results] = runMPC(z_prev, kfChaser, kfTarget, kfObs, umax, N, M, mpcConfig)
     % Declare as Persistent
     tic
     persistent isInit k n m Ad Bd K H0 Aineq_input bineq_input r_hold proximity
@@ -70,7 +70,7 @@ function [z, u, results, x_ref] = runMPC(z_prev, kfChaser, kfTarget, kfObs, umax
         % Never call the initialize again
         isInit = true;
     end
-    x_ref = zeros(n * N, 1);
+
     %% Advance k and Return Last u opt
     if k < M
         % extract the k-th block from last solution z
@@ -90,24 +90,22 @@ function [z, u, results, x_ref] = runMPC(z_prev, kfChaser, kfTarget, kfObs, umax
     [z0, PChaser] = spotSMPC.InitialConditions.initialGuess(z_prev, kfChaser.x, kfChaser.P, [], Ad, Bd, 0*K, kfChaser.Q, n, m, N, M);
 
     % Calculate the docking port location
-    [DockingPort, DockingRadius] = spotSMPC.InitialConditions.dockingLocation(xTstack, mpcConfig.docking_Offset, N);
+    [DockingPort, DockingRadius] = spotSMPC.InitialConditions.dockingLocation(xTstack, mpcConfig.docking_Offset, r_hold, N);
 
     % Calculate the reference trajectory
-    [x_ref(1:n*N,1), u_ref] = spotSMPC.InitialConditions.genReference(z0, xTstack, DockingPort, DockingRadius, m, n, N, mpcConfig.dt, mpcConfig.Camera_Offset);
-
-    % Equality Constraints
-    [Aeq, beq] = spotSMPC.EqualityConstraints.dynamicConstraint(kfChaser.x, Ad, Bd, n, m, N);
+    [x_ref, u_ref] = spotSMPC.InitialConditions.genReference(z0, xTstack, DockingPort, DockingRadius, m, n, N, mpcConfig.dt, mpcConfig.Camera_Offset);
 
     % Update reference angle if close enough to dock
     if proximity
-        x_ref(1:n*N,1) = spotSMPC.InitialConditions.updateAngle(x_ref, mpcConfig.docking_Offset(3), n, N);
+        x_ref = spotSMPC.InitialConditions.updateAngle(x_ref, mpcConfig.docking_Offset(3), n, N);
     end
 
-    % idx = 3:6:length(x_ref);
-    % plot(x_ref(idx,1))
     % Calculate Holding Radius
     [r_hold,proximity] = spotSMPC.InequalityConstrains.calcHoldingDist(r_hold, proximity, x_ref, kfChaser.x, mpcConfig.eta, mpcConfig.zeta, mpcConfig.gamma, mpcConfig.r_hold_min);
 
+    % Equality Constraints
+    [Aeq, beq] = spotSMPC.EqualityConstraints.dynamicConstraint(kfChaser.x, Ad, Bd, n, m, N);
+    
     % Inequality Constraints
     [Aineq_max, bineq_max]   = spotSMPC.InequalityConstrains.buildMaxConstraint(mpcConfig.x_max, PChaser, mpcConfig.H_max, m, N, mpcConfig.epsilon);
     [Aineq_min, bineq_min]   = spotSMPC.InequalityConstrains.buildMaxConstraint(-1*mpcConfig.x_min, PChaser, -1*mpcConfig.H_min, m, N, mpcConfig.epsilon);
@@ -115,15 +113,16 @@ function [z, u, results, x_ref] = runMPC(z_prev, kfChaser, kfTarget, kfObs, umax
     % [Aineq_Obs, bineq_Obs]   = spotSMPC.InequalityConstrains.StochasticHoldingRadius(mpcConfig.ObsHold, z0, xOstack, POstack, mpcConfig.BlueOffset, n, m, N, mpcConfig.epsilon);
     % [Aineq_FOV, bineq_FOV]   = spotSMPC.InequalityConstrains.fovConstraints(z0, PChaser, xTstack, PTstack, x_ref, mpcConfig.Camera_FOV, mpcConfig.Camera_Offset, m, n, N, mpcConfig.epsilon);
     % FOV not needed because looking angle was used for the reference
+
     % Append all constraints
     Aineq = [Aineq_input;
-             Aineq_max;
-             Aineq_min;
+             % Aineq_max;
+             % Aineq_min;
              Aineq_hold;];
              % Aineq_Obs;]; 
     bineq = [bineq_input;
-             bineq_max;
-             bineq_min;
+             % bineq_max;
+             % bineq_min;
              bineq_hold;];
              % bineq_Obs;];
 

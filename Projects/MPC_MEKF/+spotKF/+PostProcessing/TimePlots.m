@@ -7,11 +7,11 @@ t = spotFilterData.Time.t;
 
 %% Figure 1 (x, y, theta vs time)
 
-state_est  = spotFilterData.estimated_States.RED;
-state_smth = spotFilterData.smoothed_States.RED;
-state_meas = spotFilterData.measurements.RED;
-state_pred = spotFilterData.predicted_States.RED;
-P          = spotFilterData.estimated_Cov.RED;
+state_est  = spotFilterData.estimated_States.BLACK;
+state_smth = spotFilterData.smoothed_States.BLACK;
+state_meas = spotFilterData.measurements.BLACK;
+state_pred = spotFilterData.predicted_States.BLACK;
+P          = spotFilterData.estimated_Cov.BLACK;
 
 state_est(3,:) = wrapTo2Pi(state_est(3,:));
 state_smth(3,:) = wrapTo2Pi(state_smth(3,:));
@@ -88,7 +88,7 @@ for i = 1:3
     spotKF.PostProcessing.Plots.plotCovariance(t, state_est(j,:), P, j, 0.2, [1 0 0]); % light red shade
 
     plot(t, state_pred(j,:),  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)
-    % plot(t, state_smth(i,:),  'm', 'LineWidth', LW)
+    plot(t, state_smth(i+3,:),  'm', 'LineWidth', LW)
 
     % Plot measurement (ground truth)
     plot(t, state_meas(j,:), 'k', 'LineWidth', LW)
@@ -144,7 +144,7 @@ for i = 1:3
     hold on
 
     % plot(t, state_pred(j,:),  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)
-    % plot(t, state_smth(i,:),  'm', 'LineWidth', LW)
+    % plot(t, state_smth(i+3,:),  'm', 'LineWidth', LW)
 
     a = diff(state_est(i+3,:))./diff(t);
     plot(t(2:end), a,  'go', 'LineWidth', LW, 'MarkerFaceColor', 'g', 'MarkerSize', 2)

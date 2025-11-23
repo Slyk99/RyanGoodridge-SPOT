@@ -83,6 +83,12 @@ allConstraints.Sobstacle_line    = zeros(2, 2, N, numSteps);
 prev = 0;
 for k = 1:numSteps
 
+    if sum(prev) == sum(Results(k,:))
+        
+    else
+    % update prev id so we skip subsequent ZOH rows that repeated the same solver id
+    prev = Results(k,:);
+
     %% Reconstruct z0 from MPCdata (DO NOT use dataClass.MPC_z)
     % u_opt: 3 x N x numSteps (rows are [ux;uy;uz], columns are horizon steps)
     % x_opt: 6 x N x numSteps (rows are [x;y;theta;dx;dy;dtheta])
@@ -109,7 +115,7 @@ for k = 1:numSteps
     % z0_check should be close to z0; we use z0 produced above for consistency
 
     %% Docking port & reference
-    [DockingPort, DockingRadius] = spotSMPC.InitialConditions.dockingLocation(xTstack, mpcConfig.docking_Offset, N);
+    [DockingPort, DockingRadius] = spotSMPC.InitialConditions.dockingLocation(xTstack, mpcConfig.docking_Offset, r_hold, N);
     [x_ref, u_ref] = spotSMPC.InitialConditions.genReference(z0, xTstack, DockingPort, DockingRadius, m, n, N, mpcConfig.dt, mpcConfig.Camera_Offset);
 
     if proximity
@@ -130,7 +136,9 @@ for k = 1:numSteps
     [obstacle_ellipse, obstacle_line, Sobstacle_ellipse, Sobstacle_line] = ...
         StochasticHoldingRadiusPoints(mpcConfig.ObsHold, z0, xOstack, POstack, mpcConfig.BlueOffset, N, mpcConfig.epsilon, numPoints);
 
+    end
     %% Store into 3-D arrays at slice k
+    allConstraints.DockingPort(:,:,:,k)        = DockingPort;
     allConstraints.max_states(:,:,:,k)        = max_states;        % numPoints x 2 x N
     allConstraints.Smax_states(:,:,:,k)       = Smax_states;
     allConstraints.min_states(:,:,:,k)        = min_states;
@@ -144,8 +152,6 @@ for k = 1:numSteps
     allConstraints.Sobstacle_ellipse(:,:,:,k) = Sobstacle_ellipse;
     allConstraints.Sobstacle_line(:,:,:,k)    = Sobstacle_line;
 
-    % update prev id so we skip subsequent ZOH rows that repeated the same solver id
-    prev = Results(k,1);
 end
 
 end

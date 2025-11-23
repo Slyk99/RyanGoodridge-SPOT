@@ -24,18 +24,18 @@ function [vis_x, vis_yaw, vis_conf, vis_R, vis_dq, vis_q, visZOH_x, visZOH_yaw, 
     visZOH_dq = htform2Dq(T,'scalarFirst');
     
     if sum(abs(rawData - rawDataPrev)) < 10^-10 || isempty(rawDataPrev)
-        vis_x    = visZOH_x;
-        vis_yaw  = visZOH_yaw;
-        vis_conf = visZOH_conf;
-        vis_R    = visZOH_R;
-        vis_q    = visZOH_q;
-        vis_dq   = visZOH_dq;
-    else
         vis_x    = nan(size(visZOH_x));
         vis_yaw  = nan(size(visZOH_yaw));
         vis_conf = nan(size(visZOH_conf));
         vis_R    = nan(size(visZOH_R));
         vis_q    = nan(size(visZOH_q));
         vis_dq   = nan(size(visZOH_dq));
+    else
+        vis_x    = visZOH_x;
+        vis_yaw  = visZOH_yaw;
+        vis_conf = visZOH_conf;
+        vis_R    = visZOH_R;
+        vis_q    = visZOH_q;
+        vis_dq   = visZOH_dq;
     end
 end

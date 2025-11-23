@@ -2,7 +2,7 @@ function [vis_x, vis_yaw, vis_conf, vis_R, vis_dq, vis_q, visZOH_x, visZOH_yaw, 
 
     persistent xrelblack_prev
     
-    if flag 
+    if ~flag 
         [xrelblack, ~] = CV.simCV(xRed, xblack, xblue, noise, std, FOV);
     else
         xrelblack = UDP;
