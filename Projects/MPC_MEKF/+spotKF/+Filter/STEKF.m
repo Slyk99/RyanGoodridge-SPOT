@@ -1,16 +1,16 @@
 function [x, P, V] = STEKF(dt, z, x, u, P, rho, V, Q, R, Fhndle, Hhndle, ST, OLR, dmax)
-% --- PREDICT ---------------------------------------------------------
+%  PREDICT
 [xk, F, G] = Fhndle(x,  dt, u);
 Pk         = F*P*F' + G*Q*G';
 
-% --- Measurement -----------------------------------------------------
+% Measurement
 [zPred, H] = Hhndle(xk);
 y          = z - zPred;
 
-% --- Angle Innovation (wrapped difference) ---------------------------
+% Angle Innovation (wrapped difference) 
 y(3)       =  spotKF.Misc.attErr(z(3),zPred(3));
 
-% --- Outlier Rejection -----------------------------------------------
+% Outlier Rejection 
 Pzz    = H*Pk*H' + R;
 reject = false;
 if OLR
@@ -20,7 +20,7 @@ if OLR
     end
 end
 
-% --- For no Measurments ----------------------------------------------
+% if no Measurments or reject = true
 if anynan(z) || reject
     x = xk;
     P = Pk;
@@ -28,7 +28,7 @@ if anynan(z) || reject
     return
 end
 
-% --- Strong Tracking -------------------------------------------------
+% Strong Tracking
 if ST
     if det(V) == 0
         V = rho*(y*y');
@@ -43,9 +43,10 @@ if ST
     Pk = L*Pk*L';
 end
 
-% --- UPDATE ----------------------------------------------------------
+% UPDATE 
 Pzz        = H*Pk*H' + R;
-K          = Pk* H' / Pzz;
+Pxz        = Pk* H';
+K          = Pxz / Pzz;
 
 corr       = K*y;
 x          = xk + corr;
