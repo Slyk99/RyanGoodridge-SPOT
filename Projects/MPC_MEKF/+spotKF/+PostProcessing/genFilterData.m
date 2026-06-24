@@ -1,4 +1,4 @@
-function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
+function spotFilterData = genFilterData(dataClass, navOpts, Phase2_End)
     if nargin < 3
         Phase2_End = 0;
     end
@@ -8,6 +8,7 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
     Est_states = struct();
     
     t_full = dataClass.Time_s.Data.';       % 1 x T_full
+    dt     = diff(t_full);
     T_full = length(t_full);
 
     if Phase2_End > 0
@@ -28,7 +29,7 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
     
     % Store trimming index for later reuse in robot loops
     idx = idxStart;
-    
+
     stateFields_raw = ["Px_m_raw",     "Py_m_raw",     "Rz_rad_raw", ...
                        "Vx_mpers_raw", "Vy_mpers_raw", "RzD_radpers_raw", ...
                        "Ax_mpers2_raw","Ay_mpers2_raw","RzDD_radpers2_raw"];
@@ -37,6 +38,8 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
                        "Vx_mpers", "Vy_mpers", "RzD_radpers", ...
                        "Ax_mpers2","Ay_mpers2","RzDD_radpers2"];
     
+    stateFields_imu = ["IMU_Ax_mpers2", "IMU_Ay_mpers2", "IMU_Gz_radpers"];
+
     inputFields = ["Fx_Sat_N", "Fy_Sat_N", "Tz_Sat_Nm"];
     
     for r = 1:length(robots)
@@ -46,41 +49,80 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         n = length(stateFields_raw);
         m = 6;
         u = length(inputFields);
-        T = length(dataClass.(robot + "_" + stateFields_raw(1)).Data);
+        T = length(Time.t);
+        l = length(stateFields_imu);
         PS_mat  = zeros(n, T);
-        Est_mat = zeros(n, T);
         inputs  = zeros(u, T);
-    
+        IMU_mat = zeros(l, T);
+
         % Fill each 9×T matrix
         for i = 1:n
-            PS_mat(i,:)  = dataClass.(robot + "_" + stateFields_raw(i)).Data.';
-            Est_mat(i,:) = dataClass.(robot + "_" + stateFields_est(i)).Data.';
+            rawVec = dataClass.(robot + "_" + stateFields_raw(i)).Data.';
+            PS_mat(i,:) = rawVec(idx:end);
+        end
+
+        % Fill IMU
+        for i = 1:l
+            rawVec = dataClass.(robot + "_" + stateFields_imu(i)).Data.';
+            IMU_mat(i,:) = rawVec(idx:end);
         end
     
-        % Store in struct
-        PS_states.(robot)  = PS_mat;
-        Est_states.(robot) = Est_mat;
-        
         % log saturated inputs
         for i = 1:u
-            inputs(i,:)  = dataClass.(robot + "_" + inputFields(i)).Data.'; 
+            uVec = dataClass.(robot + "_" + inputFields(i)).Data.';
+            inputs(i,:) = uVec(idx:end); 
         end
+        
+        % Store in struct
+        PS_states.(robot)   = PS_mat;
+        IMU.(robot)         = IMU_mat;
+        CTL.(robot)         = inputs;
+    end
+
+    %% Run Simulation for filter test
+    xRED_in     = [Time.t', PS_states.RED'];
+    xBLACK_in   = [Time.t', PS_states.BLACK'];
+    xBLUE_in    = [Time.t', PS_states.BLUE'];
+
+    mRED_in     = [Time.t', IMU.RED'];
+    mBLACK_in   = [Time.t', IMU.BLACK'];
+    mBLUE_in    = [Time.t', IMU.BLUE'];
+
+    uRED_in     = [Time.t', CTL.RED'];
+    uBLACK_in   = [Time.t', CTL.BLACK'];
+    uBLUE_in    = [Time.t', CTL.BLUE'];
     
-        % CTL.(robot)      = inputs;
-    
+    assignin('base','xRED_in',    xRED_in);
+    assignin('base','xBLACK_in',  xBLACK_in);
+    assignin('base','xBLUE_in',   xBLUE_in);
+
+    assignin('base','mRED_in',   mRED_in);
+    assignin('base','mBLACK_in', mBLACK_in);
+    assignin('base','mBLUE_in',  mBLUE_in);
+
+    assignin('base','uRED_in',   uRED_in);
+    assignin('base','uBLACK_in', uBLACK_in);
+    assignin('base','uBLUE_in',  uBLUE_in);
+
+
+    simData = sim("+spotKF/+PostProcessing/genData.slx");
+
+
+    %% Use Sim Data to complete spotFilterData
+      for r = 1:length(robots)      
         % Determine number of time steps from P11_PS
-        T = length(dataClass.(robot + "_P11_PS").Data);
-        C = zeros(m, m, T);
-    
+        rawCov = dataClass.(robot + "_P11_PS").Data;  
+        T_trim = length(rawCov(idx:end));
+        C = zeros(m, m, T_trim);
+        
         for j = 1:m
             for k = 1:m
-                % Build field name, example: 'RED_P23_PS'
                 field = robot + "_P" + j + k + "_PS";
-    
-                % Extract time series → 1×T
-                C(j,k,:) = dataClass.(field).Data(:);
+                covVec = dataClass.(field).Data(:);
+                C(j,k,:) = covVec(idx:end);
             end
         end
+
     
         Cov.(robot) = C;  % 6×6×T
     
@@ -89,12 +131,12 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         xk = Est_mat;
         Pk = C; 
     
-        for k = 2:1:length(Time.t)
-           [xk(1:6,k),F,G] = spotKF.Dynamics.Euler1(Est_mat(1:6,k), dt(k-1), inputs(:,k), navOpts.params);
+        for k = 1:1:idx-T_full
+           [xk(1:6,k),F,G] = spotKF.Dynamics.Euler1(Est_mat(1:6,k), dt(idx+k-1), inputs(:,k), navOpts.params);
             Pk(:,:,k) = F*C(:,:,k-1)*F' + G*Q*G';
         end
     
-        [x_est_s, p_est_s] = spotKF.PostProcessing.RTS_Loop(Est_mat(1:6,:), C, xk(1:6,:), Pk, dt, inputs, @spotKF.Dynamics.Euler1, navOpts.params);
+        [x_est_s, p_est_s] = spotKF.PostProcessing.RTS_Loop(Est_mat(1:6,:), C, xk(1:6,:), Pk, dt(idx:end), inputs, @spotKF.Dynamics.Euler1, navOpts.params);
     
         % Store
         pred_states.(robot) = xk;
@@ -196,5 +238,7 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
     spotFilterData.estimated_States = Est_states;
     spotFilterData.estimated_Cov    = Cov;
     spotFilterData.measurements     = PS_states;
+    spotFilterData.CTL              = CTL;
+    spotFilterData.IMU              = IMU;
     spotFilterData.Time             = Time;
 end

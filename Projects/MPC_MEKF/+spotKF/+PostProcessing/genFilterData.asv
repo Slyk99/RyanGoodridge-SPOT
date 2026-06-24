@@ -1,4 +1,4 @@
-function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
+function spotFilterData = genFilterData(dataClass, navOpts, Phase2_End)
     if nargin < 3
         Phase2_End = 0;
     end
@@ -38,7 +38,7 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
                        "Vx_mpers", "Vy_mpers", "RzD_radpers", ...
                        "Ax_mpers2","Ay_mpers2","RzDD_radpers2"];
     
-    stateFields_imu = ['RED_IMU_Ax_mpers2', 'RED_IMU_Ay_mpers2', 'RED_IMU_Gz_radpers'];
+    stateFields_imu = ["IMU_Ax_mpers2", "IMU_Ay_mpers2", "IMU_Gz_radpers"];
 
     inputFields = ["Fx_Sat_N", "Fy_Sat_N", "Tz_Sat_Nm"];
     
@@ -52,7 +52,6 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         T = length(Time.t);
         l = length(stateFields_imu);
         PS_mat  = zeros(n, T);
-        Est_mat = zeros(n, T);
         inputs  = zeros(u, T);
         IMU_mat = zeros(l, T);
 
@@ -60,8 +59,6 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         for i = 1:n
             rawVec = dataClass.(robot + "_" + stateFields_raw(i)).Data.';
             PS_mat(i,:) = rawVec(idx:end);
-            estVec = dataClass.(robot + "_" + stateFields_est(i)).Data.';
-            Est_mat(i,:) = estVec(idx:end);
         end
 
         % Fill IMU
@@ -78,10 +75,27 @@ function spotFilterData = FilterData(dataClass, navOpts, Phase2_End)
         
         % Store in struct
         PS_states.(robot)   = PS_mat;
-        Est_states.(robot)  = Est_mat;
         IMU.(robot)         = IMU_mat;
         CTL.(robot)         = inputs;
+    end
+
+    %% Run Simulation for filter test
+    xRED_in     = [Time.t', PS_states.RED'];
+    xBLACK_in   = [Time.t', PS_states.BLACK'];
+    xBLUE_in    = [Time.t', PS_states.BLUE'];
+
+    mRED_in     = [Time.t', IMU.RED'];
+    mBLACK_in   = [Time.t', IMU.BLACK'];
+    mBLUE_in    = [Time.t', IMU.BLUE'];
+
+    uRED_in     = [Time.t', CTL.RED'];
+    uBLACK_in   = [Time.t', CTL.BLACK'];
+    uBLUE_in    = [Time.t', CTL.BLUE'];
+
     
+
+    %% Use Sim Data to complete spotFilterData
+      for r = 1:length(robots)      
         % Determine number of time steps from P11_PS
         rawCov = dataClass.(robot + "_P11_PS").Data;  
         T_trim = length(rawCov(idx:end));

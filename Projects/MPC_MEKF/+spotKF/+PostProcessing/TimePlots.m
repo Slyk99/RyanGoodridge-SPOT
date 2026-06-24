@@ -1,4 +1,8 @@
-spotFilterData = spotKF.PostProcessing.FilterData(dataClass, navOpts);
+try
+    spotFilterData = spotKF.PostProcessing.FilterData(dataClass, navOpts);
+catch
+    spotFilterData = spotKF.PostProcessing.genFilterData(dataClass_rt, navOpts);
+end
 
 % set(0,'DefaultFigureWindowStyle','docked')
 set(0,'DefaultFigureWindowStyle','normal')
