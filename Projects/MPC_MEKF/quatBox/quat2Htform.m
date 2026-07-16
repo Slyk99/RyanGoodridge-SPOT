@@ -1,0 +1,67 @@
+% Quaternion to Homogeneous Transformation Matrix
+% Ryan Goodridge
+% 1/08/2025
+% ryangoodridge@cmail.carleton.ca
+% 
+% Description:
+%   This function converts a quaternion representation of a rotation to a
+%   homogeneous transformation matrix. The homogeneous transformation matrix
+%   represents a rigid body transformation, including translation and rotation.
+% 
+% Inputs:
+%   q (4x1): The quaternion to convert, represented as a column vector.
+%   representation (optional, string): The input format of the quaternion.
+%            Valid options are 'scalarFirst' (default) or 'scalarLast'.
+% 
+% Outputs:
+%   T (4x4): The homogeneous transformation matrix.
+%
+function T = quat2Htform(q, representation)
+    % Validate input dimensions
+    if ~isvector(q) || numel(q) ~= 4
+        error('Input quaternion q must be a 4-element vector.');
+    end
+    
+    % Reshape to 4x1 if it is 1x4
+    if size(q, 1) == 1 && size(q, 2) == 4
+        q = q'; % Transpose to make it 4x1
+    elseif size(q, 1) ~= 4 || size(q, 2) ~= 1
+        error('Input quaternion q must be a 4x1 or 1x4 vector.');
+    end
+
+    % Set default representation if not provided
+    if nargin < 2 || isempty(representation)
+        representation = 'scalarLast';
+    end
+
+    % Validate representation input
+    validRepresentations = {'scalarFirst', 'scalarLast'};
+    if ~any(strcmp(representation, validRepresentations))
+        error('Invalid representation. Choose either ''scalarFirst'' or ''scalarLast''.');
+    end
+
+    switch representation
+        case 'scalarFirst'
+            % For scalar-first: q = [scalar; vector]
+            scalar = q(1);
+            vector = [q(2); q(3); q(4)];
+
+            I = eye(3);
+            C = (scalar^2 - vector'*vector)*I + 2*vector*vector' + 2*scalar*skew(vector);
+            v = [0;0;0];
+            T = [C, v; v', 1];
+
+        case 'scalarLast'
+            % For scalar-second: q = [vector; scalar]
+            vector = [q(1); q(2); q(3)];
+            scalar = q(4);
+
+            I = eye(3);
+            C = (scalar^2 - vector'*vector)*I + 2*(vector)*vector' -2*scalar*skew(vector);
+            v = [0;0;0];
+            T = [C, v; v', 1];
+
+        otherwise
+            error('Unexpected representation. This should not occur.');
+    end
+end

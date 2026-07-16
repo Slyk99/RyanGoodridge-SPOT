@@ -1,0 +1,69 @@
+% genReference  Build stacked MPC reference vectors with “look‐at” angle
+%
+% Inputs:
+%   xTstack       6×N target-state over horizon
+%   DockPort      2×N inertial docking-port positions
+%   DockingRadius 2×N inertial offset vectors (r_I)
+%   m             control dimension
+%   n             state dimension (here 6)
+%   N             horizon length
+%   dt            time step between columns of xTstack
+%
+% Outputs:
+%   x_ref         (n*N)×1 column vector [x_ref(:,1); …; x_ref(:,N)]
+%   u_ref         (m*N)×1 column vector (all zeros)
+%
+function [x_ref, u_ref] = genReference(z0, xTstack, DockPort, DockingRadius, m, n, N, dt, Camera_Offset)
+
+    % Preallocate
+    x_ref = zeros(n * N, 1);
+    u_ref = zeros(m * N, 1);
+
+    % 1) Compute look‐at angles φ_k
+    xCStack = reshape(z0(m*N+1:end), n, N);  % n x N
+
+    % 2) Numeric derivative for ω_ref
+    omega_ref = zeros(1,N);
+
+    % 3) Build the stacked x_ref
+    for k = 1:N
+        ix = (k-1)*n + (1:n);  % indices into big vector
+
+        % Position of the port
+        x_ref(ix(1:2)) = DockPort(:, k);
+
+        % Linear velocity (same as before)
+        v_t     = xTstack(4:5, k);
+        omega_t = xTstack(6,   k);
+        r_I     = DockingRadius(:, k);
+        x_ref(ix(4:5)) = v_t + omega_t * [-r_I(2); r_I(1)];
+
+        % Control ref: zero
+        iu = (k-1)*m + (1:m);
+        u_ref(iu) = zeros(m,1);
+
+        %% Angle
+        % Rotations
+        c = cos(xCStack(3,k)); s = sin(xCStack(3,k));
+        R_c = [c, -s; s, c];
+    
+        % relative vector s = p_t - p_c - R_c * o
+        p_rel =  xCStack(1:2,k) + R_c * Camera_Offset(1:2) - xTstack(1:2,k);
+    
+        phi   = atan2( p_rel(2,k),p_rel(1,k))...
+                     + Camera_Offset(3);
+
+        % Heading: look‐at angle φ_k
+        x_ref(ix(3)) = phi(k);
+
+        if k <= N-1
+            omega_ref = (x_ref(k+1) - x_ref(k)) / dt;
+        else
+            omega_ref = omega_ref;  % backward diff for last step
+        end
+
+        % Angular velocity: the newly computed look‐at rate
+        x_ref(ix(6)) = omega_ref;
+
+    end
+end

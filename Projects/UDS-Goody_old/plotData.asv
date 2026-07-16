@@ -1,0 +1,129 @@
+%% Figure 1: pose states (measure, filtered, smoothed)
+figure('Name','Pose States','NumberTitle','off');
+
+% Labels for the plots
+poseLabels = {'$x$ [m]','$y$ [m]','$\theta$ [rad]'};
+velLabels  = {'$v_x$ [m/s]','$v_y$ [m/s]','$\omega_z$ [rad/s]'};
+
+for i = 1:3
+    subplot(3,1,i); 
+    hold on;
+      plot(t, BLACK.x(:,i),   'b*', 'DisplayName','measured y','MarkerSize',3);
+      plot(t, BLACK.xest(:,i),      'r',  'LineWidth',1.2, 'DisplayName','filtered');
+      plot(t, BLACK.xs(:,i),     'm','LineWidth',1.2, 'DisplayName','smoothed');
+    hold off;
+    ylabel(poseLabels{i}, ...
+           'Interpreter','latex','FontName','Times','FontSize',12)
+    if i==1
+      title('Pose: Measurement vs Filter vs RTS Smoother', ...
+            'Interpreter','latex','FontName','Times','FontSize',14)
+    end
+    if i == 2
+        legend('Location','best','Interpreter','latex','FontSize',10)
+    end
+    if i==3
+      xlabel('Time step','Interpreter','latex','FontName','Times','FontSize',12)
+    end
+    grid on;
+    set(gca,'FontName','Times','FontSize',12)
+end
+
+%% Figure 2: velocity states (filtered, smoothed)
+figure('Name','Velocity States','NumberTitle','off');
+for k = 1:3
+    subplot(3,1,k);
+    hold on;
+      plot(t, BLACK.x(:,3+k),   'b*', 'DisplayName','measured y','MarkerSize',3);
+      plot(t, BLACK.xest(:,3+k),   'r',  'LineWidth',1.2, 'DisplayName','filtered');
+      plot(t, BLACK.xs(:,3+k),  'm','LineWidth',1.2, 'DisplayName','smoothed');
+    hold off;
+    ylabel(velLabels{k}, ...
+           'Interpreter','latex','FontName','Times','FontSize',12)
+    if k==1
+      title('Velocities: Filter vs RTS Smoother', ...
+            'Interpreter','latex','FontName','Times','FontSize',14)
+    end
+    if i == 2
+        legend('Location','best','Interpreter','latex','FontSize',10)
+    end
+    if k==3
+      xlabel('Time step','Interpreter','latex','FontName','Times','FontSize',12)
+    end
+    grid on;
+    set(gca,'FontName','Times','FontSize',12)
+end
+
+%% Figure 1: pose states (measure, filtered, smoothed)
+figure('Name','Error States','NumberTitle','off');
+
+% Labels for the plots
+poseLabels = {'$x$ [m]','$y$ [m]','$\theta$ [rad]'};
+
+e = BLACK.Path - BLACK.xest(:,1:3);
+
+for i = 1:3
+    subplot(3,1,i); 
+    hold on;
+      plot(t, e(:,i),   'k*', 'DisplayName','measured y','MarkerSize',3);
+    hold off;
+    ylabel(poseLabels{i}, ...
+           'Interpreter','latex','FontName','Times','FontSize',12)
+    if i==1
+      title('Pose: Measurement vs Filter vs RTS Smoother', ...
+            'Interpreter','latex','FontName','Times','FontSize',14)
+    end
+    if i == 2
+        legend('Location','best','Interpreter','latex','FontSize',10)
+    end
+    if i==3
+      xlabel('Time step','Interpreter','latex','FontName','Times','FontSize',12)
+    end
+    grid on;
+    set(gca,'FontName','Times','FontSize',12)
+end
+
+%% Plot 4, Drawn on Table
+
+figure('Name','Table','NumberTitle','off');
+
+% Define rectangle corners in (Y, X) order:
+y_min = 0;   y_max = 2.4;   % original Y-range
+x_min = 0;   x_max = 3.5; % original X-range
+
+% Corners in [Y; X] pairs (to swap axes)
+Y = [y_min, y_max, y_max, y_min];
+X = [x_min, x_min, x_max, x_max];
+
+figure;
+hold on;
+% Draw filled rectangle
+patch(X, Y, 0.9*[1 1 1], 'EdgeColor', 'k', 'LineWidth', 2);
+
+% Set axis labels (swapped)
+ylabel('Y-Coordinate (m)');
+xlabel('X-Coordinate (m)');
+
+% Ensure equal scaling so rectangle isn’t distorted
+axis equal;
+
+% Adjust axis limits a bit beyond the rectangle
+ylim([y_min-0.2, y_max+0.2]);
+xlim([x_min-0.2, x_max+0.2]);
+
+% Turn on grid if desired
+grid on;
+
+% Plot desired path
+plot(BLACK.Path(:,1), BLACK.Path(:,2),'k')
+
+% Plot measured path
+plot(BLACK.x(:,1), BLACK(:,2), 'b*','MarkerSize',3)
+
+% Plot Estimated states
+plot(BLACK.xest(:,1), BLACK(:,2), 'r')
+
+%
+
+hold off;
+
+

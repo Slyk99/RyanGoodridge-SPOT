@@ -1,0 +1,25 @@
+function MPCdata = loadMPCData(dataClass)
+
+    Results = dataClass.MPC_results.Data;
+    MPCdata.Results = spotSMPC.PostProcessing.zohMPCResults(Results);
+    
+    
+    % Load vector
+    z = dataClass.MPC_z.Data;    % column vector
+    
+    [t, L] = size(z);
+    
+    % Number of prediction steps
+    N = L / 9;
+
+    % Extract input and state segments
+    u_vec = z(:,1 : 3*N);          % first 3N entries
+    x_vec = z(:,3*N+1 : end);      % last 6N entries
+    
+    % Reshape into time-indexed arrays
+    u = zeros()
+    for i = 1:1:t
+        MPCdata.optimalInputs = reshape(u_vec, 3, N)';   % N × 3
+        MPCdata.optimalStates = reshape(x_vec, 6, N)';   % N × 6
+    end
+end

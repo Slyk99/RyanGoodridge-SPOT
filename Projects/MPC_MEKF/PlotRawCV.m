@@ -1,0 +1,99 @@
+%% Load and extract
+CVdata = CV.PostProcessing.LoadCV(dataClass, Phase2_End);
+
+% Relative black measurement in RED body frame
+x_black_rel = [CVdata.ZOH.x(1:2,:); CVdata.ZOH.yaw];   
+
+% Black truth (inertial)
+x_black_true = CVdata.Truth.BLACK(1:3,:);
+
+% Red truth (inertial)
+x_red = CVdata.Truth.RED(1:3,:);
+
+time = CVdata.Time(:);
+N = length(time);
+
+%% ----------------------------
+% Transform REL → GLOBAL frame
+%% ----------------------------
+
+x_black_meas_global = zeros(3, N);
+
+for k = 1:N
+    % RED inertial pose
+    xr = x_red(1,k);
+    yr = x_red(2,k);
+    psi_r = x_red(3,k);
+
+    % Relative measurement
+    x_rel = x_black_rel(1:2,k);
+    psi_rel = x_black_rel(3,k);
+
+    % Rotation into inertial
+    R = [cos(psi_r), -sin(psi_r);
+         sin(psi_r),  cos(psi_r)];
+
+    % Inertial position of BLACK measurement
+    p_global = [xr; yr] + R * x_rel;
+
+    % Inertial yaw
+    psi_global = psi_r + psi_rel;
+
+    % Store
+    x_black_meas_global(:,k) = [p_global; psi_global];
+end
+
+%% ----------------------------
+% PLOTTING STANDARDS
+%% ----------------------------
+set(groot,'defaultAxesFontName','Times New Roman');
+set(groot,'defaultAxesFontSize',12);
+set(groot,'defaultTextInterpreter','latex');
+set(groot,'defaultLegendInterpreter','latex');
+
+stateNames = {"$x$ (m)", "$y$ (m)", "$\psi$ (rad)"};
+
+%% ----------------------------
+% 1) State vs Time
+%% ----------------------------
+
+figure; hold on; box on; grid on;
+
+for i = 1:3
+    subplot(3,1,i); hold on; box on; grid on;
+
+    % Truth (black)
+    plot(time, x_black_true(i,:), 'k', 'LineWidth', 2);
+
+    % Measurement transformed to inertial (red)
+    plot(time, x_black_meas_global(i,:), 'r', 'LineWidth', 2);
+
+    ylabel(stateNames{i});
+end
+
+xlabel("Time (s)");
+sgtitle("Black State (Inertial) vs Time");
+
+print(gcf, "BlackState_Global", "-dpdf");
+
+%% ----------------------------
+% 2) Error plots
+%% ----------------------------
+error = x_black_meas_global - x_black_true;
+
+figure; hold on; box on; grid on;
+
+for i = 1:3
+    subplot(3,1,i); hold on; box on; grid on;
+
+    % Error (warm colour)
+    plot(time, error(i,:), 'Color',[0.85 0.33 0.10], 'LineWidth', 2);
+    yline(0,'k--','LineWidth',1.5);
+
+    ylabel(stateNames{i} + " error");
+end
+
+xlabel("Time (s)");
+sgtitle("Inertial Measurement Error");
+
+print(gcf, "BlackState_Error_Global", "-dpdf");
