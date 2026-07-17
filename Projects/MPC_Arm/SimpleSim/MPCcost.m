@@ -1,20 +1,42 @@
-function [J, G] = MPCcost(x, p_ref, Q_blk, R_blk, params, n, N, m, M)
-    % p_ref = [x, y, theta, 0, 0, 0, 0, 0, 0, x_ee, y_ee]' all in cart
-    U = x(1:N*m,1);
-    q = x(N*m + 1:end, 1);
+function [J, G] = MPCcost(z, refTraj, params, n, N, m, M)
+    % q  = jointAngles;
+    % p  = endEffector;
+    % v  = endEffectorNormal;
+    % x  = basePose;
+    % u  = Control;
+    % du = Controldiff;
 
+    %% Separate Data
+    U  = z(1:N*m,1);
+    zq = z(N*m + 1:end, 1);
+    zq = reshape(zq,12,N);
+
+    % Preallocate
+    x   = zeros(6*N,1);
+    q   = zeros(6*N,1);
+    pee = zeros(2*N,1);
+    v   = zeros(2*N,1);
+
+    %% Main Loop
     for i = 1:1:N
-        p_ref_current = p_ref(:,i);
-        [p, pb, p1, p2, pee] = ForwardKin(q, params);
-        e = [p]
+        [xi, qi, ~, ~, ~, peei, vi] = ForwardKin(zq(:,i), params);
+
+
     end
 
-    G_U = R_blk*U;
-    J_U = U'*G_U;
+    %% Cost Function
+    % Include rates in these variables
+    q  = jointAngles;
+    p  = endEffector;
+    v  = endEffectorNormal;
+    x  = basePose;
+    u  = Control;
+    du = Controldiff;
+    normal = DockingPortNormal;
 
-    G_p = Q_blk*e;
-    J_p = e'*G_p;
-
-    J = J_U + J_p;
-    G = [G_U; G_P];
+    % J          = J_task                      +J_align              + J_pose                     + J_effort + J_smooth                    + J_jerk 
+    % J          = (p - p_ref)'*Q*(p - p_ref)  + w*(1 - v'*normal)^2 + (x - x_ref)'*B*(x -x_ref)  + u'*R*u   + (q - q_ref)'*S*(q - q_ref)  + (Delta u)'*W*(Delta u)
+    % J_terminal = (p - p_ref)'*PQ*(p - p_ref) + Pw*(1 - v'*normal)^2 +(x - x_ref)'*PB*(x -x_ref) + u'*PR*u  + (q - q_ref)'*PS*(q - q_ref) + (Delta u)'*PW*(Delta u)
+    % Derivative references can be 0 or derived from some optimal trajectory
+    % xyz desired position weight and angle desired position weight should be zeros unless I really need the gradient for convexity 
 end
